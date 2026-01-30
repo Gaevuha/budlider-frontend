@@ -1,0 +1,225 @@
+/* WishlistPage.module.css - Mobile First */
+
+/* Header styles */
+.header {
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+.description {
+  color: var(--muted-foreground);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* Empty state */
+.emptyContainer {
+  background-color: var(--card);
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  padding: 2.5rem 1.25rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.emptyIcon {
+  width: 3.5rem;
+  height: 3.5rem;
+  color: var(--muted-foreground);
+  margin: 0 auto 1rem;
+  stroke-width: 1.5;
+}
+
+.emptyTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+.emptyText {
+  color: var(--muted-foreground);
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.emptyLink {
+  display: inline-block;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+.emptyLink:hover {
+  background-color: var(--accent);
+}
+
+/* Products grid - Mobile: 1 column */
+.productsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* Tablet (375px+) - 2 columns */
+@media only screen and (min-width: 375px) {
+  .header {
+    margin-bottom: 2rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .description {
+    font-size: 1rem;
+  }
+
+  .emptyContainer {
+    padding: 3rem 1.5rem;
+  }
+
+  .emptyIcon {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .emptyTitle {
+    font-size: 1.25rem;
+  }
+
+  .emptyText {
+    font-size: 1rem;
+  }
+
+  .emptyLink {
+    font-size: 1rem;
+    padding: 0.875rem 1.75rem;
+  }
+
+  .productsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+/* Tablet (768px+) - 3 columns */
+@media only screen and (min-width: 768px) {
+  .header {
+    margin-bottom: 2.5rem;
+  }
+
+  .title {
+    font-size: 2.25rem;
+  }
+
+  .description {
+    font-size: 1.125rem;
+  }
+
+  .emptyContainer {
+    padding: 3.5rem 2rem;
+    border-radius: 0.75rem;
+    margin-top: 3rem;
+  }
+
+  .emptyIcon {
+    width: 4.5rem;
+    height: 4.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .emptyTitle {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .emptyText {
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+  }
+
+  .emptyLink {
+    font-size: 1.125rem;
+    padding: 1rem 2rem;
+    border-radius: 0.75rem;
+  }
+
+  .productsGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+}
+
+/* Desktop (1440px+) - 4 columns */
+@media only screen and (min-width: 1440px) {
+  .header {
+    margin-bottom: 3rem;
+  }
+
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .description {
+    font-size: 1.25rem;
+  }
+
+  .emptyContainer {
+    padding: 4rem 3rem;
+    border-radius: 1rem;
+    margin-top: 4rem;
+  }
+
+  .emptyIcon {
+    width: 5rem;
+    height: 5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .emptyTitle {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .emptyText {
+    font-size: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .emptyLink {
+    font-size: 1.125rem;
+    padding: 1.125rem 2.25rem;
+  }
+
+  .productsGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-top: 2.5rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .emptyContainer {
+    background-color: var(--card);
+  }
+
+  .emptyIcon {
+    color: var(--muted-foreground);
+  }
+}

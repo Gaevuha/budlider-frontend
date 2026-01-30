@@ -1,0 +1,281 @@
+.container {
+  margin-top: 2rem;
+}
+
+.empty {
+  background-color: #f9fafb;
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 3rem 2rem;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.emptySubtext {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.statistics {
+  background-color: white;
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.averageRating {
+  text-align: center;
+  padding-right: 2rem;
+  border-right: 1px solid var(--color-border);
+}
+
+.ratingNumber {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.stars {
+  display: flex;
+  gap: 0.25rem;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.star {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #d1d5db;
+}
+
+.starFilled {
+  color: #fbbf24;
+  fill: #fbbf24;
+}
+
+.reviewCount {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.distribution {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.distributionRow {
+  display: grid;
+  grid-template-columns: 70px 1fr 40px;
+  gap: 1rem;
+  align-items: center;
+}
+
+.distributionLabel {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.distributionBar {
+  height: 0.5rem;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.distributionFill {
+  height: 100%;
+  background-color: #22c55e;
+  transition: width 0.3s;
+}
+
+.distributionCount {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  text-align: right;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.review {
+  background-color: white;
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+}
+
+.reviewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.userInfo {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatarPlaceholder {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.userName {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.date {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-top: 0.25rem;
+}
+
+.rating {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.reviewStar {
+  width: 1rem;
+  height: 1rem;
+  color: #d1d5db;
+}
+
+.reviewStarFilled {
+  color: #fbbf24;
+  fill: #fbbf24;
+}
+
+.comment {
+  color: var(--color-text);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.reviewFooter {
+  display: flex;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.helpfulButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.helpfulButton:hover {
+  background-color: #f3f4f6;
+  border-color: #22c55e;
+  color: #22c55e;
+}
+
+.unhelpfulButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.unhelpfulButton:hover {
+  background-color: #fef2f2;
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.thumbIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+@media (max-width: 1024px) {
+  .statistics {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .averageRating {
+    padding-right: 0;
+    padding-bottom: 2rem;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+}
+
+@media (max-width: 768px) {
+  .statistics {
+    padding: 1.5rem;
+  }
+
+  .ratingNumber {
+    font-size: 2.5rem;
+  }
+
+  .review {
+    padding: 1rem;
+  }
+
+  .reviewHeader {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .userInfo {
+    width: 100%;
+  }
+
+  .rating {
+    margin-left: 4rem;
+  }
+
+  .distributionRow {
+    grid-template-columns: 60px 1fr 30px;
+    gap: 0.75rem;
+  }
+}

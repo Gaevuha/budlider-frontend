@@ -1,0 +1,642 @@
+/* ==================== */
+/* ІКОНИ */
+/* ==================== */
+.icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.smallIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* ==================== */
+/* БАЗОВІ СТИЛІ ДЛЯ МОБІЛЬНИХ */
+/* ==================== */
+
+.container {
+  padding: 1rem;
+  background-color: var(--background);
+  min-height: 100vh;
+}
+
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 0;
+  min-height: calc(100vh - 200px);
+}
+
+/* ==================== */
+/* ЗАГОЛОВОК */
+/* ==================== */
+.header {
+  margin-bottom: 2rem;
+}
+
+.titleRow {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background-color: var(--card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--foreground);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  max-width: max-content;
+}
+
+.backButton:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateX(-4px);
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.15);
+}
+
+/* ==================== */
+/* СТАТИСТИКА */
+/* ==================== */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.statCard {
+  padding: 1.25rem;
+  background: linear-gradient(135deg, var(--card) 0%, var(--background) 100%);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.statCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--primary);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.statCard:hover {
+  border-color: var(--primary);
+  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.15);
+  transform: translateY(-2px);
+}
+
+.statCard:hover::before {
+  opacity: 1;
+}
+
+.statValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ==================== */
+/* ЕЛЕМЕНТИ КЕРУВАННЯ */
+/* ==================== */
+.controls {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.searchBox {
+  position: relative;
+  width: 100%;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 0.875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--primary);
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.875rem 0.875rem 0.875rem 2.75rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  background: var(--input-background);
+  transition: all 0.2s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+}
+
+.searchInput::placeholder {
+  color: var(--muted-foreground);
+}
+
+.filters {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filterButton {
+  padding: 0.75rem 1.5rem;
+  background: var(--card);
+  color: var(--foreground);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.filterButton:hover:not(.filterButtonActive) {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(34, 197, 94, 0.05);
+  transform: translateY(-1px);
+}
+
+.filterButtonActive {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  box-shadow: 0 1px 3px rgba(34, 197, 94, 0.2);
+  transform: translateY(-1px);
+}
+
+.filterButtonActive:hover {
+  background: var(--accent);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
+}
+
+.filterButton:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(34, 197, 94, 0.2);
+}
+
+/* ==================== */
+/* СТАНИ ЗАВАНТАЖЕННЯ ТА ПОМИЛОК */
+/* ==================== */
+.loading,
+.error,
+.empty {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.spinner {
+  display: inline-block;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingText {
+  margin-top: 1rem;
+  color: var(--muted-foreground);
+}
+
+.errorMessage {
+  color: var(--destructive);
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.retryButton {
+  padding: 0.75rem 1.5rem;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.retryButton:hover {
+  opacity: 0.9;
+}
+
+.emptyText {
+  color: var(--muted-foreground);
+  font-size: 1rem;
+}
+
+/* ==================== */
+/* МОБІЛЬНІ КАРТКИ */
+/* ==================== */
+.usersList {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.userCard {
+  padding: 1rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: box-shadow 0.2s;
+}
+
+.userCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.userCardHeader {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.userAvatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.userAvatarPlaceholder {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted-foreground);
+  flex-shrink: 0;
+}
+
+.userInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.userName {
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 0.25rem;
+  word-wrap: break-word;
+}
+
+.userEmail {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  word-wrap: break-word;
+}
+
+.userDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+.userDetailRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.userDetailLabel {
+  color: var(--muted-foreground);
+}
+
+.userDetailValue {
+  color: var(--foreground);
+  font-weight: 500;
+  text-align: right;
+}
+
+/* ==================== */
+/* БЕЙДЖІ РОЛЕЙ */
+/* ==================== */
+.roleBadge {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.roleBadgeUser {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+}
+
+.roleBadgeAdmin {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+/* ==================== */
+/* ДІЇ КОРИСТУВАЧІВ - МОБІЛЬНІ */
+/* ==================== */
+.userActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.actionButton {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--foreground);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.actionButton:hover:not(:disabled) {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(34, 197, 94, 0.15);
+}
+
+.actionButtonDelete {
+  color: var(--destructive-foreground);
+  background: var(--destructive);
+  border-color: var(--destructive);
+  box-shadow: 0 1px 3px rgba(220, 38, 38, 0.2);
+}
+
+.actionButtonDelete:hover:not(:disabled) {
+  background: #b91c1c;
+  color: var(--destructive-foreground);
+  border-color: #b91c1c;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.actionButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ==================== */
+/* ТАБЛИЦЯ ДЛЯ ДЕСКТОПУ - ПРИХОВАНА НА МОБІЛЬНИХ */
+/* ==================== */
+.tableWrapper {
+  display: none;
+}
+
+/* ==================== */
+/* ПЛАНШЕТ (768px+) */
+/* ==================== */
+@media only screen and (min-width: 768px) {
+  .wrapper {
+    padding: 2rem 0;
+  }
+
+  .title {
+    font-size: var(--text-3xl);
+  }
+
+  .titleRow {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .searchBox {
+    max-width: 400px;
+  }
+
+  .filters {
+    justify-content: flex-start;
+  }
+}
+
+/* ==================== */
+/* ДЕСКТОП (1440px+) */
+/* ==================== */
+@media only screen and (min-width: 1440px) {
+  .container {
+    padding: 2rem;
+  }
+  .wrapper {
+    padding: 2.5rem 0;
+  }
+
+  .title {
+    font-size: var(--text-3xl);
+  }
+
+  /* Ховаємо мобільні картки, показуємо таблицю */
+  .usersList {
+    display: none;
+  }
+
+  .tableWrapper {
+    display: block;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .tableHead {
+    background: var(--muted);
+  }
+
+  .tableRow {
+    border-bottom: 1px solid var(--border);
+    transition: background-color 0.2s;
+  }
+
+  .tableRow:hover {
+    background: var(--muted);
+  }
+
+  .tableRow:last-child {
+    border-bottom: none;
+  }
+
+  .tableHeader {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .tableCell {
+    padding: 1rem;
+    color: var(--foreground);
+    font-size: 0.875rem;
+  }
+
+  .userCellContent {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .tableAvatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .tableAvatarPlaceholder {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted-foreground);
+    flex-shrink: 0;
+  }
+
+  .tableUserInfo {
+    min-width: 0;
+  }
+
+  .tableUserName {
+    font-weight: 500;
+    margin-bottom: 0.125rem;
+  }
+
+  .tableUserEmail {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+  }
+
+  /* ==================== */
+  /* ДІЇ ТАБЛИЦІ - ДЕСКТОП */
+  /* ==================== */
+  .tableActions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+  }
+
+  .tableActionButton {
+    padding: 0.625rem;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--card);
+    color: var(--foreground);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .tableActionButton:hover:not(:disabled) {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.15);
+  }
+
+  .tableActionButtonDelete {
+    color: var(--destructive-foreground);
+    background: var(--destructive);
+    border-color: var(--destructive);
+    box-shadow: 0 1px 3px rgba(220, 38, 38, 0.2);
+  }
+
+  .tableActionButtonDelete:hover:not(:disabled) {
+    background: #b91c1c;
+    color: var(--destructive-foreground);
+    border-color: #b91c1c;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+  }
+
+  .tableActionButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+}

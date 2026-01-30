@@ -1,0 +1,242 @@
+/* Mobile-first підхід */
+
+.container {
+  max-width: 896px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+.contactsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.contactCard {
+  background-color: white;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+}
+
+.contactCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.contactIcon {
+  width: 3rem;
+  height: 3rem;
+  background-color: rgba(34, 197, 94, 0.1);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contactCardTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.contactInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contactLink {
+  font-size: 1.125rem;
+  display: block;
+  transition: color 0.2s;
+}
+
+.contactLink:hover {
+  color: var(--primary);
+}
+
+.contactText {
+  font-size: 1.125rem;
+}
+
+.contactNote {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin-top: 0.75rem;
+}
+
+.mapLink {
+  display: inline-block;
+  margin-top: 0.75rem;
+  color: var(--primary);
+  transition: text-decoration 0.2s;
+}
+
+.mapLink:hover {
+  text-decoration: underline;
+}
+
+/* Форма зворотного зв'язку */
+.formCard {
+  background-color: white;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+}
+
+.formTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.required {
+  color: #dc2626;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+}
+
+.textarea {
+  resize: none;
+}
+
+.submitButton {
+  background-color: var(--primary);
+  color: white;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  align-self: flex-start;
+}
+
+.submitButton:hover:not(:disabled) {
+  background-color: rgba(34, 197, 94, 0.9);
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Соцмережі */
+.socialCard {
+  margin-top: 3rem;
+  background: linear-gradient(to right, #22c55e, #10b981);
+  color: white;
+  border-radius: 0.5rem;
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.socialTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.socialDescription {
+  margin-bottom: 1.5rem;
+}
+
+.socialLinks {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.socialLink {
+  width: 3rem;
+  height: 3rem;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+  font-size: 1.5rem;
+}
+
+.socialLink:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Tablet (768px+) */
+@media (min-width: 768px) {
+  .container {
+    padding: 1.5rem;
+  }
+
+  .title {
+    font-size: 2.25rem;
+  }
+
+  .contactsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .formCard {
+    padding: 2rem;
+  }
+
+  .formRow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop (1350px+) */
+@media (min-width: 1350px) {
+  .container {
+    padding: 2rem;
+  }
+}

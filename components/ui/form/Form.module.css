@@ -1,0 +1,20 @@
+/* Form Component - Mobile First */
+
+.formItem {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.formLabel[data-error="true"] {
+  color: var(--color-destructive, #ef4444);
+}
+
+.formDescription {
+  font-size: 0.875rem;
+  color: var(--color-muted-foreground, #9ca3af);
+}
+
+.formMessage {
+  font-size: 0.875rem;
+  color: var(--color-destructive, #ef4444);
+}

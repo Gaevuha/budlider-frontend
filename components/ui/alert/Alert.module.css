@@ -1,0 +1,68 @@
+/* Alert Component - Mobile First */
+
+.alert {
+  position: relative;
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border, #e5e7eb);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  display: grid;
+  grid-template-columns: 0 1fr;
+  gap: 0 0.75rem;
+  row-gap: 0.125rem;
+  align-items: start;
+}
+
+.alert:has(> svg) {
+  grid-template-columns: calc(1rem) 1fr;
+}
+
+.alert > svg {
+  width: 1rem;
+  height: 1rem;
+  transform: translateY(0.125rem);
+  color: currentColor;
+}
+
+.default {
+  background-color: var(--color-card, white);
+  color: var(--color-card-foreground, #000);
+}
+
+.destructive {
+  color: var(--color-destructive, #ef4444);
+  background-color: var(--color-card, white);
+}
+
+.destructive > svg {
+  color: currentColor;
+}
+
+.alertTitle {
+  grid-column-start: 2;
+  min-height: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.alertDescription {
+  grid-column-start: 2;
+  color: var(--color-muted-foreground, #6b7280);
+  font-size: 0.875rem;
+  display: grid;
+  justify-items: start;
+  gap: 0.25rem;
+}
+
+.alertDescription p {
+  line-height: 1.625;
+}
+
+.destructive .alertDescription {
+  color: rgba(239, 68, 68, 0.9);
+}

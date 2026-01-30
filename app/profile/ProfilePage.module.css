@@ -1,0 +1,428 @@
+/* ==================== */
+/* ІКОНИ */
+/* ==================== */
+.icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.quickLinkIcon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+}
+
+.emptyOrdersIcon {
+  width: 3rem;
+  height: 3rem;
+  color: var(--muted-foreground);
+  margin: 0 auto 1rem;
+}
+
+/* ==================== */
+/* БАЗОВІ СТИЛІ (МОБІЛЬНІ < 375px) */
+/* ==================== */
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background-color: var(--background);
+  min-height: 100vh;
+}
+
+.title {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--foreground);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+/* ==================== */
+/* КАРТКА КОРИСТУВАЧА */
+/* ==================== */
+.userCard {
+  background-color: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.userCardHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatarWrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(34, 197, 94, 0.2);
+}
+
+.avatarPlaceholder {
+  width: 3.5rem;
+  height: 3.5rem;
+  background-color: rgba(34, 197, 94, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+
+.userName {
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--foreground);
+  margin-bottom: 0.25rem;
+  line-height: 1.5;
+}
+
+.userEmail {
+  color: var(--muted-foreground);
+  font-size: var(--text-base);
+}
+
+.userActions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.editButton,
+.logoutButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-medium);
+  background-color: var(--card);
+  line-height: 1.5;
+  flex: 1;
+  justify-content: center;
+}
+
+.editButton {
+  color: var(--primary);
+}
+
+.editButton:hover {
+  background-color: rgba(34, 197, 94, 0.05);
+  border-color: var(--primary);
+}
+
+.logoutButton {
+  color: var(--destructive);
+}
+
+.logoutButton:hover {
+  background-color: #fef2f2;
+  border-color: var(--destructive);
+}
+
+.userDetailsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.userDetail {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.userDetail:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.userDetailLabel {
+  font-size: var(--text-sm);
+  color: var(--muted-foreground);
+  margin-bottom: 0.25rem;
+}
+
+.userDetailValue {
+  font-weight: 500;
+  color: var(--foreground);
+  font-size: var(--text-base);
+}
+
+/* ==================== */
+/* ШВИДКІ ПОСИЛАННЯ */
+/* ==================== */
+.quickLinks {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.quickLink {
+  background-color: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 1.25rem;
+  transition: all 0.3s;
+  text-align: left;
+  cursor: pointer;
+  position: relative;
+  color: inherit;
+  display: block;
+  width: 100%;
+  border: none;
+}
+
+.quickLink:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+  border-color: var(--primary);
+}
+
+.quickLinkTitle {
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--foreground);
+  margin-bottom: 0.25rem;
+  line-height: 1.5;
+}
+
+.quickLinkDescription {
+  font-size: var(--text-base);
+  color: var(--muted-foreground);
+  line-height: 1.5;
+}
+
+.badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border-radius: 50%;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-sm);
+  font-weight: bold;
+}
+
+/* ==================== */
+/* ІСТОРІЯ ЗАМОВЛЕНЬ */
+/* ==================== */
+.ordersCard {
+  background-color: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.ordersTitle {
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--foreground);
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+
+.emptyOrders {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.emptyOrdersText {
+  color: var(--muted-foreground);
+  font-size: var(--text-base);
+}
+
+/* ==================== */
+/* НЕ АВТОРИЗОВАНО */
+/* ==================== */
+.notAuthorized {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.notAuthorizedTitle {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--foreground);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.notAuthorizedText {
+  color: var(--muted-foreground);
+  margin-bottom: 2rem;
+  font-size: var(--text-base);
+}
+
+.notAuthorizedButton {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-base);
+  line-height: 1.5;
+}
+
+.notAuthorizedButton:hover {
+  background-color: var(--accent);
+}
+
+/* ==================== */
+/* ПЕРЕЛОМ 375px */
+/* ==================== */
+@media only screen and (min-width: 375px) {
+  .userActions {
+    flex-wrap: nowrap;
+  }
+
+  .editButton,
+  .logoutButton {
+    flex: none;
+    min-width: 120px;
+  }
+}
+
+/* ==================== */
+/* ПЕРЕЛОМ 768px (ПЛАНШЕТИ) */
+/* ==================== */
+@media only screen and (min-width: 768px) {
+  .container {
+    max-width: 768px;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .title {
+    font-size: var(--text-3xl);
+    margin-bottom: 2rem;
+  }
+
+  .userCard {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .userCardHeader {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+  }
+
+  .userInfo {
+    gap: 1rem;
+  }
+
+  .avatar {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .avatarPlaceholder {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .userName {
+    font-size: var(--text-2xl);
+  }
+
+  .userDetailsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .userDetail {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .quickLinks {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .quickLink {
+    padding: 1.5rem;
+  }
+
+  .ordersCard {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .ordersTitle {
+    font-size: var(--text-2xl);
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* ==================== */
+/* ПЕРЕЛОМ 1440px (ДЕСКТОП) */
+/* ==================== */
+@media only screen and (min-width: 1440px) {
+  .container {
+    max-width: 1440px;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .title {
+    font-size: var(--text-3xl);
+  }
+
+  .quickLinks {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .userCard {
+    padding: 2rem;
+  }
+
+  .quickLink {
+    padding: 2rem;
+  }
+
+  .ordersCard {
+    padding: 2rem;
+  }
+}

@@ -1,0 +1,182 @@
+/* Mobile First - базові стилі для мобілки */
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+}
+
+.menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 85%;
+  max-width: 400px;
+  background-color: white;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* Планшет */
+@media only screen and (min-width: 768px) {
+  .menu {
+    width: 400px;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: linear-gradient(135deg, rgba(22, 163, 74, 0.05) 0%, rgba(255, 255, 255, 1) 100%);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.closeButton {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #6b7280;
+}
+
+.closeButton:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+  transform: rotate(90deg);
+}
+
+.closeIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+}
+
+.navList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.navLink {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.5rem;
+  text-decoration: none;
+  color: #111827;
+  font-size: 1.125rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  overflow: hidden;
+}
+
+.navLink:hover {
+  background-color: rgba(22, 163, 74, 0.05);
+  color: #16a34a;
+}
+
+.navLink:active {
+  background-color: rgba(22, 163, 74, 0.1);
+}
+
+.navLinkText {
+  position: relative;
+  z-index: 1;
+}
+
+.navLinkIndicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #16a34a 0%, #22c55e 100%);
+  border-radius: 2px 2px 0 0;
+}
+
+.contactInfo {
+  padding: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  background: linear-gradient(135deg, rgba(22, 163, 74, 0.02) 0%, rgba(255, 255, 255, 1) 100%);
+}
+
+.contactTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 1rem 0;
+}
+
+.contactText {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+
+.contactLink {
+  color: #16a34a;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.contactLink:hover {
+  color: #15803d;
+  text-decoration: underline;
+}
+
+.schedule {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.scheduleTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+}
+
+.scheduleText {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0.25rem 0;
+  line-height: 1.6;
+}

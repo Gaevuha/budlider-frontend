@@ -1,0 +1,127 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+/* Sizes */
+.small {
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  gap: 4px;
+}
+
+.medium {
+  padding: 6px 12px;
+  font-size: 0.875rem;
+  gap: 6px;
+}
+
+.large {
+  padding: 8px 16px;
+  font-size: 1rem;
+  gap: 8px;
+}
+
+/* Icon styles */
+.icon {
+  flex-shrink: 0;
+}
+
+.small .icon {
+  width: 14px;
+  height: 14px;
+}
+
+.medium .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.large .icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* Status variants */
+.inStock {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  color: #059669;
+  border: 1.5px solid #6ee7b7;
+  box-shadow: 0 1px 3px rgba(5, 150, 105, 0.1);
+}
+
+.iconInStock {
+  color: #10b981;
+}
+
+.preOrder {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  color: #d97706;
+  border: 1.5px solid #fbbf24;
+  box-shadow: 0 1px 3px rgba(217, 119, 6, 0.1);
+}
+
+.iconPreOrder {
+  color: #f59e0b;
+}
+
+.outOfStock {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #dc2626;
+  border: 1.5px solid #f87171;
+  box-shadow: 0 1px 3px rgba(220, 38, 38, 0.1);
+}
+
+.iconOutOfStock {
+  color: #ef4444;
+}
+
+.unknown {
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  color: #6b7280;
+  border: 1.5px solid #d1d5db;
+  box-shadow: 0 1px 3px rgba(107, 114, 128, 0.1);
+}
+
+.iconUnknown {
+  color: #9ca3af;
+}
+
+/* Text */
+.text {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.stockCount {
+  font-weight: 500;
+  opacity: 0.85;
+  margin-left: 2px;
+}
+
+/* Hover effect */
+.badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .medium {
+    padding: 5px 10px;
+    font-size: 0.8125rem;
+  }
+  
+  .large {
+    padding: 6px 12px;
+    font-size: 0.9375rem;
+  }
+}

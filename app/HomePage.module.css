@@ -1,0 +1,349 @@
+.features {
+  padding: 2rem 0;
+  background-color: var(--card);
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.featureCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.25rem;
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.featureCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.featureIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.625rem;
+  background-color: rgba(var(--primary-rgb, 34, 197, 94), 0.1);
+  border-radius: 0.5rem;
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+}
+
+.featureCard h3 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--foreground);
+}
+
+.featureCard p {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  line-height: 1.3;
+}
+
+/* Products Sections */
+.productsSection {
+  padding: 2rem 0;
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.sectionHeader h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.viewAllLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.viewAllLink:hover {
+  color: var(--accent);
+}
+
+.viewAllLink svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.productsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+/* CTA Section - прихована на мобільних */
+.ctaSection {
+  display: none;
+}
+
+/* Tablet (375px+) */
+@media only screen and (min-width: 375px) {
+  .features {
+    padding: 2.5rem 0;
+  }
+
+  .featuresGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .featureCard {
+    padding: 1.5rem;
+  }
+
+  .featureIcon {
+    width: 3rem;
+    height: 3rem;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .featureCard h3 {
+    font-size: 1rem;
+  }
+
+  .featureCard p {
+    font-size: 0.875rem;
+  }
+
+  .productsSection {
+    padding: 2.5rem 0;
+  }
+
+  .sectionHeader {
+    margin-bottom: 1.75rem;
+  }
+
+  .sectionHeader h2 {
+    font-size: 1.5rem;
+  }
+
+  .viewAllLink {
+    font-size: 1rem;
+  }
+
+  .productsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+/* Tablet (768px+) */
+@media only screen and (min-width: 768px) {
+  .features {
+    padding: 3rem 0;
+  }
+
+  .featuresGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .featureCard {
+    padding: 1.75rem;
+  }
+
+  .featureIcon {
+    width: 3.5rem;
+    height: 3.5rem;
+    padding: 0.875rem;
+  }
+
+  .featureCard h3 {
+    font-size: 1.125rem;
+  }
+
+  .featureCard p {
+    font-size: 0.9rem;
+  }
+
+  .productsSection {
+    padding: 3rem 0;
+  }
+
+  .sectionHeader {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .sectionHeader h2 {
+    font-size: 1.75rem;
+  }
+
+  .productsGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  /* Показуємо CTA секцію на планшетах і вище */
+  .ctaSection {
+    display: block;
+    padding: 2.5rem 0;
+  }
+
+  .ctaCard {
+    background-color: var(--muted);
+    border-radius: 1rem;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .ctaTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--foreground);
+  }
+
+  .ctaDescription {
+    color: var(--muted-foreground);
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    max-width: 36rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .ctaButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease;
+  }
+
+  .ctaButton:hover {
+    background-color: var(--accent);
+  }
+}
+
+/* Desktop (1440px+) */
+@media only screen and (min-width: 1440px) {
+  .features {
+    padding: 4rem 0;
+  }
+
+  .featuresGrid {
+    gap: 2rem;
+  }
+
+  .featureCard {
+    padding: 2rem;
+    border-radius: 0.75rem;
+  }
+
+  .featureIcon {
+    width: 4rem;
+    height: 4rem;
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .featureCard h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .featureCard p {
+    font-size: 1rem;
+  }
+
+  .productsSection {
+    padding: 4rem 0;
+  }
+
+  .sectionHeader {
+    margin-bottom: 2.5rem;
+  }
+
+  .sectionHeader h2 {
+    font-size: 2rem;
+  }
+
+  .productsGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+
+  .ctaSection {
+    padding: 4rem 0;
+  }
+
+  .ctaCard {
+    padding: 3rem 4rem;
+    border-radius: 1.25rem;
+  }
+
+  .ctaTitle {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .ctaDescription {
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+    max-width: 42rem;
+  }
+
+  .ctaButton {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    border-radius: 0.75rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .features {
+    background-color: var(--card);
+  }
+
+  .featureCard {
+    background-color: var(--card);
+    border-color: var(--border);
+  }
+
+  .featureIcon {
+    background-color: rgba(var(--primary-rgb, 34, 197, 94), 0.15);
+  }
+
+  .ctaCard {
+    background-color: var(--muted);
+  }
+}
+
+/* Якщо потрібно задати RGB значення для primary кольору */
+/* moved global variables to styles/globals.css */
