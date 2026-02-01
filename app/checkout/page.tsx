@@ -1,16 +1,17 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { mockProducts } from "@/data/mockData";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { DeliverySelection } from "@/components/DeliverySelection/DeliverySelection";
 import { toast } from "@/lib/utils/toast";
 import { useCart, useClearCart } from "@/lib/hooks/useCart";
 import { useAuth } from "@/contexts/AuthContext";
-import { ordersStorage } from "@/lib/utils/ordersStorage";
 import { CardPaymentForm } from "@/components/CardPaymentForm/CardPaymentForm";
+import { fetchProductClient } from "@/lib/api/apiClient";
+import { createOrderClient } from "@/lib/api/apiClient";
+import type { Product } from "@/types";
 import {
   CreditCard,
   Banknote,
@@ -157,12 +158,55 @@ export default function CheckoutPage() {
   const clearCart = useClearCart();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const cartItems = items
-    .map((item) => {
-      const product = mockProducts.find((p) => p._id === item.productId);
-      return { ...item, product };
-    })
-    .filter((item) => item.product);
+  const [productsById, setProductsById] = useState<Record<string, Product>>({});
+
+  const normalizeProduct = (data: any): Product | null => {
+    if (!data) return null;
+    if (data?.data) return data.data;
+    return data;
+  };
+
+  useEffect(() => {
+    const ids = Array.from(new Set(items.map((item) => item.productId)));
+    if (ids.length === 0) {
+      setProductsById({});
+      return;
+    }
+
+    let isMounted = true;
+    const load = async () => {
+      const results = await Promise.all(
+        ids.map(async (id) => {
+          try {
+            const res = await fetchProductClient(id);
+            return normalizeProduct(res);
+          } catch {
+            return null;
+          }
+        })
+      );
+
+      if (!isMounted) return;
+      const map: Record<string, Product> = {};
+      results.forEach((product) => {
+        if (product?._id) map[product._id] = product;
+      });
+      setProductsById(map);
+    };
+
+    load();
+    return () => {
+      isMounted = false;
+    };
+  }, [items]);
+
+  const cartItems = useMemo(
+    () =>
+      items
+        .map((item) => ({ ...item, product: productsById[item.productId] }))
+        .filter((item) => item.product),
+    [items, productsById]
+  );
 
   const total = cartItems.reduce((sum, item) => {
     return sum + (item.product?.price || 0) * item.quantity;
@@ -199,9 +243,7 @@ export default function CheckoutPage() {
           total: (item.product?.price || 0) * item.quantity,
         }));
 
-        const order: any = {
-          id: Date.now().toString(),
-          userId: user?._id,
+        const orderPayload: any = {
           items: orderItems,
           total: total,
           customerName: values.name,
@@ -211,12 +253,10 @@ export default function CheckoutPage() {
           deliveryMethod: values.deliveryMethod,
           comment: values.comment || "",
           paymentMethod: values.paymentMethod,
-          status: values.paymentMethod === "card_online" ? "paid" : "new",
-          createdAt: new Date().toISOString(),
           type: "product",
         };
 
-        ordersStorage.addOrder(order);
+        await createOrderClient(orderPayload);
         clearCart.mutate();
 
         if (values.paymentMethod === "card_online") {

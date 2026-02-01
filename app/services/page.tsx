@@ -2,9 +2,8 @@
 
 import { Construction, Truck, Package, Settings } from "lucide-react";
 import { useState, FormEvent, useEffect } from "react";
-import { ordersStorage } from "@/lib/utils/ordersStorage";
+import { createOrderClient } from "@/lib/api/apiClient";
 import { toast } from "@/lib/utils/toast";
-import { Order } from "@/types/index";
 import { useAuth } from "@/contexts/AuthContext";
 import styles from "./ServicesPage.module.css";
 
@@ -125,25 +124,21 @@ export default function ServicesPage() {
     const formData = new FormData(form);
 
     try {
-      const serviceOrder: Order = {
-        id: Date.now().toString(),
-        userId: user?._id || "guest",
+      const serviceOrder: any = {
         items: [],
         total: 0,
         customerName: formData.get("name") as string,
         customerPhone: formData.get("phone") as string,
         customerEmail: formData.get("email") as string,
         deliveryAddress: formData.get("address") as string,
-        deliveryMethod: "self-pickup", // Додано обов'язкове поле
+        deliveryMethod: "self-pickup",
         comment: formData.get("comment") as string,
         paymentMethod: "cash",
-        status: "new",
-        createdAt: new Date().toISOString(),
         type: "service",
         serviceName: selectedService?.name || "",
       };
 
-      ordersStorage.addOrder(serviceOrder);
+      await createOrderClient(serviceOrder);
 
       toast.success(
         "Заявку успішно відправлено! Наш менеджер зв'яжеться з вами найближчим часом."

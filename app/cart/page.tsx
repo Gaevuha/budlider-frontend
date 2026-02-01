@@ -2,15 +2,17 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAuthModalStore } from "@/store/authModalStore";
-import { mockProducts } from "@/data/mockData";
 import { Minus, Plus, X, ShoppingBag } from "lucide-react";
 import {
   useCart,
   useUpdateCartQuantity,
   useRemoveFromCart,
 } from "@/lib/hooks/useCart";
+import { fetchProductClient } from "@/lib/api/apiClient";
+import type { Product } from "@/types";
 import styles from "./CartPage.module.css";
 
 export default function CartPage() {
@@ -22,12 +24,58 @@ export default function CartPage() {
   const { user } = useAuth();
   const { openModal } = useAuthModalStore();
 
-  const cartItems = items
-    .map((item) => {
-      const product = mockProducts.find((p) => p._id === item.productId);
-      return { ...item, product };
-    })
-    .filter((item) => item.product);
+  const [productsById, setProductsById] = useState<Record<string, Product>>({});
+
+  const normalizeProduct = (data: any): Product | null => {
+    if (!data) return null;
+    if (data?.data) return data.data;
+    return data;
+  };
+
+  useEffect(() => {
+    const ids = Array.from(new Set(items.map((item) => item.productId)));
+    if (ids.length === 0) {
+      setProductsById({});
+      return;
+    }
+
+    let isMounted = true;
+    const load = async () => {
+      try {
+        const results = await Promise.all(
+          ids.map(async (id) => {
+            try {
+              const res = await fetchProductClient(id);
+              return normalizeProduct(res);
+            } catch {
+              return null;
+            }
+          })
+        );
+        if (!isMounted) return;
+        const map: Record<string, Product> = {};
+        results.forEach((product) => {
+          if (product?._id) map[product._id] = product;
+        });
+        setProductsById(map);
+      } finally {
+        // no-op
+      }
+    };
+
+    load();
+    return () => {
+      isMounted = false;
+    };
+  }, [items]);
+
+  const cartItems = useMemo(
+    () =>
+      items
+        .map((item) => ({ ...item, product: productsById[item.productId] }))
+        .filter((item) => item.product),
+    [items, productsById]
+  );
 
   const total = cartItems.reduce((sum, item) => {
     return sum + (item.product?.price || 0) * item.quantity;

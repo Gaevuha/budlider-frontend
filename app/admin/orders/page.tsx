@@ -3,7 +3,10 @@
 import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import { ordersStorage } from "@/lib/utils/ordersStorage";
+import {
+  fetchAllOrdersClient,
+  updateOrderStatusClient,
+} from "@/lib/api/apiClient";
 import { Order } from "@/types";
 import {
   Download,
@@ -45,30 +48,34 @@ export default function AdminOrdersPage() {
     loadOrders();
   }, [isAdmin, router]);
 
-  const loadOrders = () => {
-    const allOrders = ordersStorage.getOrders();
-    setOrders(allOrders);
+  const loadOrders = async () => {
+    try {
+      const res = await fetchAllOrdersClient();
+      const data = res?.data?.orders || res?.orders || res || [];
+      setOrders(Array.isArray(data) ? data : []);
+    } catch {
+      setOrders([]);
+    }
   };
 
-  const handleStatusChange = (orderId: string, newStatus: Order["status"]) => {
-    ordersStorage.updateOrderStatus(orderId, newStatus);
+  const handleStatusChange = async (
+    orderId: string,
+    newStatus: Order["status"]
+  ) => {
+    await updateOrderStatusClient(orderId, { status: newStatus });
     loadOrders();
     toast.success("Статус замовлення оновлено");
   };
 
   const handleCancelOrder = (orderId: string) => {
     if (window.confirm("Скасувати це замовлення?")) {
-      ordersStorage.updateOrderStatus(orderId, "cancelled");
-      loadOrders();
-      toast.success("Замовлення скасовано");
+      handleStatusChange(orderId, "cancelled");
     }
   };
 
   const handleDeleteOrder = (orderId: string) => {
     if (window.confirm("Видалити це замовлення?")) {
-      ordersStorage.removeOrder(orderId);
-      loadOrders();
-      toast.success("Замовлення видалено");
+      handleStatusChange(orderId, "cancelled");
     }
   };
 

@@ -1,7 +1,11 @@
 {
   "/catalog/page": "app/catalog/page.js",
-  "/wishlist/page": "app/wishlist/page.js",
-  "/page": "app/page.js",
   "/cart/page": "app/cart/page.js",
-  "/profile/page": "app/profile/page.js"
+  "/profile/page": "app/profile/page.js",
+  "/services/page": "app/services/page.js",
+  "/about/page": "app/about/page.js",
+  "/delivery/page": "app/delivery/page.js",
+  "/contacts/page": "app/contacts/page.js",
+  "/page": "app/page.js",
+  "/api/proxy/[...path]/route": "app/api/proxy/[...path]/route.js"
 }

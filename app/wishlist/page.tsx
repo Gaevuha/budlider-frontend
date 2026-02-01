@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { mockProducts } from "@/data/mockData";
+import { useEffect, useMemo, useState } from "react";
 import { ProductCard } from "@/components/ProductCard/ProductCard";
 import { QuickOrderModal } from "@/components/QuickOrderModal/QuickOrderModal";
 import { Product } from "@/types";
 import { useCart, useAddToCart, useRemoveFromCart } from "@/lib/hooks/useCart";
 import { useWishlist, useToggleWishlist } from "@/lib/hooks/useWishlist";
+import { fetchProductClient } from "@/lib/api/apiClient";
 import { Heart } from "lucide-react";
 import styles from "./WishlistPage.module.css";
 
@@ -22,12 +22,54 @@ export default function WishlistPage() {
   const addToCart = useAddToCart();
   const removeFromCart = useRemoveFromCart();
 
-  const favoriteProducts = mockProducts.filter((product) =>
-    favorites.includes(product._id)
+  const [productsById, setProductsById] = useState<Record<string, Product>>({});
+
+  const normalizeProduct = (data: any): Product | null => {
+    if (!data) return null;
+    if (data?.data) return data.data;
+    return data;
+  };
+
+  useEffect(() => {
+    if (favorites.length === 0) {
+      setProductsById({});
+      return;
+    }
+
+    let isMounted = true;
+    const load = async () => {
+      const results = await Promise.all(
+        favorites.map(async (id) => {
+          try {
+            const res = await fetchProductClient(id);
+            return normalizeProduct(res);
+          } catch {
+            return null;
+          }
+        })
+      );
+
+      if (!isMounted) return;
+      const map: Record<string, Product> = {};
+      results.forEach((product) => {
+        if (product?._id) map[product._id] = product;
+      });
+      setProductsById(map);
+    };
+
+    load();
+    return () => {
+      isMounted = false;
+    };
+  }, [favorites]);
+
+  const favoriteProducts = useMemo(
+    () => favorites.map((id) => productsById[id]).filter(Boolean) as Product[],
+    [favorites, productsById]
   );
 
   const handleQuickOrder = (productId: string) => {
-    const product = mockProducts.find((p) => p._id === productId);
+    const product = productsById[productId];
     if (product) {
       setQuickOrderProduct(product);
     }

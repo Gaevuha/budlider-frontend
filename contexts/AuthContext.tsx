@@ -9,6 +9,13 @@ import type { User, AuthContextType } from "@/types/index";
 import { toast } from "@/lib/utils/toast";
 import { useCartStore } from "@/store/cartStore";
 import { useFavoritesStore } from "@/store/favoritesStore";
+import {
+  registerClient,
+  loginClient,
+  logoutClient,
+  getMeClient,
+  updateProfileClient,
+} from "@/lib/api/apiClient";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -36,85 +43,73 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setToken(savedToken);
       setAuthCookie(savedToken);
     }
+    if (!savedUser) {
+      getMeClient()
+        .then((res) => {
+          const currentUser = res?.data?.user || res?.user || res;
+          if (currentUser) {
+            setUser(currentUser);
+            localStorage.setItem("user", JSON.stringify(currentUser));
+          }
+        })
+        .catch(() => undefined);
+    }
   }, []);
 
   const login = async (email: string, password: string) => {
-    // Симуляція API запиту
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    const res = await loginClient({ email, password });
+    const authUser = res?.data?.user || res?.user;
+    const authToken = res?.data?.token || res?.token;
 
-    // Перевірка демо облікових записів
-    if (email === "admin@budlider.com" && password === "admin123") {
-      const adminUser: User = {
-        _id: "1",
-        email: "admin@budlider.com",
-        name: "Адміністратор",
-        role: "admin",
-        createdAt: new Date().toISOString(),
-      };
-      const demoToken = "demo_admin_token_" + Date.now();
-      setUser(adminUser);
-      setToken(demoToken);
-      localStorage.setItem("user", JSON.stringify(adminUser));
-      localStorage.setItem("token", demoToken);
-      setAuthCookie(demoToken);
-      toast.success(`Вітаємо, ${adminUser.name}!`, "Успішний вхід");
-      return;
+    if (authUser) {
+      setUser(authUser);
+      localStorage.setItem("user", JSON.stringify(authUser));
+    }
+    if (authToken) {
+      setToken(authToken);
+      localStorage.setItem("token", authToken);
+      setAuthCookie(authToken);
     }
 
-    if (email === "user@example.com" && password === "user123") {
-      const regularUser: User = {
-        _id: "2",
-        email: "user@example.com",
-        name: "Іван Петренко",
-        phone: "+380501234567",
-        role: "user",
-        createdAt: new Date().toISOString(),
-      };
-      const demoToken = "demo_user_token_" + Date.now();
-      setUser(regularUser);
-      setToken(demoToken);
-      localStorage.setItem("user", JSON.stringify(regularUser));
-      localStorage.setItem("token", demoToken);
-      setAuthCookie(demoToken);
-      toast.success(`Вітаємо, ${regularUser.name}!`, "Успішний вхід");
-      return;
+    if (!authUser) {
+      const me = await getMeClient();
+      const currentUser = me?.data?.user || me?.user || me;
+      if (currentUser) {
+        setUser(currentUser);
+        localStorage.setItem("user", JSON.stringify(currentUser));
+      }
     }
 
-    throw new Error("Невірний email або пароль");
+    toast.success("Вітаємо!", "Успішний вхід");
   };
 
   const register = async (name: string, email: string, password: string) => {
-    // Симуляція API запиту
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    const res = await registerClient({ name, email, password });
+    const authUser = res?.data?.user || res?.user;
+    const authToken = res?.data?.token || res?.token;
 
-    // Перевірка чи користувач вже існує
-    const existingUser = localStorage.getItem(`user_${email}`);
-    if (existingUser) {
-      throw new Error("Користувач з таким email вже існує");
+    if (authUser) {
+      setUser(authUser);
+      localStorage.setItem("user", JSON.stringify(authUser));
+    }
+    if (authToken) {
+      setToken(authToken);
+      localStorage.setItem("token", authToken);
+      setAuthCookie(authToken);
     }
 
-    const newUser: User = {
-      _id: Date.now().toString(),
-      email,
-      name,
-      role: "user",
-      createdAt: new Date().toISOString(),
-    };
-
-    const demoToken = "demo_token_" + Date.now();
-    setUser(newUser);
-    setToken(demoToken);
-    localStorage.setItem("user", JSON.stringify(newUser));
-    localStorage.setItem("token", demoToken);
-    localStorage.setItem(`user_${email}`, JSON.stringify({ email, password }));
-    setAuthCookie(demoToken);
     toast.success(
-      `Вітаємо, ${newUser.name}! Ваш акаунт успішно створено.`,
+      `Вітаємо${authUser?.name ? `, ${authUser.name}` : ""}!`,
       "Реєстрація успішна"
     );
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await logoutClient();
+    } catch {
+      // ignore
+    }
     setUser(null);
     setToken(null);
     localStorage.removeItem("user");
@@ -133,10 +128,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     toast.info("Ви успішно вийшли з акаунту", "До побачення");
   };
 
-  const updateProfile = (data: Partial<User>) => {
+  const updateProfile = async (data: Partial<User>) => {
     if (!user) return;
 
-    const updatedUser = { ...user, ...data };
+    const res = await updateProfileClient(data);
+    const updatedUser = res?.data?.user || res?.user || { ...user, ...data };
     setUser(updatedUser);
     localStorage.setItem("user", JSON.stringify(updatedUser));
     toast.success("Профіль успішно оновлено");

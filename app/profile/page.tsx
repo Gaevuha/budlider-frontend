@@ -16,7 +16,7 @@ import {
 import { ProfileEditModal } from "@/components/ProfileEditModal/ProfileEditModal";
 import { useCart } from "@/lib/hooks/useCart";
 import { useWishlist } from "@/lib/hooks/useWishlist";
-import { ordersStorage } from "@/lib/utils/ordersStorage";
+import { fetchOrdersClient } from "@/lib/api/apiClient";
 import type { Order } from "@/types";
 import styles from "./ProfilePage.module.css";
 
@@ -37,11 +37,26 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (!user) return;
-    const storedOrders = ordersStorage.getOrders();
-    const userOrders = storedOrders.filter(
-      (order) => order.userId === user._id
-    );
-    setOrders(userOrders);
+    let isMounted = true;
+    const load = async () => {
+      try {
+        const res = await fetchOrdersClient();
+        const data = res?.data?.orders || res?.orders || res || [];
+        const userOrders = Array.isArray(data)
+          ? data.filter((order: Order) => order.userId === user._id)
+          : [];
+        if (!isMounted) return;
+        setOrders(userOrders);
+      } catch {
+        if (!isMounted) return;
+        setOrders([]);
+      }
+    };
+
+    load();
+    return () => {
+      isMounted = false;
+    };
   }, [user]);
 
   const sortedOrders = useMemo(() => {

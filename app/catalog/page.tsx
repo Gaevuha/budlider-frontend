@@ -3,7 +3,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
-import { mockProducts } from "@/data/mockData";
 import { ProductCard } from "@/components/ProductCard/ProductCard";
 import { CatalogFilters } from "@/components/CatalogFilters/CatalogFilters";
 import {
@@ -18,7 +17,7 @@ import { Product, Filters } from "@/types";
 import { useCart, useAddToCart, useRemoveFromCart } from "@/lib/hooks/useCart";
 import { useWishlist, useToggleWishlist } from "@/lib/hooks/useWishlist";
 import { useBreakpoint } from "@/lib/hooks/useBreakpoint";
-import { useAuth } from "@/contexts/AuthContext";
+import { fetchProductsClient } from "@/lib/api/apiClient";
 
 import { Filter, X } from "lucide-react";
 import styles from "./CatalogPage.module.css";
@@ -96,7 +95,6 @@ export default function CatalogPage() {
 
   const [sortBy, setSortBy] = useState<SortOption>("default");
   const [currentPage, setCurrentPage] = useState(0);
-  const [displayedItems, setDisplayedItems] = useState(8);
   const [quickOrderProduct, setQuickOrderProduct] = useState<Product | null>(
     null
   );
@@ -104,10 +102,15 @@ export default function CatalogPage() {
     () => searchParams.get("search") || ""
   );
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalItems: 0,
+  });
   const [isFiltersModalOpen, setIsFiltersModalOpen] = useState(false);
 
   const breakpoint = useBreakpoint();
-  const { user } = useAuth();
 
   const { items: cartItems } = useCart();
   const addToCart = useAddToCart();
@@ -125,66 +128,129 @@ export default function CatalogPage() {
   useEffect(() => {
     setSearchQuery(searchParams.get("search") || "");
     setCurrentPage(0);
-    setDisplayedItems(itemsPerPage);
   }, [searchParams, itemsPerPage]);
 
-  const filteredProducts = useMemo(() => {
-    let result = [...mockProducts];
+  const normalizeProducts = (data: any): Product[] => {
+    if (Array.isArray(data)) return data;
+    if (data?.data?.products) return data.data.products;
+    if (data?.products) return data.products;
+    return [];
+  };
 
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      result = result.filter(
-        (p) =>
-          p.name.toLowerCase().includes(q) ||
-          p.description?.toLowerCase().includes(q) ||
-          p.category.name.toLowerCase().includes(q) ||
-          p.brand.toLowerCase().includes(q)
-      );
-    }
+  const normalizePagination = (data: any) => {
+    return (
+      data?.data?.pagination ||
+      data?.pagination || {
+        currentPage: currentPage + 1,
+        totalPages: 1,
+        totalItems: 0,
+      }
+    );
+  };
 
-    if (filters.categories.length)
-      result = result.filter((p) =>
-        filters.categories.includes(p.category.slug)
-      );
+  const sortParam = useMemo(() => {
+    if (sortBy === "price-asc") return "price_asc";
+    if (sortBy === "price-desc") return "price_desc";
+    if (sortBy === "name") return "name";
+    return undefined;
+  }, [sortBy]);
 
-    if (filters.brands.length)
-      result = result.filter((p) => filters.brands.includes(p.brand));
+  const hasActiveFilters =
+    Boolean(searchQuery) ||
+    filters.categories.length > 0 ||
+    filters.brands.length > 0 ||
+    filters.priceMin !== undefined ||
+    filters.priceMax !== undefined ||
+    filters.rating !== undefined ||
+    filters.inStock !== undefined ||
+    filters.onSale !== undefined ||
+    filters.isNew !== undefined;
 
-    if (filters.priceMin !== undefined)
-      result = result.filter((p) => p.price >= filters.priceMin!);
+  useEffect(() => {
+    let isMounted = true;
+    const loadProducts = async () => {
+      const isAppend = breakpoint !== "desktop" && currentPage > 0;
+      if (isAppend) setIsLoadingMore(true);
 
-    if (filters.priceMax !== undefined)
-      result = result.filter((p) => p.price <= filters.priceMax!);
+      try {
+        const params = {
+          search: searchQuery || undefined,
+          categories: filters.categories.length
+            ? filters.categories
+            : undefined,
+          brands: filters.brands.length ? filters.brands : undefined,
+          priceMin: filters.priceMin,
+          priceMax: filters.priceMax,
+          rating: filters.rating,
+          inStock: filters.inStock,
+          onSale: filters.onSale,
+          isOnSale: filters.onSale,
+          is_on_sale: filters.onSale,
+          isNew: filters.isNew,
+          isNewProduct: filters.isNew,
+          is_new: filters.isNew,
+          sort: sortParam,
+          page: currentPage + 1,
+          limit: itemsPerPage,
+        };
 
-    if (filters.rating !== undefined)
-      result = result.filter((p) => p.rating >= filters.rating!);
+        const res = await fetchProductsClient(params);
+        if (!isMounted) return;
 
-    if (filters.inStock)
-      result = result.filter((p) => p.availability === "in_stock");
+        const nextProducts = normalizeProducts(res);
+        const nextPagination = normalizePagination(res);
+        const filteredProducts = nextProducts.filter((product) => {
+          const hasNewFlag =
+            "isNewProduct" in product ||
+            "isNew" in product ||
+            "is_new" in product ||
+            "new" in product;
+          const isNewValue =
+            (product as any).isNewProduct ??
+            (product as any).isNew ??
+            (product as any).is_new ??
+            (product as any).new;
+          if (filters.isNew && hasNewFlag && isNewValue !== true) return false;
 
-    if (filters.onSale)
-      result = result.filter((p) => p.oldPrice && p.oldPrice > 0);
+          const hasSaleFlag =
+            "oldPrice" in product ||
+            "isOnSale" in product ||
+            "onSale" in product ||
+            "is_on_sale" in product;
+          const isSaleValue =
+            Boolean(product.oldPrice) ||
+            (product as any).isOnSale === true ||
+            (product as any).onSale === true ||
+            (product as any).is_on_sale === true;
+          if (filters.onSale && hasSaleFlag && !isSaleValue) return false;
 
-    if (filters.isNew) result = result.filter((p) => p.isNewProduct === true);
+          if (filters.inStock && product.availability !== "in_stock")
+            return false;
+          return true;
+        });
+        setPagination(nextPagination);
 
-    if (sortBy === "price-asc") result.sort((a, b) => a.price - b.price);
-    if (sortBy === "price-desc") result.sort((a, b) => b.price - a.price);
-    if (sortBy === "name")
-      result.sort((a, b) => a.name.localeCompare(b.name, "uk"));
+        setProducts((prev) =>
+          isAppend ? [...prev, ...filteredProducts] : filteredProducts
+        );
+      } catch (error) {
+        if (!isMounted) return;
+        setProducts([]);
+        setPagination({ currentPage: 1, totalPages: 1, totalItems: 0 });
+      } finally {
+        if (!isMounted) return;
+        setIsLoadingMore(false);
+      }
+    };
 
-    return result;
-  }, [filters, sortBy, searchQuery]);
+    loadProducts();
+    return () => {
+      isMounted = false;
+    };
+  }, [breakpoint, currentPage, filters, itemsPerPage, searchQuery, sortParam]);
 
-  const displayProducts = useMemo(() => {
-    if (breakpoint === "desktop") {
-      const start = currentPage * itemsPerPage;
-      return filteredProducts.slice(start, start + itemsPerPage);
-    }
-    return filteredProducts.slice(0, displayedItems);
-  }, [breakpoint, filteredProducts, currentPage, itemsPerPage, displayedItems]);
-
-  const pageCount = Math.ceil(filteredProducts.length / itemsPerPage);
-  const hasMoreItems = displayedItems < filteredProducts.length;
+  const pageCount = pagination.totalPages || 1;
+  const hasMoreItems = pagination.currentPage < pagination.totalPages;
 
   const handleFiltersChange = (newFilters: Filters) => {
     const params = new URLSearchParams();
@@ -217,16 +283,12 @@ export default function CatalogPage() {
   const handleToggleFavorite = (id: string) => toggleWishlist.mutate(id);
 
   const handleQuickOrder = (productId: string) => {
-    const product = mockProducts.find((p) => p._id === productId);
+    const product = products.find((p) => p._id === productId);
     if (product) setQuickOrderProduct(product);
   };
 
   const handleLoadMore = () => {
-    setIsLoadingMore(true);
-    setTimeout(() => {
-      setDisplayedItems((prev) => prev + itemsPerPage);
-      setIsLoadingMore(false);
-    }, 500);
+    setCurrentPage((prev) => prev + 1);
   };
 
   const handlePageChange = ({ selected }: { selected: number }) =>
@@ -268,7 +330,11 @@ export default function CatalogPage() {
                     </p>
                   )}
                   <p className={styles.productsCount}>
-                    Знайдено {filteredProducts.length} товарів
+                    Знайдено{" "}
+                    {hasActiveFilters
+                      ? products.length
+                      : pagination.totalItems || products.length}{" "}
+                    товарів
                   </p>
                 </div>
                 <div className={styles.headerActions}>
@@ -284,7 +350,7 @@ export default function CatalogPage() {
                 </div>
               </div>
 
-              {filteredProducts.length > 0 ? (
+              {products.length > 0 ? (
                 <>
                   {breakpoint === "desktop" && pageCount > 1 && (
                     <div className={styles.paginationContainer}>
@@ -297,7 +363,7 @@ export default function CatalogPage() {
                   )}
 
                   <ul className={styles.productsGrid}>
-                    {displayProducts.map((product) => (
+                    {products.map((product) => (
                       <li key={product._id}>
                         <ProductCard
                           product={product}

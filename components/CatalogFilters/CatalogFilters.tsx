@@ -1,46 +1,85 @@
-'use client';
+"use client";
 
-import { Filters } from '@/types';
-import { mockCategories, brands } from '@/data/mockData';
-import { useState, useEffect } from 'react';
-import { X, Tag, DollarSign, Star, Package, TrendingUp, Sparkles } from 'lucide-react';
-import styles from './CatalogFilters.module.css';
+import { Filters } from "@/types";
+import { useState, useEffect } from "react";
+import { fetchCategoriesClient, fetchBrandsClient } from "@/lib/api/apiClient";
+import { X } from "lucide-react";
+import styles from "./CatalogFilters.module.css";
 
 interface CatalogFiltersProps {
   filters: Filters;
   onFiltersChange: (filters: Filters) => void;
 }
 
-export function CatalogFilters({ filters, onFiltersChange }: CatalogFiltersProps) {
-  const [priceMin, setPriceMin] = useState<string>(filters.priceMin?.toString() || '');
-  const [priceMax, setPriceMax] = useState<string>(filters.priceMax?.toString() || '');
+export function CatalogFilters({
+  filters,
+  onFiltersChange,
+}: CatalogFiltersProps) {
+  const [priceMin, setPriceMin] = useState<string>(
+    filters.priceMin?.toString() || ""
+  );
+  const [priceMax, setPriceMax] = useState<string>(
+    filters.priceMax?.toString() || ""
+  );
+  const [categories, setCategories] = useState<any[]>([]);
+  const [brands, setBrands] = useState<string[]>([]);
 
-  console.log('CatalogFilters rendered with filters:', filters);
+  console.log("CatalogFilters rendered with filters:", filters);
 
   // Синхронізація локальних станів ціни з зовнішніми фільтрами
   useEffect(() => {
-    console.log('CatalogFilters useEffect: syncing price states');
-    setPriceMin(filters.priceMin?.toString() || '');
-    setPriceMax(filters.priceMax?.toString() || '');
+    setPriceMin(filters.priceMin?.toString() || "");
+    setPriceMax(filters.priceMax?.toString() || "");
   }, [filters.priceMin, filters.priceMax]);
 
+  useEffect(() => {
+    let isMounted = true;
+
+    const normalizeList = (data: any) => {
+      if (Array.isArray(data)) return data;
+      if (data?.data) return data.data;
+      return [];
+    };
+
+    const load = async () => {
+      try {
+        const [categoriesRes, brandsRes] = await Promise.all([
+          fetchCategoriesClient(),
+          fetchBrandsClient(),
+        ]);
+        if (!isMounted) return;
+        setCategories(normalizeList(categoriesRes));
+        setBrands(normalizeList(brandsRes));
+      } catch {
+        if (!isMounted) return;
+        setCategories([]);
+        setBrands([]);
+      }
+    };
+
+    load();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const toggleCategory = (categorySlug: string) => {
-    console.log('toggleCategory called:', categorySlug);
+    console.log("toggleCategory called:", categorySlug);
     const newCategories = filters.categories.includes(categorySlug)
-      ? filters.categories.filter(c => c !== categorySlug)
+      ? filters.categories.filter((c) => c !== categorySlug)
       : [...filters.categories, categorySlug];
     const newFilters = { ...filters, categories: newCategories };
-    console.log('Calling onFiltersChange with:', newFilters);
+    console.log("Calling onFiltersChange with:", newFilters);
     onFiltersChange(newFilters);
   };
 
   const toggleBrand = (brand: string) => {
-    console.log('toggleBrand called:', brand);
+    console.log("toggleBrand called:", brand);
     const newBrands = filters.brands.includes(brand)
-      ? filters.brands.filter(b => b !== brand)
+      ? filters.brands.filter((b) => b !== brand)
       : [...filters.brands, brand];
     const newFilters = { ...filters, brands: newBrands };
-    console.log('Calling onFiltersChange with:', newFilters);
+    console.log("Calling onFiltersChange with:", newFilters);
     onFiltersChange(newFilters);
   };
 
@@ -53,13 +92,13 @@ export function CatalogFilters({ filters, onFiltersChange }: CatalogFiltersProps
   };
 
   const clearFilters = () => {
-    console.log('🧹 clearFilters called');
-    setPriceMin('');
-    setPriceMax('');
-    
+    console.log("🧹 clearFilters called");
+    setPriceMin("");
+    setPriceMax("");
+
     // Очищаємо sessionStorage
-    sessionStorage.removeItem('catalogFilters');
-    
+    sessionStorage.removeItem("catalogFilters");
+
     onFiltersChange({
       categories: [],
       brands: [],
@@ -87,10 +126,7 @@ export function CatalogFilters({ filters, onFiltersChange }: CatalogFiltersProps
       <div className={styles.header}>
         <h2 className={styles.title}>Фільтри</h2>
         {hasActiveFilters && (
-          <button
-            onClick={clearFilters}
-            className={styles.clearButton}
-          >
+          <button onClick={clearFilters} className={styles.clearButton}>
             <X className={styles.clearIcon} />
             <span>Скинути</span>
           </button>
@@ -101,8 +137,12 @@ export function CatalogFilters({ filters, onFiltersChange }: CatalogFiltersProps
       <div className={styles.section}>
         <h3 className={styles.sectionTitle}>Категорії</h3>
         <div className={styles.checkboxList}>
-          {mockCategories.map(category => (
-            <label key={category.slug} htmlFor={`category-${category.slug}`} className={styles.checkboxLabel}>
+          {categories.map((category) => (
+            <label
+              key={category.slug}
+              htmlFor={`category-${category.slug}`}
+              className={styles.checkboxLabel}
+            >
               <input
                 id={`category-${category.slug}`}
                 type="checkbox"
@@ -120,8 +160,12 @@ export function CatalogFilters({ filters, onFiltersChange }: CatalogFiltersProps
       <div className={styles.section}>
         <h3 className={styles.sectionTitle}>Бренди</h3>
         <div className={styles.checkboxList}>
-          {brands.map(brand => (
-            <label key={brand} htmlFor={`brand-${brand}`} className={styles.checkboxLabel}>
+          {brands.map((brand) => (
+            <label
+              key={brand}
+              htmlFor={`brand-${brand}`}
+              className={styles.checkboxLabel}
+            >
               <input
                 id={`brand-${brand}`}
                 type="checkbox"
@@ -143,21 +187,18 @@ export function CatalogFilters({ filters, onFiltersChange }: CatalogFiltersProps
             type="number"
             placeholder="Від"
             value={priceMin}
-            onChange={e => setPriceMin(e.target.value)}
+            onChange={(e) => setPriceMin(e.target.value)}
             className={styles.priceInput}
           />
           <input
             type="number"
             placeholder="До"
             value={priceMax}
-            onChange={e => setPriceMax(e.target.value)}
+            onChange={(e) => setPriceMax(e.target.value)}
             className={styles.priceInput}
           />
         </div>
-        <button
-          onClick={applyPriceFilter}
-          className={styles.applyButton}
-        >
+        <button onClick={applyPriceFilter} className={styles.applyButton}>
           Застосувати
         </button>
       </div>
@@ -169,7 +210,12 @@ export function CatalogFilters({ filters, onFiltersChange }: CatalogFiltersProps
             id="filter-inStock"
             type="checkbox"
             checked={filters.inStock || false}
-            onChange={e => onFiltersChange({ ...filters, inStock: e.target.checked ? true : undefined })}
+            onChange={(e) =>
+              onFiltersChange({
+                ...filters,
+                inStock: e.target.checked ? true : undefined,
+              })
+            }
             className={styles.checkbox}
           />
           <span className={styles.checkboxText}>В наявності</span>
@@ -179,7 +225,12 @@ export function CatalogFilters({ filters, onFiltersChange }: CatalogFiltersProps
             id="filter-onSale"
             type="checkbox"
             checked={filters.onSale || false}
-            onChange={e => onFiltersChange({ ...filters, onSale: e.target.checked ? true : undefined })}
+            onChange={(e) =>
+              onFiltersChange({
+                ...filters,
+                onSale: e.target.checked ? true : undefined,
+              })
+            }
             className={styles.checkbox}
           />
           <span className={styles.checkboxText}>Акції</span>
@@ -189,7 +240,12 @@ export function CatalogFilters({ filters, onFiltersChange }: CatalogFiltersProps
             id="filter-isNew"
             type="checkbox"
             checked={filters.isNew || false}
-            onChange={e => onFiltersChange({ ...filters, isNew: e.target.checked ? true : undefined })}
+            onChange={(e) =>
+              onFiltersChange({
+                ...filters,
+                isNew: e.target.checked ? true : undefined,
+              })
+            }
             className={styles.checkbox}
           />
           <span className={styles.checkboxText}>Новинки</span>
