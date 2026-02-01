@@ -169,7 +169,7 @@ export default function ServicesPage() {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} container`}>
       <div className={styles.header}>
         <h1 className={styles.title}>Послуги спецтехніки</h1>
         <p className={styles.subtitle}>

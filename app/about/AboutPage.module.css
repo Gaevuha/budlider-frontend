@@ -1,7 +1,6 @@
 /* Mobile-first підхід */
 
 .container {
-  max-width: 896px;
   margin: 0 auto;
   padding: 1rem;
 }

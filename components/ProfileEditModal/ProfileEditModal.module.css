@@ -1,277 +1,128 @@
-.overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 1rem;
-}
-
-.modal {
-  background-color: white;
-  border-radius: 0.75rem;
-  width: 100%;
-  max-width: 600px;
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  overflow: hidden;
-}
-
-.modal form {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem;
-  border-bottom: 1px solid var(--color-border);
-  flex-shrink: 0;
-}
-
-.title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 0;
-}
-
-.closeButton {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-text-secondary);
-  transition: color 0.2s;
-  padding: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.closeButton:hover {
-  color: var(--color-text);
-}
-
-.content {
-  padding: 1.5rem;
-  overflow-y: auto;
-  flex: 1;
-  min-height: 0;
-}
-
+/* === Специфічні стилі ProfileEditModal === */
 .avatarSection {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 2rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid var(--color-border);
+  gap: 0.75rem;
+  padding: 1rem;
 }
 
 .avatarWrapper {
   position: relative;
-  margin-bottom: 1rem;
 }
 
 .avatar {
   width: 120px;
   height: 120px;
-  border-radius: 50%;
+  border-radius: 9999px;
   object-fit: cover;
-  border: 4px solid var(--color-border);
-}
-
-.avatarPlaceholder {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 4px solid var(--color-border);
-}
-
-.avatarLetter {
-  font-size: 3rem;
-  font-weight: 700;
-  color: white;
-  text-transform: uppercase;
+  border: 1px solid #e6e9ee;
 }
 
 .changeAvatarButton {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background-color: #22c55e;
+  margin-top: 0.25rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #16a34a, #22c55e);
   color: white;
   border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.2s;
-}
-
-.changeAvatarButton:hover {
-  background-color: #15803d;
-}
-
-.fileInput {
-  display: none;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem 1.5rem;
 }
 
-.formGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.label {
-  font-weight: 600;
-  font-size: 0.875rem;
-  color: var(--color-text);
-}
-
-.required {
-  color: #dc2626;
-}
-
-.input {
-  padding: 0.75rem;
-  border: 1px solid var(--color-border);
+.input,
+.textarea {
+  width: 100%;
+  padding: 0.75rem 0.875rem;
+  border: 1px solid #e6e9ee;
   border-radius: 0.5rem;
-  font-size: 1rem;
-  transition: border-color 0.2s;
-}
-
-.input:focus {
-  outline: none;
-  border-color: var(--color-primary);
-}
-
-.input:disabled {
-  background-color: #f3f4f6;
-  cursor: not-allowed;
+  font-size: 0.95rem;
 }
 
 .textarea {
-  padding: 0.75rem;
-  border: 1px solid var(--color-border);
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  transition: border-color 0.2s;
   min-height: 100px;
   resize: vertical;
-  font-family: inherit;
-}
-
-.textarea:focus {
-  outline: none;
-  border-color: var(--color-primary);
-}
-
-.error {
-  color: #dc2626;
-  font-size: 0.875rem;
 }
 
 .footer {
   display: flex;
   gap: 0.75rem;
-  padding: 1.5rem;
-  border-top: 1px solid var(--color-border);
+  padding: 0 1.25rem 1.25rem;
   justify-content: flex-end;
-  flex-shrink: 0;
-  background-color: white;
-}
-
-.button {
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: none;
-  font-size: 1rem;
-}
-
-.cancelButton {
-  background-color: transparent;
-  color: var(--color-text-secondary);
-  border: 1px solid var(--color-border);
-}
-
-.cancelButton:hover {
-  background-color: #f3f4f6;
 }
 
 .saveButton {
-  background-color: #22c55e;
+  background: linear-gradient(90deg, #16a34a, #22c55e);
   color: white;
+  padding: 0.65rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  font-weight: 700;
 }
 
-.saveButton:hover {
-  background-color: #15803d;
+.cancelButton {
+  background: transparent;
+  border: 1px solid #e6e9ee;
+  padding: 0.55rem 0.85rem;
+  border-radius: 0.5rem;
 }
 
-.saveButton:disabled {
-  background-color: #9ca3af;
-  cursor: not-allowed;
+/* Header and modern touches */
+.profileHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem 0.5rem;
+  border-bottom: 1px solid #eef2f7;
 }
 
-@media (max-width: 768px) {
-  .modal {
-    max-height: 95vh;
-  }
+.profileTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f172a;
+}
 
-  .header {
-    padding: 1rem;
-  }
+.profileCloseButton {
+  background: none;
+  border: none;
+  color: #475569;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
 
-  .content {
-    padding: 1rem;
-  }
+.profileCloseButton:hover {
+  background: #f8fafc;
+}
 
-  .footer {
-    padding: 1rem;
-    flex-direction: column-reverse;
-  }
+.input:focus,
+.textarea:focus {
+  border-color: #10b981;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.06);
+  transform: translateY(-1px);
+}
 
-  .button {
-    width: 100%;
-  }
+.changeAvatarButton {
+  transition: transform 0.12s, box-shadow 0.12s;
+}
 
-  .avatarSection {
-    margin-bottom: 1.5rem;
-    padding-bottom: 1.5rem;
-  }
+.changeAvatarButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.08);
+}
 
-  .avatar,
-  .avatarPlaceholder {
-    width: 100px;
-    height: 100px;
-  }
-
-  .avatarLetter {
-    font-size: 2.5rem;
+@media (min-width: 768px) {
+  .form {
+    padding: 1.25rem 1.75rem 1.5rem;
   }
 }

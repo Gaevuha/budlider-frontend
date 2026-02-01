@@ -1,0 +1,43 @@
+.actionButton {
+  position: relative;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: #111827;
+}
+
+.actionButton:hover {
+  background-color: #f3f4f6;
+}
+
+.actionIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Мобільна версія 375px+ */
+@media only screen and (min-width: 375px) {
+  .actionIcon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.badge {
+  position: absolute;
+  top: -0.25rem;
+  right: -0.25rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  background-color: #16a34a;
+  color: white;
+  font-size: 0.75rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

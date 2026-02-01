@@ -3,7 +3,7 @@ import styles from "./DeliveryPage.module.css";
 
 export default function DeliveryPage() {
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} container`}>
       <h1 className={styles.title}>Доставка та оплата</h1>
 
       {/* Доставка */}

@@ -48,7 +48,7 @@ export default function ContactsPage() {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} container`}>
       <h1 className={styles.title}>Контакти</h1>
 
       <div className={styles.contactsGrid}>

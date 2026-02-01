@@ -531,6 +531,112 @@
   width: 1.25rem;
   height: 1.25rem;
 }
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./components/ui/modalwrapper/ModalWrapper.module.css ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************/
+/* === Загальні стилі модалки та бекдропа === */
+
+.ModalWrapper_backdrop__uuI2b {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+/* subtle blur to the backdrop for a modern frosted effect */
+.ModalWrapper_backdrop__uuI2b {
+  backdrop-filter: blur(4px) saturate(1.05);
+}
+
+.ModalWrapper_modal__dwR60 {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  max-height: 92vh;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 18px 50px rgba(2, 6, 23, 0.28), 0 2px 6px rgba(16, 24, 40, 0.06);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  z-index: 1001;
+}
+
+.ModalWrapper_header__h_HoD {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.ModalWrapper_title__q0paS {
+  font-weight: 700;
+  color: #111827;
+}
+
+.ModalWrapper_closeButton__8QSF_ {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  color: #6b7280;
+  transition: all 0.2s;
+}
+
+.ModalWrapper_closeButton__8QSF_:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.ModalWrapper_content__Zh7ZZ {
+  padding: 1.25rem 1.25rem 1.75rem;
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .ModalWrapper_modal__dwR60 {
+    max-width: 460px;
+  }
+  .ModalWrapper_header__h_HoD {
+    padding: 1.25rem 1.5rem;
+  }
+  .ModalWrapper_title__q0paS {
+    font-size: 1.35rem;
+  }
+  .ModalWrapper_content__Zh7ZZ {
+    padding: 1.5rem 1.5rem 2rem;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1440px) {
+  .ModalWrapper_modal__dwR60 {
+    max-width: 520px;
+  }
+  .ModalWrapper_title__q0paS {
+    font-size: 1.6rem;
+  }
+  .ModalWrapper_content__Zh7ZZ {
+    padding: 2rem;
+  }
+}
+
+/* small tweak to ensure modal stays visually centered on short viewports */
+@media (max-height: 640px) {
+  .ModalWrapper_modal__dwR60 {
+    align-self: flex-start;
+    margin-top: 2.25rem;
+  }
+}
+
 /*!*********************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[3]!./node_modules/izitoast/dist/css/iziToast.min.css ***!
   \*********************************************************************************************************************************************************************************************************************************************************************************************/
@@ -543,69 +649,11 @@
 /*!*************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./components/QuickOrderModal/QuickOrderModal.module.css ***!
   \*************************************************************************************************************************************************************************************************************************************************************************************************/
-.QuickOrderModal_backdrop__DRWVt {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-}
-
-.QuickOrderModal_modal__ZB7wQ {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 90%;
-  max-width: 500px;
-  max-height: 90vh;
-  background-color: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  z-index: 1001;
-  overflow-y: auto;
-}
-
-.QuickOrderModal_header__aY3bz {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.5rem;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.QuickOrderModal_title__eeWe4 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #111827;
-}
-
-.QuickOrderModal_closeButton___YCfN {
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  border: none;
-  background: none;
-  cursor: pointer;
-  color: #6b7280;
-  transition: all 0.2s;
-}
-
-.QuickOrderModal_closeButton___YCfN:hover {
-  background-color: #f3f4f6;
-  color: #111827;
-}
-
-.QuickOrderModal_closeIcon__frgeH {
-  width: 1.5rem;
-  height: 1.5rem;
-}
-
+/* === Специфічні стилі QuickOrderModal === */
 .QuickOrderModal_productInfo__1qZhT {
   display: flex;
   gap: 1rem;
-  padding: 1.5rem;
-  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 1rem;
 }
 
 .QuickOrderModal_productImage__fA2_b {
@@ -640,7 +688,7 @@
 }
 
 .QuickOrderModal_form__6X2fx {
-  padding: 1.5rem;
+  padding-top: 1rem;
 }
 
 .QuickOrderModal_formGroup__Ad5IC {
@@ -670,19 +718,14 @@
   transition: all 0.2s;
 }
 
-.QuickOrderModal_input__KYgfh:focus,
-.QuickOrderModal_textarea__VuRvT:focus {
-  border-color: #16a34a;
-  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
-}
-
 .QuickOrderModal_inputError__KuCpe {
   border-color: #dc2626;
 }
 
-.QuickOrderModal_inputError__KuCpe:focus {
-  border-color: #dc2626;
-  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+.QuickOrderModal_textarea__VuRvT {
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
 }
 
 .QuickOrderModal_errorMessage__hxFBM {
@@ -692,40 +735,42 @@
   color: #dc2626;
 }
 
-.QuickOrderModal_textarea__VuRvT {
-  resize: vertical;
-  min-height: 80px;
-  font-family: inherit;
+.QuickOrderModal_submitButton__HvQHv {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+/* Modern tweaks */
+.QuickOrderModal_input__KYgfh:focus,
+.QuickOrderModal_textarea__VuRvT:focus {
+  border-color: #10b981;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.06);
+  transform: translateY(-1px);
 }
 
 .QuickOrderModal_submitButton__HvQHv {
-  width: 100%;
-  background-color: #16a34a;
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
+  padding: 0.85rem 1rem;
+  background: linear-gradient(90deg, #16a34a, #22c55e);
+  color: #ffffff;
   border: none;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  margin-bottom: 1rem;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.08);
+  transition: transform 0.12s, box-shadow 0.12s, opacity 0.12s;
 }
 
-.QuickOrderModal_submitButton__HvQHv:hover:not(:disabled) {
-  background-color: #15803d;
+.QuickOrderModal_submitButton__HvQHv:active {
+  transform: translateY(1px) scale(0.998);
 }
 
-.QuickOrderModal_submitButton__HvQHv:disabled {
+.QuickOrderModal_submitButton__HvQHv[disabled] {
   opacity: 0.6;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
-.QuickOrderModal_disclaimer__4vdAP {
-  font-size: 0.75rem;
-  color: #6b7280;
-  text-align: center;
-  line-height: 1.4;
+.QuickOrderModal_label__wB2kQ {
+  font-size: 0.9rem;
 }
 
 .QuickOrderModal_successMessage__HYA_D {
@@ -758,29 +803,22 @@
   color: #6b7280;
 }
 
-/* Мобілка */
-@media only screen and (max-width: 640px) {
-  .QuickOrderModal_modal__ZB7wQ {
-    width: 95%;
-    max-height: 95vh;
-  }
-
-  .QuickOrderModal_header__aY3bz {
-    padding: 1rem;
-  }
-
-  .QuickOrderModal_title__eeWe4 {
-    font-size: 1.25rem;
-  }
-
-  .QuickOrderModal_productInfo__1qZhT {
-    padding: 1rem;
-  }
-
-  .QuickOrderModal_form__6X2fx {
-    padding: 1rem;
-  }
+.QuickOrderModal_closeButton___YCfN {
+  background: none;
+  border: none;
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  color: #475569;
 }
+
+.QuickOrderModal_closeButton___YCfN:hover {
+  background: #f8fafc;
+}
+
 /*!***************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./components/Hero/Hero.module.css ***!
   \***************************************************************************************************************************************************************************************************************************************************************************/

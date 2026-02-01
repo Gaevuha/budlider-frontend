@@ -25,6 +25,37 @@
   overflow-y: auto;
 }
 
+.nav {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Активний пункт меню */
+.activeNavLink {
+  color: #16a34a;
+  background-color: rgba(22, 163, 74, 0.08);
+}
+
+/* Лінія під активним пунктом — завжди видима */
+.activeNavLink .navLinkIndicator {
+  width: 100%;
+}
+.authWrapper {
+  margin: 0 auto;
+  padding: 16px 0;
+}
+.authButtonMobile {
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  background-color: #16a34a;
+  color: white;
+  font-size: 1.125rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+}
+
 /* Планшет */
 @media only screen and (min-width: 768px) {
   .menu {
@@ -38,7 +69,11 @@
   justify-content: space-between;
   padding: 1.5rem;
   border-bottom: 1px solid #e5e7eb;
-  background: linear-gradient(135deg, rgba(22, 163, 74, 0.05) 0%, rgba(255, 255, 255, 1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(22, 163, 74, 0.05) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
   position: sticky;
   top: 0;
   z-index: 10;
@@ -132,7 +167,11 @@
 .contactInfo {
   padding: 1.5rem;
   border-top: 1px solid #e5e7eb;
-  background: linear-gradient(135deg, rgba(22, 163, 74, 0.02) 0%, rgba(255, 255, 255, 1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(22, 163, 74, 0.02) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
 }
 
 .contactTitle {

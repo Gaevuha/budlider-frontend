@@ -1,0 +1,98 @@
+.profileWrapper {
+  position: relative;
+}
+
+.profileButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+  background: none;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.profileButton:hover {
+  background-color: #f3f4f6;
+}
+
+.iconAdmin {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #16a34a;
+}
+
+.userName {
+  display: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #111827;
+  padding-right: 0.5rem;
+}
+
+/* Планшет 768px+ - показуємо ім'я користувача */
+@media only screen and (min-width: 768px) {
+  .userName {
+    display: block;
+  }
+}
+
+.profileDropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  width: 250px;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: 50;
+  overflow: hidden;
+}
+
+.profileDropdownHeader {
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+}
+
+.profileDropdownName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 0.25rem;
+}
+
+.profileDropdownEmail {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.profileDropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: #111827;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+  text-align: left;
+}
+
+.profileDropdownItem:hover {
+  background-color: #f3f4f6;
+}
+
+.profileMenuIcon {
+  width: 1.125rem;
+  height: 1.125rem;
+  color: #6b7280;
+}

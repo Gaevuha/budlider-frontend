@@ -3,7 +3,7 @@ import styles from "./AboutPage.module.css";
 
 export default function AboutPage() {
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} container`}>
       <h1 className={styles.title}>Про нас</h1>
 
       <div className={styles.introCard}>

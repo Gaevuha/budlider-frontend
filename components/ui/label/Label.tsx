@@ -4,7 +4,7 @@ import * as React from "react";
 import * as LabelPrimitive from "@radix-ui/react-label";
 import styles from "./Label.module.css";
 
-function Label({
+export default function Label({
   className = "",
   ...props
 }: React.ComponentProps<typeof LabelPrimitive.Root>) {

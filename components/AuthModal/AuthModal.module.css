@@ -1,39 +1,16 @@
-.backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-}
-
-.modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 90%;
-  max-width: 450px;
-  max-height: 90vh;
-  background-color: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  z-index: 1001;
-  overflow-y: auto;
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.5rem;
-  border-bottom: 1px solid #e5e7eb;
-}
-
+/* === Специфічні стилі AuthModal === */
 .tabs {
   display: flex;
   gap: 0.5rem;
   flex: 1;
+}
+
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 0.25rem;
 }
 
 .tab {
@@ -58,33 +35,6 @@
   border-bottom-color: #16a34a;
 }
 
-.title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #111827;
-}
-
-.closeButton {
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  border: none;
-  background: none;
-  cursor: pointer;
-  color: #6b7280;
-  transition: all 0.2s;
-  flex-shrink: 0;
-}
-
-.closeButton:hover {
-  background-color: #f3f4f6;
-  color: #111827;
-}
-
-.closeIcon {
-  width: 1.5rem;
-  height: 1.5rem;
-}
-
 .demoCredentials {
   padding: 1rem 1.5rem;
   background-color: #f0fdf4;
@@ -106,10 +56,6 @@
   margin: 0.25rem 0;
 }
 
-.form {
-  padding: 1.5rem;
-}
-
 .googleButton {
   width: 100%;
   display: flex;
@@ -124,19 +70,14 @@
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
   margin-bottom: 1.5rem;
 }
 
-.googleButton:hover {
-  background-color: #f9fafb;
-  border-color: #9ca3af;
-}
-
-.googleIcon {
-  width: 1.25rem;
-  height: 1.25rem;
-  flex-shrink: 0;
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 8px 0 6px;
 }
 
 .divider {
@@ -158,109 +99,100 @@
   font-weight: 500;
 }
 
-.formGroup {
-  margin-bottom: 1.25rem;
+/* === Modern form styles === */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 1rem;
 }
 
 .label {
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #111827;
-  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+  color: #334155;
+  font-weight: 600;
+  margin-bottom: 6px;
 }
 
 .required {
   color: #dc2626;
+  margin-left: 4px;
 }
 
 .input {
   width: 100%;
-  padding: 0.625rem 0.875rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  background: linear-gradient(180deg, #ffffff, #fbfdff);
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transition: box-shadow 0.15s, border-color 0.15s, transform 0.08s;
   outline: none;
-  transition: all 0.2s;
 }
 
 .input:focus {
-  border-color: #16a34a;
-  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+  border-color: #10b981;
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.08);
+  transform: translateY(-1px);
 }
 
 .error {
-  padding: 0.75rem;
-  background-color: #fee2e2;
-  border-left: 4px solid #dc2626;
-  color: #991b1b;
-  font-size: 0.875rem;
-  border-radius: 0.5rem;
-  margin-bottom: 1rem;
+  color: #dc2626;
+  font-size: 0.8rem;
+  margin-top: -0.25rem;
 }
 
 .submitButton {
   width: 100%;
-  background-color: #16a34a;
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(90deg, #16a34a, #22c55e);
+  color: #fff;
   border: none;
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: 0.75rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.2s;
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.12);
+  transition: transform 0.12s, box-shadow 0.12s, opacity 0.12s;
 }
 
-.submitButton:hover:not(:disabled) {
-  background-color: #15803d;
+.submitButton:active {
+  transform: translateY(1px) scale(0.998);
 }
 
-.submitButton:disabled {
+.submitButton[disabled] {
   opacity: 0.6;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
-.switchMode {
-  margin-top: 1.5rem;
-  text-align: center;
-  font-size: 0.875rem;
-  color: #6b7280;
+/* Small screens tweaks */
+@media (max-width: 420px) {
+  .tab {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.9rem;
+  }
 }
 
-.switchButton {
+.closeButton {
   background: none;
   border: none;
-  color: #16a34a;
-  font-weight: 600;
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
   cursor: pointer;
-  text-decoration: underline;
+  color: #475569;
 }
 
-.switchButton:hover {
-  color: #15803d;
+.closeButton:hover {
+  background: #f8fafc;
 }
 
-/* Мобілка */
-@media only screen and (max-width: 640px) {
-  .modal {
-    width: 95%;
-    max-height: 95vh;
-  }
-
-  .header {
-    padding: 1rem;
-  }
-
-  .title {
-    font-size: 1.25rem;
-  }
-
-  .demoCredentials {
-    margin: 1rem;
-  }
-
-  .form {
-    padding: 1rem;
-  }
+/* When closeButton inside header, keep it visible but without absolute overlap issues */
+.header .closeButton {
+  position: absolute;
+  right: 12px;
+  top: 8px;
 }
