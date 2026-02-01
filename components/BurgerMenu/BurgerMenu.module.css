@@ -45,10 +45,10 @@
 }
 .authButtonMobile {
   margin: 0 auto;
-  padding: 1rem 1.5rem;
+  padding: var(--text-base) var(--text-2xl);
   background-color: #16a34a;
   color: white;
-  font-size: 1.125rem;
+  font-size: var(--text-lg);
   font-weight: 600;
   text-align: center;
   text-decoration: none;
@@ -67,7 +67,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem;
+  padding: var(--text-2xl);
   border-bottom: 1px solid #e5e7eb;
   background: linear-gradient(
     135deg,
@@ -81,7 +81,7 @@
 }
 
 .title {
-  font-size: 1.5rem;
+  font-size: var(--text-2xl);
   font-weight: 700;
   color: #111827;
   margin: 0;
@@ -108,15 +108,15 @@
 }
 
 .closeIcon {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: var(--text-2xl);
+  height: var(--text-2xl);
 }
 
 .nav {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 1rem 0;
+  padding: var(--text-base) 0;
 }
 
 .navList {
@@ -131,10 +131,10 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 1rem 1.5rem;
+  padding: var(--text-base) var(--text-2xl);
   text-decoration: none;
   color: #111827;
-  font-size: 1.125rem;
+  font-size: var(--text-lg);
   font-weight: 500;
   transition: all 0.2s;
   overflow: hidden;
@@ -165,7 +165,7 @@
 }
 
 .contactInfo {
-  padding: 1.5rem;
+  padding: var(--text-2xl);
   border-top: 1px solid #e5e7eb;
   background: linear-gradient(
     135deg,
@@ -175,14 +175,14 @@
 }
 
 .contactTitle {
-  font-size: 1.125rem;
+  font-size: var(--text-lg);
   font-weight: 600;
   color: #111827;
-  margin: 0 0 1rem 0;
+  margin: 0 0 var(--text-base) 0;
 }
 
 .contactText {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: #6b7280;
   margin: 0.5rem 0;
   line-height: 1.6;
@@ -201,20 +201,20 @@
 }
 
 .schedule {
-  margin-top: 1rem;
-  padding-top: 1rem;
+  margin-top: var(--text-base);
+  padding-top: var(--text-base);
   border-top: 1px solid #e5e7eb;
 }
 
 .scheduleTitle {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 600;
   color: #111827;
   margin: 0 0 0.5rem 0;
 }
 
 .scheduleText {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: #6b7280;
   margin: 0.25rem 0;
   line-height: 1.6;

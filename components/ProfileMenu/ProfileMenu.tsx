@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { User, LogOut, Settings, Users } from "lucide-react";
 import { RiAdminFill } from "react-icons/ri";
 import styles from "./ProfileMenu.module.css";
@@ -20,23 +20,6 @@ export function ProfileMenu({
   handleLogout,
   profileMenuRef,
 }: ProfileMenuProps) {
-  const router = useRouter();
-
-  const handleProfileClick = () => {
-    setIsProfileMenuOpen(false);
-    router.push("/profile");
-  };
-
-  const handleAdminUsersClick = () => {
-    setIsProfileMenuOpen(false);
-    router.push("/admin/users");
-  };
-
-  const handleAdminOrdersClick = () => {
-    setIsProfileMenuOpen(false);
-    router.push("/admin/orders");
-  };
-
   return (
     <div className={styles.profileWrapper} ref={profileMenuRef}>
       <button
@@ -55,33 +38,33 @@ export function ProfileMenu({
             <p className={styles.profileDropdownEmail}>{user.email}</p>
           </div>
 
-          <button
-            onClick={handleProfileClick}
+          <Link
+            href="/profile"
+            onClick={() => setIsProfileMenuOpen(false)}
             className={styles.profileDropdownItem}
-            type="button"
           >
             <User className={styles.profileMenuIcon} />
             Профіль
-          </button>
+          </Link>
 
           {user.role === "admin" && (
             <>
-              <button
-                onClick={handleAdminUsersClick}
+              <Link
+                href="/admin/users"
+                onClick={() => setIsProfileMenuOpen(false)}
                 className={styles.profileDropdownItem}
-                type="button"
               >
                 <Users className={styles.profileMenuIcon} />
                 Управління користувачами
-              </button>
-              <button
-                onClick={handleAdminOrdersClick}
+              </Link>
+              <Link
+                href="/admin/orders"
+                onClick={() => setIsProfileMenuOpen(false)}
                 className={styles.profileDropdownItem}
-                type="button"
               >
                 <Settings className={styles.profileMenuIcon} />
                 Адмін-панель
-              </button>
+              </Link>
             </>
           )}
 

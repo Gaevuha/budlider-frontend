@@ -27,10 +27,12 @@ export default function ModalWrapper({
     };
 
     document.body.classList.add("modal-open");
+    document.documentElement.classList.add("modal-open");
     document.addEventListener("keydown", handleEsc);
 
     return () => {
       document.body.classList.remove("modal-open");
+      document.documentElement.classList.remove("modal-open");
       document.removeEventListener("keydown", handleEsc);
     };
   }, [isOpen, onClose]);

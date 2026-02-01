@@ -2,13 +2,13 @@
 
 .radioGroup {
   display: grid;
-  gap: 0.75rem;
+  gap: var(--text-xs);
 }
 
 .radioItem {
   aspect-ratio: 1;
-  width: 1rem;
-  height: 1rem;
+  width: var(--text-base);
+  height: var(--text-base);
   flex-shrink: 0;
   border-radius: 9999px;
   border: 1px solid var(--color-border, #e5e7eb);

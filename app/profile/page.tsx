@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -16,12 +16,15 @@ import {
 import { ProfileEditModal } from "@/components/ProfileEditModal/ProfileEditModal";
 import { useCart } from "@/lib/hooks/useCart";
 import { useWishlist } from "@/lib/hooks/useWishlist";
+import { ordersStorage } from "@/lib/utils/ordersStorage";
+import type { Order } from "@/types";
 import styles from "./ProfilePage.module.css";
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();
   const router = useRouter();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [orders, setOrders] = useState<Order[]>([]);
 
   const { items: cartItems } = useCart();
   const { favorites } = useWishlist();
@@ -31,6 +34,23 @@ export default function ProfilePage() {
     0
   );
   const favoritesCount = favorites.length;
+
+  useEffect(() => {
+    if (!user) return;
+    const storedOrders = ordersStorage.getOrders();
+    const userOrders = storedOrders.filter(
+      (order) => order.userId === user._id
+    );
+    setOrders(userOrders);
+  }, [user]);
+
+  const sortedOrders = useMemo(() => {
+    return [...orders].sort((a, b) => {
+      const aTime = new Date(a.createdAt).getTime();
+      const bTime = new Date(b.createdAt).getTime();
+      return bTime - aTime;
+    });
+  }, [orders]);
 
   const handleLogout = () => {
     logout();
@@ -198,10 +218,34 @@ export default function ProfilePage() {
       {/* Orders History - optional section */}
       <div className={styles.ordersCard}>
         <h2 className={styles.ordersTitle}>Історія замовлень</h2>
-        <div className={styles.emptyOrders}>
-          <Package className={styles.emptyOrdersIcon} />
-          <p className={styles.emptyOrdersText}>У вас ще немає замовлень</p>
-        </div>
+        {sortedOrders.length === 0 ? (
+          <div className={styles.emptyOrders}>
+            <Package className={styles.emptyOrdersIcon} />
+            <p className={styles.emptyOrdersText}>У вас ще немає замовлень</p>
+          </div>
+        ) : (
+          <div className={styles.ordersList}>
+            {sortedOrders.map((order) => (
+              <div key={order.id} className={styles.orderItem}>
+                <div className={styles.orderRow}>
+                  <div className={styles.orderMeta}>
+                    <span className={styles.orderId}>#{order.id}</span>
+                    <span className={styles.orderDate}>
+                      {new Date(order.createdAt).toLocaleDateString("uk-UA")}
+                    </span>
+                  </div>
+                  <span className={styles.orderStatus}>{order.status}</span>
+                </div>
+                <div className={styles.orderRow}>
+                  <span className={styles.orderType}>
+                    {order.type === "service" ? "Послуга" : "Товари"}
+                  </span>
+                  <span className={styles.orderTotal}>{order.total} грн</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Profile Edit Modal */}

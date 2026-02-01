@@ -2,7 +2,7 @@
 
 .container {
   margin: 0 auto;
-  padding: 1rem;
+  padding: var(--text-base);
 }
 
 .title {
@@ -18,37 +18,37 @@
 .sectionHeader {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  gap: var(--text-xs);
+  margin-bottom: var(--text-2xl);
 }
 
 .sectionTitle {
-  font-size: 1.5rem;
+  font-size: var(--text-2xl);
   font-weight: bold;
 }
 
 .optionsList {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--text-2xl);
 }
 
 .optionCard {
   background-color: white;
   border-radius: 0.5rem;
   border: 1px solid var(--border);
-  padding: 1.5rem;
+  padding: var(--text-2xl);
 }
 
 .optionTitle {
-  font-size: 1.125rem;
+  font-size: var(--text-lg);
   font-weight: 600;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--text-xs);
 }
 
 .optionDescription {
   color: var(--muted-foreground);
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--text-xs);
   line-height: 1.5;
 }
 
@@ -62,27 +62,27 @@
 
 .optionPrice {
   margin-top: 0.5rem;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: var(--muted-foreground);
 }
 
 .paymentGrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
+  gap: var(--text-2xl);
 }
 
 .paymentCard {
   background-color: white;
   border-radius: 0.5rem;
   border: 1px solid var(--border);
-  padding: 1.5rem;
+  padding: var(--text-2xl);
 }
 
 .paymentTitle {
-  font-size: 1rem;
+  font-size: var(--text-base);
   font-weight: 600;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--text-xs);
 }
 
 .paymentDescription {
@@ -95,7 +95,7 @@
   background-color: #eff6ff;
   border: 1px solid #bfdbfe;
   border-radius: 0.5rem;
-  padding: 1.5rem;
+  padding: var(--text-2xl);
 }
 
 .infoTitle {
@@ -107,22 +107,22 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: var(--muted-foreground);
 }
 
 /* Tablet (768px+) */
 @media (min-width: 768px) {
   .container {
-    padding: 1.5rem;
+    padding: var(--text-2xl);
   }
 
   .title {
-    font-size: 2.25rem;
+    font-size: var(--text-3xl);
   }
 
   .sectionTitle {
-    font-size: 1.5rem;
+    font-size: var(--text-2xl);
   }
 
   .paymentGrid {
@@ -130,11 +130,11 @@
   }
 
   .optionTitle {
-    font-size: 1.25rem;
+    font-size: var(--text-xl);
   }
 
   .paymentTitle {
-    font-size: 1.125rem;
+    font-size: var(--text-lg);
   }
 }
 

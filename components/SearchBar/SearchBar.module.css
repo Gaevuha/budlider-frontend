@@ -1,6 +1,6 @@
 .mobileSearch {
   display: block;
-  padding-bottom: 1rem;
+  padding-bottom: var(--text-base);
 }
 
 /* Планшет 768px+ - пошук переміщається в topBar */
@@ -54,8 +54,8 @@
 }
 
 .searchIcon {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: var(--text-xl);
+  height: var(--text-xl);
   color: #16a34a;
 }
 

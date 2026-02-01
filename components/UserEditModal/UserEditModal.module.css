@@ -22,7 +22,7 @@
 
 .modal {
   background: white;
-  border-radius: 1rem 1rem 0 0;
+  border-radius: var(--text-base) var(--text-base) 0 0;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
@@ -42,7 +42,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.25rem;
+  padding: var(--text-xl);
   border-bottom: 1px solid var(--color-border);
   position: sticky;
   top: 0;
@@ -51,7 +51,7 @@
 }
 
 .title {
-  font-size: 1.25rem;
+  font-size: var(--text-xl);
   font-weight: 600;
   color: var(--color-text-primary);
 }
@@ -74,13 +74,13 @@
 }
 
 .body {
-  padding: 1.25rem;
+  padding: var(--text-xl);
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: var(--text-xl);
 }
 
 .formGroup {
@@ -90,7 +90,7 @@
 }
 
 .label {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 500;
   color: var(--color-text-primary);
 }
@@ -101,10 +101,10 @@
 }
 
 .input {
-  padding: 0.75rem;
+  padding: var(--text-xs);
   border: 1px solid var(--color-border);
   border-radius: 0.5rem;
-  font-size: 1rem;
+  font-size: var(--text-base);
   transition: border-color 0.2s;
 }
 
@@ -118,10 +118,10 @@
 }
 
 .select {
-  padding: 0.75rem;
+  padding: var(--text-xs);
   border: 1px solid var(--color-border);
   border-radius: 0.5rem;
-  font-size: 1rem;
+  font-size: var(--text-base);
   background: white;
   cursor: pointer;
   transition: border-color 0.2s;
@@ -134,14 +134,14 @@
 
 .errorText {
   color: var(--color-error);
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
 }
 
 .footer {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding: 1.25rem;
+  gap: var(--text-xs);
+  padding: var(--text-xl);
   border-top: 1px solid var(--color-border);
   position: sticky;
   bottom: 0;
@@ -149,12 +149,12 @@
 }
 
 .submitButton {
-  padding: 0.875rem 1.5rem;
+  padding: var(--text-sm) var(--text-2xl);
   background: #22c55e;
   color: white;
   border: none;
   border-radius: 0.5rem;
-  font-size: 1rem;
+  font-size: var(--text-base);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -183,12 +183,12 @@
 }
 
 .cancelButton {
-  padding: 0.875rem 1.5rem;
+  padding: var(--text-sm) var(--text-2xl);
   background: white;
   color: var(--color-text-primary);
   border: 2px solid var(--color-border);
   border-radius: 0.5rem;
-  font-size: 1rem;
+  font-size: var(--text-base);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -213,30 +213,30 @@
 @media (min-width: 768px) {
   .overlay {
     align-items: center;
-    padding: 1rem;
+    padding: var(--text-base);
   }
 
   .modal {
-    border-radius: 1rem;
+    border-radius: var(--text-base);
     max-width: 500px;
     max-height: 85vh;
   }
 
   .header {
-    padding: 1.5rem;
+    padding: var(--text-2xl);
   }
 
   .title {
-    font-size: 1.5rem;
+    font-size: var(--text-2xl);
   }
 
   .body {
-    padding: 1.5rem;
+    padding: var(--text-2xl);
   }
 
   .footer {
     flex-direction: row-reverse;
-    padding: 1.5rem;
+    padding: var(--text-2xl);
   }
 
   .submitButton,

@@ -14,7 +14,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 0;
+  padding: var(--text-base) 0;
   gap: 0.5rem;
 }
 
@@ -27,7 +27,7 @@
 /* Планшет 768px+ */
 @media only screen and (min-width: 768px) {
   .actions {
-    gap: 1rem;
+    gap: var(--text-base);
   }
 }
 
@@ -47,7 +47,7 @@
 }
 
 .burgerIcon {
-  font-size: 1.5rem;
+  font-size: var(--text-2xl);
   line-height: 1;
 }
 
@@ -60,7 +60,7 @@
     display: none;
   }
   .authButton {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem var(--text-base);
     border-radius: 0.5rem;
     background-color: #16a34a;
     color: white;
@@ -68,7 +68,7 @@
     cursor: pointer;
     transition: background-color 0.2s;
     font-weight: 600;
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
   }
 
   .authButton:hover {

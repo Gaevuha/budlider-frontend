@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -54,14 +54,29 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
     },
   });
 
-const onSubmit: SubmitHandler<ProfileFormData> = (data) => {
-  updateProfile({
-    ...data,
-    phone: data.phone || undefined,
-    avatar: data.avatar || undefined,
-    address: data.address || undefined,
-  });
-};
+  useEffect(() => {
+    if (!isOpen || !user) return;
+    reset({
+      name: user.name ?? "",
+      email: user.email ?? "",
+      phone: user.phone ?? "",
+      avatar: user.avatar ?? "",
+      address: user.address ?? "",
+    });
+    setAvatarPreview(user.avatar || "");
+  }, [isOpen, reset, user]);
+
+  const onSubmit: SubmitHandler<ProfileFormData> = (data) => {
+    updateProfile({
+      ...data,
+      phone: data.phone || undefined,
+      avatar: data.avatar || undefined,
+      address: data.address || undefined,
+    });
+    reset(data);
+    setAvatarPreview(data.avatar || "");
+    onClose();
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

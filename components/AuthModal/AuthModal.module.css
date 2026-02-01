@@ -15,10 +15,10 @@
 
 .tab {
   flex: 1;
-  padding: 0.75rem 1.5rem;
+  padding: var(--text-xs) var(--text-2xl);
   border: none;
   background: none;
-  font-size: 1rem;
+  font-size: var(--text-base);
   font-weight: 600;
   color: #6b7280;
   cursor: pointer;
@@ -36,22 +36,22 @@
 }
 
 .demoCredentials {
-  padding: 1rem 1.5rem;
+  padding: var(--text-base) var(--text-2xl);
   background-color: #f0fdf4;
   border-left: 4px solid #16a34a;
-  margin: 1.5rem;
+  margin: var(--text-2xl);
   border-radius: 0.5rem;
 }
 
 .demoTitle {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 600;
   color: #15803d;
   margin-bottom: 0.5rem;
 }
 
 .demoItem {
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   color: #166534;
   margin: 0.25rem 0;
 }
@@ -61,30 +61,30 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1.5rem;
+  gap: var(--text-xs);
+  padding: var(--text-xs) var(--text-2xl);
   border: 1px solid #d1d5db;
   border-radius: 0.5rem;
   background-color: white;
   color: #111827;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 500;
   cursor: pointer;
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--text-2xl);
 }
 
 .divider {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--text-base);
   margin: 8px 0 6px;
 }
 
 .divider {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  gap: var(--text-base);
+  margin-bottom: var(--text-2xl);
 }
 
 .dividerLine {
@@ -95,7 +95,7 @@
 
 .dividerText {
   color: #6b7280;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 500;
 }
 
@@ -103,8 +103,8 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding-top: 1rem;
+  gap: var(--text-xs);
+  padding-top: var(--text-base);
 }
 
 .label {
@@ -121,10 +121,10 @@
 
 .input {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: var(--text-xs) var(--text-base);
   border: 1px solid #e5e7eb;
-  border-radius: 0.75rem;
-  background: linear-gradient(180deg, #ffffff, #fbfdff);
+  border-radius: var(--text-xs);
+  background: linear-gradient(180deg, var(--background)fff, #fbfdff);
   box-shadow: 0 1px 2px rgba(16, 24, 40, 0.03),
     inset 0 1px 0 rgba(255, 255, 255, 0.6);
   transition: box-shadow 0.15s, border-color 0.15s, transform 0.08s;
@@ -145,11 +145,11 @@
 
 .submitButton {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: var(--text-xs) var(--text-base);
   background: linear-gradient(90deg, #16a34a, #22c55e);
-  color: #fff;
+  color: var(--background);
   border: none;
-  border-radius: 0.75rem;
+  border-radius: var(--text-xs);
   font-weight: 700;
   cursor: pointer;
   box-shadow: 0 6px 18px rgba(16, 185, 129, 0.12);
@@ -169,8 +169,8 @@
 /* Small screens tweaks */
 @media (max-width: 420px) {
   .tab {
-    padding: 0.6rem 0.75rem;
-    font-size: 0.9rem;
+    padding: 0.6rem var(--text-xs);
+    font-size: var(--text-base);
   }
 }
 
@@ -178,8 +178,8 @@
   background: none;
   border: none;
   position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
+  top: var(--text-xs);
+  right: var(--text-xs);
   padding: 0.5rem;
   border-radius: 0.5rem;
   cursor: pointer;

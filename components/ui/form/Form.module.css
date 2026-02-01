@@ -10,11 +10,11 @@
 }
 
 .formDescription {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: var(--color-muted-foreground, #9ca3af);
 }
 
 .formMessage {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: var(--color-destructive, #ef4444);
 }

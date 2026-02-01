@@ -21,7 +21,7 @@
   width: 100%;
   max-width: 460px;
   max-height: 92vh;
-  background-color: #fff;
+  background-color: var(--background);
   border-radius: 12px;
   box-shadow: 0 18px 50px rgba(2, 6, 23, 0.28), 0 2px 6px rgba(16, 24, 40, 0.06);
   display: flex;
@@ -34,7 +34,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: var(--text-base);
   border-bottom: 1px solid #e5e7eb;
 }
 
@@ -59,7 +59,7 @@
 }
 
 .content {
-  padding: 1.25rem 1.25rem 1.75rem;
+  padding: var(--text-xl) var(--text-xl) 1.75rem;
   flex: 1;
   overflow-y: auto;
 }
@@ -70,13 +70,13 @@
     max-width: 460px;
   }
   .header {
-    padding: 1.25rem 1.5rem;
+    padding: var(--text-xl) var(--text-2xl);
   }
   .title {
     font-size: 1.35rem;
   }
   .content {
-    padding: 1.5rem 1.5rem 2rem;
+    padding: var(--text-2xl) var(--text-2xl) 2rem;
   }
 }
 
@@ -97,6 +97,6 @@
 @media (max-height: 640px) {
   .modal {
     align-self: flex-start;
-    margin-top: 2.25rem;
+    margin-top: var(--text-3xl);
   }
 }

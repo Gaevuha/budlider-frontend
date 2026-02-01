@@ -21,8 +21,8 @@
   border-radius: 0.375rem;
   border: 1px solid var(--color-border, #e5e7eb);
   background-color: var(--color-input-background, white);
-  padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
+  padding: 0.5rem var(--text-xs);
+  font-size: var(--text-sm);
   white-space: nowrap;
   transition: border-color 0.2s, box-shadow 0.2s;
   outline: none;
@@ -51,8 +51,8 @@
 .selectTrigger svg {
   pointer-events: none;
   flex-shrink: 0;
-  width: 1rem;
-  height: 1rem;
+  width: var(--text-base);
+  height: var(--text-base);
 }
 
 .selectTrigger svg:not([class*="text-"]) {
@@ -60,7 +60,7 @@
 }
 
 .selectTrigger[data-size="default"] {
-  height: 2.25rem;
+  height: var(--text-3xl);
 }
 
 .selectTrigger[data-size="sm"] {
@@ -104,7 +104,7 @@
 
 .selectLabel {
   padding: 0.375rem 0.5rem;
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   color: var(--color-muted-foreground, #9ca3af);
 }
 
@@ -116,7 +116,7 @@
   gap: 0.5rem;
   border-radius: 0.125rem;
   padding: 0.375rem 2rem 0.375rem 0.5rem;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   outline: none;
   user-select: none;
   cursor: pointer;
@@ -134,8 +134,8 @@
 .selectItem svg {
   pointer-events: none;
   flex-shrink: 0;
-  width: 1rem;
-  height: 1rem;
+  width: var(--text-base);
+  height: var(--text-base);
 }
 
 .selectItem svg:not([class*="text-"]) {
@@ -146,15 +146,15 @@
   position: absolute;
   right: 0.5rem;
   display: flex;
-  width: 0.875rem;
-  height: 0.875rem;
+  width: var(--text-sm);
+  height: var(--text-sm);
   align-items: center;
   justify-content: center;
 }
 
 .selectItemIndicator svg {
-  width: 1rem;
-  height: 1rem;
+  width: var(--text-base);
+  height: var(--text-base);
 }
 
 .selectSeparator {
@@ -173,8 +173,8 @@
 }
 
 .selectScrollButton svg {
-  width: 1rem;
-  height: 1rem;
+  width: var(--text-base);
+  height: var(--text-base);
 }
 
 @keyframes fadeIn {

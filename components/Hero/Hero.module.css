@@ -1,6 +1,6 @@
 /* Hero Section - відступ від header */
 .heroSection {
-  padding-top: 1.5rem;
+  padding-top: var(--text-2xl);
   padding-bottom: 2rem;
 }
 
@@ -24,16 +24,16 @@
 .hero {
   position: relative;
   background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-  border-radius: 1rem;
+  border-radius: var(--text-base);
   overflow: hidden;
   min-height: 600px;
-  padding: 2rem 1.5rem;
+  padding: 2rem var(--text-2xl);
 }
 
 /* Планшет */
 @media only screen and (min-width: 768px) {
   .hero {
-    border-radius: 1.5rem;
+    border-radius: var(--text-2xl);
     min-height: 500px;
     padding: 3rem 2rem;
   }
@@ -57,7 +57,7 @@
   min-height: 280px;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--text-2xl);
 }
 
 /* Title - Mobile First */
@@ -71,7 +71,7 @@
 /* Планшет */
 @media only screen and (min-width: 768px) {
   .title {
-    font-size: 2.25rem;
+    font-size: var(--text-3xl);
   }
 }
 
@@ -84,7 +84,7 @@
 
 /* Description - Mobile First */
 .description {
-  font-size: 1rem;
+  font-size: var(--text-base);
   line-height: 1.6;
   opacity: 0.95;
   margin: 0;
@@ -93,27 +93,27 @@
 /* Планшет */
 @media only screen and (min-width: 768px) {
   .description {
-    font-size: 1.125rem;
+    font-size: var(--text-lg);
   }
 }
 
 /* Декстоп */
 @media only screen and (min-width: 1350px) {
   .description {
-    font-size: 1.25rem;
+    font-size: var(--text-xl);
   }
 }
 
 .cta {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--text-xs);
   background-color: white;
   color: var(--primary);
-  padding: 1rem 2rem;
-  border-radius: 0.75rem;
+  padding: var(--text-base) 2rem;
+  border-radius: var(--text-xs);
   font-weight: 600;
-  font-size: 1rem;
+  font-size: var(--text-base);
   text-decoration: none;
   transition: all 0.3s ease;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
@@ -126,8 +126,8 @@
 }
 
 .ctaIcon {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: var(--text-xl);
+  height: var(--text-xl);
   transition: transform 0.3s ease;
 }
 
@@ -137,7 +137,7 @@
 
 .indicators {
   display: flex;
-  gap: 0.75rem;
+  gap: var(--text-xs);
   margin-top: 2rem;
 }
 
@@ -165,7 +165,7 @@
 .features {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
+  gap: var(--text-2xl);
   margin-top: 3rem;
   position: relative;
   z-index: 1;
@@ -188,11 +188,11 @@
 .feature {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1.5rem;
+  gap: var(--text-base);
+  padding: var(--text-2xl);
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(10px);
-  border-radius: 1rem;
+  border-radius: var(--text-base);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
   cursor: pointer;
@@ -207,7 +207,7 @@
   width: 3rem;
   height: 3rem;
   background: rgba(255, 255, 255, 0.25);
-  border-radius: 0.75rem;
+  border-radius: var(--text-xs);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -215,18 +215,18 @@
 }
 
 .icon {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: var(--text-2xl);
+  height: var(--text-2xl);
 }
 
 .featureTitle {
-  font-size: 1.125rem;
+  font-size: var(--text-lg);
   font-weight: 600;
   margin: 0 0 0.25rem 0;
 }
 
 .featureText {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   opacity: 0.9;
   margin: 0;
 }

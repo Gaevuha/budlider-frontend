@@ -1,7 +1,7 @@
 // app/components/Header/HeaderClient.tsx
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { BurgerMenu } from "@/components/BurgerMenu/BurgerMenu";
 import { useAuth } from "@/contexts/AuthContext";
@@ -12,6 +12,8 @@ import { SearchBar } from "@/components/SearchBar/SearchBar";
 import { Navigation } from "@/components/Navigation/Navigation";
 import { ActionButtons } from "@/components/ActionButtons/ActionButtons";
 import { ProfileMenu } from "@/components/ProfileMenu/ProfileMenu";
+import { useCart } from "@/lib/hooks/useCart";
+import { useWishlist } from "@/lib/hooks/useWishlist";
 import styles from "./Header.module.css";
 
 interface HeaderClientProps {
@@ -28,14 +30,15 @@ export function HeaderClient({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
-  const [cartItemsCount, setCartItemsCount] = useState(initialCartItemsCount);
-  const [favoritesCount, setFavoritesCount] = useState(initialFavoritesCount);
   const [isLargeDesktop, setIsLargeDesktop] = useState(false);
+  const [hasHydrated, setHasHydrated] = useState(false);
   const profileMenuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
   const { user, logout } = useAuth();
   const { openModal, isOpen, closeModal } = useAuthModalStore();
+  const { items: cartItems } = useCart();
+  const { favorites } = useWishlist();
 
   // Визначаємо, чи це desktop версія
   useEffect(() => {
@@ -51,50 +54,17 @@ export function HeaderClient({
     };
   }, []);
 
-  // Оновлюємо кількість товарів при зміні
+  // Позначаємо гідратацію, щоб використовувати актуальні значення зі store
   useEffect(() => {
-    const updateCartCount = () => {
-      if (typeof window !== "undefined") {
-        const cart = JSON.parse(localStorage.getItem("cart") || "{}");
-        const count =
-          cart.items?.reduce(
-            (sum: number, item: any) => sum + item.quantity,
-            0
-          ) || 0;
-        setCartItemsCount(count);
-      }
-    };
-
-    const updateFavoritesCount = () => {
-      if (typeof window !== "undefined") {
-        const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-        setFavoritesCount(favorites.length);
-      }
-    };
-
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === "cart") {
-        updateCartCount();
-      }
-      if (e.key === "favorites") {
-        updateFavoritesCount();
-      }
-    };
-
-    updateCartCount();
-    updateFavoritesCount();
-
-    window.addEventListener("storage", handleStorageChange);
-    const interval = setInterval(() => {
-      updateCartCount();
-      updateFavoritesCount();
-    }, 1000);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      clearInterval(interval);
-    };
+    setHasHydrated(true);
   }, []);
+
+  const derivedCartCount = useMemo(
+    () => cartItems.reduce((sum, item) => sum + item.quantity, 0),
+    [cartItems]
+  );
+  const cartItemsCount = hasHydrated ? derivedCartCount : initialCartItemsCount;
+  const favoritesCount = hasHydrated ? favorites.length : initialFavoritesCount;
 
   // Закриття dropdown меню при кліку поза ним
   useEffect(() => {

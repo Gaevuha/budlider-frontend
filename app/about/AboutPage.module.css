@@ -2,7 +2,7 @@
 
 .container {
   margin: 0 auto;
-  padding: 1rem;
+  padding: var(--text-base);
 }
 
 .title {
@@ -15,15 +15,15 @@
   background-color: white;
   border-radius: 0.5rem;
   border: 1px solid var(--border);
-  padding: 1.5rem;
+  padding: var(--text-2xl);
   margin-bottom: 2rem;
 }
 
 .introParagraph {
-  font-size: 1rem;
+  font-size: var(--text-base);
   color: var(--muted-foreground);
   line-height: 1.6;
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--text-2xl);
 }
 
 .introParagraph:last-child {
@@ -33,7 +33,7 @@
 .featuresGrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
+  gap: var(--text-2xl);
   margin-bottom: 2rem;
 }
 
@@ -41,7 +41,7 @@
   background-color: white;
   border-radius: 0.5rem;
   border: 1px solid var(--border);
-  padding: 1.5rem;
+  padding: var(--text-2xl);
 }
 
 .featureIcon {
@@ -52,11 +52,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
+  margin-bottom: var(--text-base);
 }
 
 .featureTitle {
-  font-size: 1.125rem;
+  font-size: var(--text-lg);
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
@@ -70,40 +70,40 @@
   background: linear-gradient(to right, #22c55e, #10b981);
   color: white;
   border-radius: 0.5rem;
-  padding: 1.5rem;
+  padding: var(--text-2xl);
 }
 
 .advantagesTitle {
-  font-size: 1.5rem;
+  font-size: var(--text-2xl);
   font-weight: bold;
-  margin-bottom: 1rem;
+  margin-bottom: var(--text-base);
 }
 
 .advantagesList {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--text-xs);
 }
 
 .advantageItem {
   display: flex;
   align-items: flex-start;
-  gap: 0.75rem;
+  gap: var(--text-xs);
 }
 
 .advantageCheckmark {
-  font-size: 1.5rem;
+  font-size: var(--text-2xl);
   flex-shrink: 0;
 }
 
 /* Tablet (768px+) */
 @media (min-width: 768px) {
   .container {
-    padding: 1.5rem;
+    padding: var(--text-2xl);
   }
 
   .title {
-    font-size: 2.25rem;
+    font-size: var(--text-3xl);
   }
 
   .introCard {
@@ -111,7 +111,7 @@
   }
 
   .introParagraph {
-    font-size: 1.125rem;
+    font-size: var(--text-lg);
   }
 
   .featuresGrid {
@@ -123,7 +123,7 @@
   }
 
   .advantagesTitle {
-    font-size: 1.5rem;
+    font-size: var(--text-2xl);
   }
 }
 

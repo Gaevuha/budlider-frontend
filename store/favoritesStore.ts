@@ -1,5 +1,9 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import {
+  persist,
+  createJSONStorage,
+  type StateStorage,
+} from "zustand/middleware";
 
 interface FavoritesState {
   favorites: string[];
@@ -10,11 +14,29 @@ interface FavoritesState {
   clearFavorites: () => void;
 }
 
+const getStorage = () => {
+  if (typeof window === "undefined") return undefined;
+  const hasAuth = Boolean(
+    localStorage.getItem("user") || localStorage.getItem("token")
+  );
+  return hasAuth ? localStorage : sessionStorage;
+};
+
+const dynamicStorage: StateStorage = {
+  getItem: (name) => getStorage()?.getItem(name) ?? null,
+  setItem: (name, value) => {
+    getStorage()?.setItem(name, value);
+  },
+  removeItem: (name) => {
+    getStorage()?.removeItem(name);
+  },
+};
+
 export const useFavoritesStore = create<FavoritesState>()(
   persist(
     (set, get) => ({
       favorites: [],
-      
+
       addFavorite: (productId) =>
         set((state) => {
           if (state.favorites.includes(productId)) {
@@ -24,32 +46,36 @@ export const useFavoritesStore = create<FavoritesState>()(
             favorites: [...state.favorites, productId],
           };
         }),
-      
+
       removeFavorite: (productId) =>
         set((state) => ({
-          favorites: state.favorites.filter(id => id !== productId),
+          favorites: state.favorites.filter((id) => id !== productId),
         })),
-      
+
       toggleFavorite: (productId) =>
         set((state) => {
           if (state.favorites.includes(productId)) {
             return {
-              favorites: state.favorites.filter(id => id !== productId),
+              favorites: state.favorites.filter((id) => id !== productId),
             };
           }
           return {
             favorites: [...state.favorites, productId],
           };
         }),
-      
+
       isFavorite: (productId) => {
         return get().favorites.includes(productId);
       },
-      
+
       clearFavorites: () => set({ favorites: [] }),
     }),
     {
-      name: 'budlider-favorites-storage',
+      name: "budlider-favorites-storage",
+      storage:
+        typeof window === "undefined"
+          ? undefined
+          : createJSONStorage(() => dynamicStorage),
     }
   )
 );

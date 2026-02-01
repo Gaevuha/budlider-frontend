@@ -54,7 +54,7 @@ const mockUsers: User[] = [
 function verifyToken(token: string | null): boolean {
   if (!token) return false;
   // In a real app, you would verify JWT token here
-  return token.startsWith("mock-token-");
+  return token.startsWith("demo_") || token.startsWith("mock-token-");
 }
 
 // GET all users

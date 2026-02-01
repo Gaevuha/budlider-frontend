@@ -109,6 +109,11 @@ body {
   font-size: var(--font-size);
 }
 
+html.modal-open,
+body.modal-open {
+  overflow: hidden;
+}
+
 ul,
 ol {
   margin: 0;

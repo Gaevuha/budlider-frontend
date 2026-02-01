@@ -19,14 +19,14 @@
 }
 
 .iconAdmin {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: var(--text-2xl);
+  height: var(--text-2xl);
   color: #16a34a;
 }
 
 .userName {
   display: none;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 500;
   color: #111827;
   padding-right: 0.5rem;
@@ -54,35 +54,35 @@
 }
 
 .profileDropdownHeader {
-  padding: 1rem;
+  padding: var(--text-base);
   border-bottom: 1px solid #e5e7eb;
   background-color: #f9fafb;
 }
 
 .profileDropdownName {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 600;
   color: #111827;
   margin-bottom: 0.25rem;
 }
 
 .profileDropdownEmail {
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   color: #6b7280;
 }
 
 .profileDropdownItem {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--text-xs);
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: var(--text-xs) var(--text-base);
   background: none;
   border: none;
   cursor: pointer;
   text-decoration: none;
   color: #111827;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   transition: background-color 0.2s;
   text-align: left;
 }
@@ -92,7 +92,7 @@
 }
 
 .profileMenuIcon {
-  width: 1.125rem;
-  height: 1.125rem;
+  width: var(--text-lg);
+  height: var(--text-lg);
   color: #6b7280;
 }

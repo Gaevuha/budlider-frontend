@@ -2,9 +2,9 @@
   !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./components/Footer/Footer.module.css ***!
   \*******************************************************************************************************************************************************************************************************************************************************************************/
 .Footer_footer__o4_Ec {
-  background-color: #ffffff;
+  background-color: var(--background)fff;
   color: #111827;
-  padding: 3rem 0 1rem;
+  padding: 3rem 0 var(--text-base);
   margin-top: 4rem;
   border-top: 1px solid #e5e7eb;
 }
@@ -50,9 +50,9 @@
   justify-content: center;
   gap: 0;
   text-decoration: none;
-  font-size: 1.5rem;
+  font-size: var(--text-2xl);
   font-weight: 800;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--text-xs);
   transition: transform 0.2s ease;
   letter-spacing: -0.02em;
 }
@@ -64,7 +64,7 @@
 /* Планшет */
 @media (min-width: 768px) {
   .Footer_logo__ZNv_V {
-    font-size: 1.875rem;
+    font-size: var(--text-3xl);
   }
 }
 
@@ -96,14 +96,14 @@
 .Footer_footerText__GTcyF {
   color: #6b7280;
   line-height: 1.6;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   max-width: 280px;
 }
 
 .Footer_footerHeading__sh7fj {
-  font-size: 1rem;
+  font-size: var(--text-base);
   font-weight: 600;
-  margin-bottom: 1rem;
+  margin-bottom: var(--text-base);
   color: #111827;
 }
 
@@ -120,7 +120,7 @@
   color: #6b7280;
   text-decoration: none;
   transition: color 0.2s;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
 }
 
 .Footer_footerLinks__txsgW a:hover {
@@ -133,7 +133,7 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--text-xs);
 }
 
 .Footer_footerContacts__gKPOp li {
@@ -141,7 +141,7 @@
   align-items: center;
   gap: 0.5rem;
   color: #6b7280;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
 }
 
 .Footer_footerContacts__gKPOp a,
@@ -157,13 +157,13 @@
 
 .Footer_footerBottom__KjW7F {
   border-top: 1px solid #e5e7eb;
-  padding-top: 1.5rem;
+  padding-top: var(--text-2xl);
   text-align: center;
 }
 
 .Footer_copyright__sqw0C {
   color: #9ca3af;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
 }
 
 /*!*************************************************************************************************************************************************************************************************************************************************************!*\
@@ -278,6 +278,11 @@ body {
     Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   line-height: 1.6;
   font-size: var(--font-size);
+}
+
+html.modal-open,
+body.modal-open {
+  overflow: hidden;
 }
 
 ul,
@@ -454,10 +459,10 @@ p {
 }
 .BurgerMenu_authButtonMobile__GJfmO {
   margin: 0 auto;
-  padding: 1rem 1.5rem;
+  padding: var(--text-base) var(--text-2xl);
   background-color: #16a34a;
   color: white;
-  font-size: 1.125rem;
+  font-size: var(--text-lg);
   font-weight: 600;
   text-align: center;
   text-decoration: none;
@@ -476,7 +481,7 @@ p {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem;
+  padding: var(--text-2xl);
   border-bottom: 1px solid #e5e7eb;
   background: linear-gradient(
     135deg,
@@ -490,7 +495,7 @@ p {
 }
 
 .BurgerMenu_title__ZtYm4 {
-  font-size: 1.5rem;
+  font-size: var(--text-2xl);
   font-weight: 700;
   color: #111827;
   margin: 0;
@@ -517,15 +522,15 @@ p {
 }
 
 .BurgerMenu_closeIcon__Hx4Uc {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: var(--text-2xl);
+  height: var(--text-2xl);
 }
 
 .BurgerMenu_nav__G269s {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 1rem 0;
+  padding: var(--text-base) 0;
 }
 
 .BurgerMenu_navList__zCuW4 {
@@ -540,10 +545,10 @@ p {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 1rem 1.5rem;
+  padding: var(--text-base) var(--text-2xl);
   text-decoration: none;
   color: #111827;
-  font-size: 1.125rem;
+  font-size: var(--text-lg);
   font-weight: 500;
   transition: all 0.2s;
   overflow: hidden;
@@ -574,7 +579,7 @@ p {
 }
 
 .BurgerMenu_contactInfo__YSpmJ {
-  padding: 1.5rem;
+  padding: var(--text-2xl);
   border-top: 1px solid #e5e7eb;
   background: linear-gradient(
     135deg,
@@ -584,14 +589,14 @@ p {
 }
 
 .BurgerMenu_contactTitle__YlJwW {
-  font-size: 1.125rem;
+  font-size: var(--text-lg);
   font-weight: 600;
   color: #111827;
-  margin: 0 0 1rem 0;
+  margin: 0 0 var(--text-base) 0;
 }
 
 .BurgerMenu_contactText___532g {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: #6b7280;
   margin: 0.5rem 0;
   line-height: 1.6;
@@ -610,20 +615,20 @@ p {
 }
 
 .BurgerMenu_schedule__J3smR {
-  margin-top: 1rem;
-  padding-top: 1rem;
+  margin-top: var(--text-base);
+  padding-top: var(--text-base);
   border-top: 1px solid #e5e7eb;
 }
 
 .BurgerMenu_scheduleTitle__Qyv3Y {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 600;
   color: #111827;
   margin: 0 0 0.5rem 0;
 }
 
 .BurgerMenu_scheduleText__lZ4bG {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: #6b7280;
   margin: 0.25rem 0;
   line-height: 1.6;
@@ -664,7 +669,7 @@ p {
   width: 100%;
   max-width: 460px;
   max-height: 92vh;
-  background-color: #fff;
+  background-color: var(--background);
   border-radius: 12px;
   box-shadow: 0 18px 50px rgba(2, 6, 23, 0.28), 0 2px 6px rgba(16, 24, 40, 0.06);
   display: flex;
@@ -677,7 +682,7 @@ p {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: var(--text-base);
   border-bottom: 1px solid #e5e7eb;
 }
 
@@ -702,7 +707,7 @@ p {
 }
 
 .ModalWrapper_content__Zh7ZZ {
-  padding: 1.25rem 1.25rem 1.75rem;
+  padding: var(--text-xl) var(--text-xl) 1.75rem;
   flex: 1;
   overflow-y: auto;
 }
@@ -713,13 +718,13 @@ p {
     max-width: 460px;
   }
   .ModalWrapper_header__h_HoD {
-    padding: 1.25rem 1.5rem;
+    padding: var(--text-xl) var(--text-2xl);
   }
   .ModalWrapper_title__q0paS {
     font-size: 1.35rem;
   }
   .ModalWrapper_content__Zh7ZZ {
-    padding: 1.5rem 1.5rem 2rem;
+    padding: var(--text-2xl) var(--text-2xl) 2rem;
   }
 }
 
@@ -740,7 +745,7 @@ p {
 @media (max-height: 640px) {
   .ModalWrapper_modal__dwR60 {
     align-self: flex-start;
-    margin-top: 2.25rem;
+    margin-top: var(--text-3xl);
   }
 }
 
@@ -764,10 +769,10 @@ p {
 
 .AuthModal_tab___C6kj {
   flex: 1;
-  padding: 0.75rem 1.5rem;
+  padding: var(--text-xs) var(--text-2xl);
   border: none;
   background: none;
-  font-size: 1rem;
+  font-size: var(--text-base);
   font-weight: 600;
   color: #6b7280;
   cursor: pointer;
@@ -785,22 +790,22 @@ p {
 }
 
 .AuthModal_demoCredentials__a0I4T {
-  padding: 1rem 1.5rem;
+  padding: var(--text-base) var(--text-2xl);
   background-color: #f0fdf4;
   border-left: 4px solid #16a34a;
-  margin: 1.5rem;
+  margin: var(--text-2xl);
   border-radius: 0.5rem;
 }
 
 .AuthModal_demoTitle__AH_rS {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 600;
   color: #15803d;
   margin-bottom: 0.5rem;
 }
 
 .AuthModal_demoItem__Iaut9 {
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   color: #166534;
   margin: 0.25rem 0;
 }
@@ -810,30 +815,30 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1.5rem;
+  gap: var(--text-xs);
+  padding: var(--text-xs) var(--text-2xl);
   border: 1px solid #d1d5db;
   border-radius: 0.5rem;
   background-color: white;
   color: #111827;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 500;
   cursor: pointer;
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--text-2xl);
 }
 
 .AuthModal_divider__VgcVJ {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--text-base);
   margin: 8px 0 6px;
 }
 
 .AuthModal_divider__VgcVJ {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  gap: var(--text-base);
+  margin-bottom: var(--text-2xl);
 }
 
 .AuthModal_dividerLine__dXt8B {
@@ -844,7 +849,7 @@ p {
 
 .AuthModal_dividerText__7exMf {
   color: #6b7280;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 500;
 }
 
@@ -852,8 +857,8 @@ p {
 .AuthModal_form__CBB7_ {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding-top: 1rem;
+  gap: var(--text-xs);
+  padding-top: var(--text-base);
 }
 
 .AuthModal_label__w29gy {
@@ -870,10 +875,10 @@ p {
 
 .AuthModal_input__9nN8b {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: var(--text-xs) var(--text-base);
   border: 1px solid #e5e7eb;
-  border-radius: 0.75rem;
-  background: linear-gradient(180deg, #ffffff, #fbfdff);
+  border-radius: var(--text-xs);
+  background: linear-gradient(180deg, var(--background)fff, #fbfdff);
   box-shadow: 0 1px 2px rgba(16, 24, 40, 0.03),
     inset 0 1px 0 rgba(255, 255, 255, 0.6);
   transition: box-shadow 0.15s, border-color 0.15s, transform 0.08s;
@@ -894,11 +899,11 @@ p {
 
 .AuthModal_submitButton___6w_1 {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: var(--text-xs) var(--text-base);
   background: linear-gradient(90deg, #16a34a, #22c55e);
-  color: #fff;
+  color: var(--background);
   border: none;
-  border-radius: 0.75rem;
+  border-radius: var(--text-xs);
   font-weight: 700;
   cursor: pointer;
   box-shadow: 0 6px 18px rgba(16, 185, 129, 0.12);
@@ -918,8 +923,8 @@ p {
 /* Small screens tweaks */
 @media (max-width: 420px) {
   .AuthModal_tab___C6kj {
-    padding: 0.6rem 0.75rem;
-    font-size: 0.9rem;
+    padding: 0.6rem var(--text-xs);
+    font-size: var(--text-base);
   }
 }
 
@@ -927,8 +932,8 @@ p {
   background: none;
   border: none;
   position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
+  top: var(--text-xs);
+  right: var(--text-xs);
   padding: 0.5rem;
   border-radius: 0.5rem;
   cursor: pointer;
@@ -955,7 +960,7 @@ p {
   align-items: center;
   gap: 0;
   text-decoration: none;
-  font-size: 1.25rem;
+  font-size: var(--text-xl);
   font-weight: 800;
   transition: transform 0.2s ease;
   letter-spacing: -0.02em;
@@ -968,14 +973,14 @@ p {
 /* Мобільна версія 375px+ */
 @media only screen and (min-width: 375px) {
   .Logo_logo__NU4Nk {
-    font-size: 1.5rem;
+    font-size: var(--text-2xl);
   }
 }
 
 /* Планшет 768px+ */
 @media only screen and (min-width: 768px) {
   .Logo_logo__NU4Nk {
-    font-size: 1.875rem;
+    font-size: var(--text-3xl);
   }
 }
 
@@ -1006,7 +1011,7 @@ p {
   \*************************************************************************************************************************************************************************************************************************************************************************************/
 .SearchBar_mobileSearch__0rAuv {
   display: block;
-  padding-bottom: 1rem;
+  padding-bottom: var(--text-base);
 }
 
 /* Планшет 768px+ - пошук переміщається в topBar */
@@ -1060,8 +1065,8 @@ p {
 }
 
 .SearchBar_searchIcon__hMHjc {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: var(--text-xl);
+  height: var(--text-xl);
   color: #16a34a;
 }
 
@@ -1077,8 +1082,8 @@ p {
 .Navigation_nav__hP0PW {
   display: none;
   align-items: center;
-  gap: 1.5rem;
-  padding: 0.75rem 0;
+  gap: var(--text-2xl);
+  padding: var(--text-xs) 0;
   border-top: 1px solid #e5e7eb;
 }
 
@@ -1092,7 +1097,7 @@ p {
 .Navigation_navList__lLQBK {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: var(--text-2xl);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -1102,7 +1107,7 @@ p {
   position: relative;
   color: #111827;
   text-decoration: none;
-  font-size: 1rem;
+  font-size: var(--text-base);
   padding: 0.25rem 0;
   transition: color 0.2s ease;
 }
@@ -1160,15 +1165,15 @@ p {
 }
 
 .ActionButtons_actionIcon__e_iyU {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: var(--text-xl);
+  height: var(--text-xl);
 }
 
 /* Мобільна версія 375px+ */
 @media only screen and (min-width: 375px) {
   .ActionButtons_actionIcon__e_iyU {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: var(--text-2xl);
+    height: var(--text-2xl);
   }
 }
 
@@ -1176,11 +1181,11 @@ p {
   position: absolute;
   top: -0.25rem;
   right: -0.25rem;
-  width: 1.25rem;
-  height: 1.25rem;
+  width: var(--text-xl);
+  height: var(--text-xl);
   background-color: #16a34a;
   color: white;
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   border-radius: 9999px;
   display: flex;
   align-items: center;
@@ -1211,14 +1216,14 @@ p {
 }
 
 .ProfileMenu_iconAdmin__JwMem {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: var(--text-2xl);
+  height: var(--text-2xl);
   color: #16a34a;
 }
 
 .ProfileMenu_userName__njr_H {
   display: none;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 500;
   color: #111827;
   padding-right: 0.5rem;
@@ -1246,35 +1251,35 @@ p {
 }
 
 .ProfileMenu_profileDropdownHeader__CDv7T {
-  padding: 1rem;
+  padding: var(--text-base);
   border-bottom: 1px solid #e5e7eb;
   background-color: #f9fafb;
 }
 
 .ProfileMenu_profileDropdownName__aWRbK {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 600;
   color: #111827;
   margin-bottom: 0.25rem;
 }
 
 .ProfileMenu_profileDropdownEmail__yt4tH {
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   color: #6b7280;
 }
 
 .ProfileMenu_profileDropdownItem__DroMx {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--text-xs);
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: var(--text-xs) var(--text-base);
   background: none;
   border: none;
   cursor: pointer;
   text-decoration: none;
   color: #111827;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   transition: background-color 0.2s;
   text-align: left;
 }
@@ -1284,8 +1289,8 @@ p {
 }
 
 .ProfileMenu_profileMenuIcon__q73HL {
-  width: 1.125rem;
-  height: 1.125rem;
+  width: var(--text-lg);
+  height: var(--text-lg);
   color: #6b7280;
 }
 
@@ -1308,7 +1313,7 @@ p {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 0;
+  padding: var(--text-base) 0;
   gap: 0.5rem;
 }
 
@@ -1321,7 +1326,7 @@ p {
 /* Планшет 768px+ */
 @media only screen and (min-width: 768px) {
   .Header_actions__FR7C0 {
-    gap: 1rem;
+    gap: var(--text-base);
   }
 }
 
@@ -1341,7 +1346,7 @@ p {
 }
 
 .Header_burgerIcon__UAZ2t {
-  font-size: 1.5rem;
+  font-size: var(--text-2xl);
   line-height: 1;
 }
 
@@ -1354,7 +1359,7 @@ p {
     display: none;
   }
   .Header_authButton__I5ye2 {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem var(--text-base);
     border-radius: 0.5rem;
     background-color: #16a34a;
     color: white;
@@ -1362,7 +1367,7 @@ p {
     cursor: pointer;
     transition: background-color 0.2s;
     font-weight: 600;
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
   }
 
   .Header_authButton__I5ye2:hover {

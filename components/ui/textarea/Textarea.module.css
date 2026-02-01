@@ -8,8 +8,8 @@
   border-radius: 0.375rem;
   border: 1px solid var(--color-border, #e5e7eb);
   background-color: var(--color-input-background, white);
-  padding: 0.5rem 0.75rem;
-  font-size: 1rem;
+  padding: 0.5rem var(--text-xs);
+  font-size: var(--text-base);
   line-height: 1.5;
   color: var(--color-foreground, #000);
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -39,6 +39,6 @@
 /* Tablet and up */
 @media (min-width: 768px) {
   .textarea {
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
   }
 }

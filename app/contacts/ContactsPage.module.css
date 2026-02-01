@@ -2,7 +2,7 @@
 
 .container {
   margin: 0 auto;
-  padding: 1rem;
+  padding: var(--text-base);
 }
 
 .title {
@@ -14,7 +14,7 @@
 .contactsGrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
+  gap: var(--text-2xl);
   margin-bottom: 3rem;
 }
 
@@ -22,14 +22,14 @@
   background-color: white;
   border-radius: 0.5rem;
   border: 1px solid var(--border);
-  padding: 1.5rem;
+  padding: var(--text-2xl);
 }
 
 .contactCardHeader {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+  gap: var(--text-xs);
+  margin-bottom: var(--text-base);
 }
 
 .contactIcon {
@@ -43,7 +43,7 @@
 }
 
 .contactCardTitle {
-  font-size: 1.25rem;
+  font-size: var(--text-xl);
   font-weight: 600;
 }
 
@@ -54,7 +54,7 @@
 }
 
 .contactLink {
-  font-size: 1.125rem;
+  font-size: var(--text-lg);
   display: block;
   transition: color 0.2s;
 }
@@ -64,18 +64,18 @@
 }
 
 .contactText {
-  font-size: 1.125rem;
+  font-size: var(--text-lg);
 }
 
 .contactNote {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: var(--muted-foreground);
-  margin-top: 0.75rem;
+  margin-top: var(--text-xs);
 }
 
 .mapLink {
   display: inline-block;
-  margin-top: 0.75rem;
+  margin-top: var(--text-xs);
   color: var(--primary);
   transition: text-decoration 0.2s;
 }
@@ -89,25 +89,25 @@
   background-color: white;
   border-radius: 0.5rem;
   border: 1px solid var(--border);
-  padding: 1.5rem;
+  padding: var(--text-2xl);
 }
 
 .formTitle {
-  font-size: 1.5rem;
+  font-size: var(--text-2xl);
   font-weight: bold;
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--text-2xl);
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--text-base);
 }
 
 .formRow {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1rem;
+  gap: var(--text-base);
 }
 
 .formGroup {
@@ -117,7 +117,7 @@
 
 .label {
   display: block;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 500;
   margin-bottom: 0.5rem;
 }
@@ -129,10 +129,10 @@
 .input,
 .textarea {
   width: 100%;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem var(--text-base);
   border: 1px solid var(--border);
   border-radius: 0.5rem;
-  font-size: 1rem;
+  font-size: var(--text-base);
   outline: none;
   transition: all 0.2s;
 }
@@ -150,7 +150,7 @@
 .submitButton {
   background-color: var(--primary);
   color: white;
-  padding: 0.75rem 2rem;
+  padding: var(--text-xs) 2rem;
   border-radius: 0.5rem;
   border: none;
   font-weight: 500;
@@ -174,24 +174,24 @@
   background: linear-gradient(to right, #22c55e, #10b981);
   color: white;
   border-radius: 0.5rem;
-  padding: 2rem 1.5rem;
+  padding: 2rem var(--text-2xl);
   text-align: center;
 }
 
 .socialTitle {
-  font-size: 1.5rem;
+  font-size: var(--text-2xl);
   font-weight: bold;
-  margin-bottom: 1rem;
+  margin-bottom: var(--text-base);
 }
 
 .socialDescription {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--text-2xl);
 }
 
 .socialLinks {
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  gap: var(--text-base);
 }
 
 .socialLink {
@@ -203,7 +203,7 @@
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s;
-  font-size: 1.5rem;
+  font-size: var(--text-2xl);
 }
 
 .socialLink:hover {
@@ -213,11 +213,11 @@
 /* Tablet (768px+) */
 @media (min-width: 768px) {
   .container {
-    padding: 1.5rem;
+    padding: var(--text-2xl);
   }
 
   .title {
-    font-size: 2.25rem;
+    font-size: var(--text-3xl);
   }
 
   .contactsGrid {

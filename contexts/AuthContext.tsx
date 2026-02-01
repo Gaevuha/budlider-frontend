@@ -7,12 +7,23 @@ import {
 } from "react";
 import type { User, AuthContextType } from "@/types/index";
 import { toast } from "@/lib/utils/toast";
+import { useCartStore } from "@/store/cartStore";
+import { useFavoritesStore } from "@/store/favoritesStore";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
+
+  const setAuthCookie = (value: string | null) => {
+    if (typeof document === "undefined") return;
+    if (value) {
+      document.cookie = `auth-token=${value}; path=/; max-age=2592000`;
+    } else {
+      document.cookie = "auth-token=; path=/; max-age=0";
+    }
+  };
 
   // Завантаження користувача з localStorage при монтуванні
   useEffect(() => {
@@ -23,6 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     if (savedToken) {
       setToken(savedToken);
+      setAuthCookie(savedToken);
     }
   }, []);
 
@@ -44,6 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setToken(demoToken);
       localStorage.setItem("user", JSON.stringify(adminUser));
       localStorage.setItem("token", demoToken);
+      setAuthCookie(demoToken);
       toast.success(`Вітаємо, ${adminUser.name}!`, "Успішний вхід");
       return;
     }
@@ -62,6 +75,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setToken(demoToken);
       localStorage.setItem("user", JSON.stringify(regularUser));
       localStorage.setItem("token", demoToken);
+      setAuthCookie(demoToken);
       toast.success(`Вітаємо, ${regularUser.name}!`, "Успішний вхід");
       return;
     }
@@ -93,6 +107,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("user", JSON.stringify(newUser));
     localStorage.setItem("token", demoToken);
     localStorage.setItem(`user_${email}`, JSON.stringify({ email, password }));
+    setAuthCookie(demoToken);
     toast.success(
       `Вітаємо, ${newUser.name}! Ваш акаунт успішно створено.`,
       "Реєстрація успішна"
@@ -104,6 +119,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setToken(null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    localStorage.removeItem("budlider-cart-storage");
+    localStorage.removeItem("budlider-favorites-storage");
+    localStorage.removeItem("buildleader_cart");
+    localStorage.removeItem("buildleader_favorites");
+    sessionStorage.removeItem("budlider-cart-storage");
+    sessionStorage.removeItem("budlider-favorites-storage");
+    sessionStorage.removeItem("buildleader_cart");
+    sessionStorage.removeItem("buildleader_favorites");
+    useCartStore.getState().clearCart();
+    useFavoritesStore.getState().clearFavorites();
+    setAuthCookie(null);
     toast.info("Ви успішно вийшли з акаунту", "До побачення");
   };
 

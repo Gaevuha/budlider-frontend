@@ -1,7 +1,7 @@
 .footer {
-  background-color: #ffffff;
+  background-color: var(--background)fff;
   color: #111827;
-  padding: 3rem 0 1rem;
+  padding: 3rem 0 var(--text-base);
   margin-top: 4rem;
   border-top: 1px solid #e5e7eb;
 }
@@ -47,9 +47,9 @@
   justify-content: center;
   gap: 0;
   text-decoration: none;
-  font-size: 1.5rem;
+  font-size: var(--text-2xl);
   font-weight: 800;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--text-xs);
   transition: transform 0.2s ease;
   letter-spacing: -0.02em;
 }
@@ -61,7 +61,7 @@
 /* Планшет */
 @media (min-width: 768px) {
   .logo {
-    font-size: 1.875rem;
+    font-size: var(--text-3xl);
   }
 }
 
@@ -93,14 +93,14 @@
 .footerText {
   color: #6b7280;
   line-height: 1.6;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   max-width: 280px;
 }
 
 .footerHeading {
-  font-size: 1rem;
+  font-size: var(--text-base);
   font-weight: 600;
-  margin-bottom: 1rem;
+  margin-bottom: var(--text-base);
   color: #111827;
 }
 
@@ -117,7 +117,7 @@
   color: #6b7280;
   text-decoration: none;
   transition: color 0.2s;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
 }
 
 .footerLinks a:hover {
@@ -130,7 +130,7 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--text-xs);
 }
 
 .footerContacts li {
@@ -138,7 +138,7 @@
   align-items: center;
   gap: 0.5rem;
   color: #6b7280;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
 }
 
 .footerContacts a,
@@ -154,11 +154,11 @@
 
 .footerBottom {
   border-top: 1px solid #e5e7eb;
-  padding-top: 1.5rem;
+  padding-top: var(--text-2xl);
   text-align: center;
 }
 
 .copyright {
   color: #9ca3af;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
 }

@@ -6,7 +6,7 @@
 .featuresGrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1rem;
+  gap: var(--text-base);
 }
 
 .featureCard {
@@ -14,7 +14,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 1.25rem;
+  padding: var(--text-xl);
   background-color: var(--card);
   border: 1px solid var(--border);
   border-radius: 0.5rem;
@@ -33,18 +33,18 @@
   background-color: rgba(var(--primary-rgb, 34, 197, 94), 0.1);
   border-radius: 0.5rem;
   color: var(--primary);
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--text-xs);
 }
 
 .featureCard h3 {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 600;
   margin-bottom: 0.25rem;
   color: var(--foreground);
 }
 
 .featureCard p {
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   color: var(--muted-foreground);
   line-height: 1.3;
 }
@@ -58,12 +58,12 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  gap: var(--text-xs);
+  margin-bottom: var(--text-2xl);
 }
 
 .sectionHeader h2 {
-  font-size: 1.25rem;
+  font-size: var(--text-xl);
   font-weight: 700;
   color: var(--foreground);
   margin: 0;
@@ -74,7 +74,7 @@
   align-items: center;
   gap: 0.25rem;
   color: var(--primary);
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 500;
   text-decoration: none;
   transition: color 0.2s ease;
@@ -85,14 +85,14 @@
 }
 
 .viewAllLink svg {
-  width: 1rem;
-  height: 1rem;
+  width: var(--text-base);
+  height: var(--text-base);
 }
 
 .productsGrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1rem;
+  gap: var(--text-base);
 }
 
 /* CTA Section - прихована на мобільних */
@@ -108,26 +108,26 @@
 
   .featuresGrid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.25rem;
+    gap: var(--text-xl);
   }
 
   .featureCard {
-    padding: 1.5rem;
+    padding: var(--text-2xl);
   }
 
   .featureIcon {
     width: 3rem;
     height: 3rem;
-    padding: 0.75rem;
-    margin-bottom: 1rem;
+    padding: var(--text-xs);
+    margin-bottom: var(--text-base);
   }
 
   .featureCard h3 {
-    font-size: 1rem;
+    font-size: var(--text-base);
   }
 
   .featureCard p {
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
   }
 
   .productsSection {
@@ -139,16 +139,16 @@
   }
 
   .sectionHeader h2 {
-    font-size: 1.5rem;
+    font-size: var(--text-2xl);
   }
 
   .viewAllLink {
-    font-size: 1rem;
+    font-size: var(--text-base);
   }
 
   .productsGrid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.25rem;
+    gap: var(--text-xl);
   }
 }
 
@@ -160,7 +160,7 @@
 
   .featuresGrid {
     grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
+    gap: var(--text-2xl);
   }
 
   .featureCard {
@@ -170,15 +170,15 @@
   .featureIcon {
     width: 3.5rem;
     height: 3.5rem;
-    padding: 0.875rem;
+    padding: var(--text-sm);
   }
 
   .featureCard h3 {
-    font-size: 1.125rem;
+    font-size: var(--text-lg);
   }
 
   .featureCard p {
-    font-size: 0.9rem;
+    font-size: var(--text-base);
   }
 
   .productsSection {
@@ -198,7 +198,7 @@
 
   .productsGrid {
     grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
+    gap: var(--text-2xl);
   }
 
   /* Показуємо CTA секцію на планшетах і вище */
@@ -209,22 +209,22 @@
 
   .ctaCard {
     background-color: var(--muted);
-    border-radius: 1rem;
+    border-radius: var(--text-base);
     padding: 2rem;
     text-align: center;
   }
 
   .ctaTitle {
-    font-size: 1.5rem;
+    font-size: var(--text-2xl);
     font-weight: 700;
-    margin-bottom: 0.75rem;
+    margin-bottom: var(--text-xs);
     color: var(--foreground);
   }
 
   .ctaDescription {
     color: var(--muted-foreground);
-    margin-bottom: 1.5rem;
-    font-size: 0.9rem;
+    margin-bottom: var(--text-2xl);
+    font-size: var(--text-base);
     line-height: 1.4;
     max-width: 36rem;
     margin-left: auto;
@@ -237,11 +237,11 @@
     gap: 0.5rem;
     background-color: var(--primary);
     color: var(--primary-foreground);
-    padding: 0.75rem 1.5rem;
+    padding: var(--text-xs) var(--text-2xl);
     border-radius: 0.5rem;
     text-decoration: none;
     font-weight: 500;
-    font-size: 0.9rem;
+    font-size: var(--text-base);
     transition: background-color 0.2s ease;
   }
 
@@ -262,23 +262,23 @@
 
   .featureCard {
     padding: 2rem;
-    border-radius: 0.75rem;
+    border-radius: var(--text-xs);
   }
 
   .featureIcon {
     width: 4rem;
     height: 4rem;
-    padding: 1rem;
-    margin-bottom: 1.25rem;
+    padding: var(--text-base);
+    margin-bottom: var(--text-xl);
   }
 
   .featureCard h3 {
-    font-size: 1.25rem;
+    font-size: var(--text-xl);
     margin-bottom: 0.5rem;
   }
 
   .featureCard p {
-    font-size: 1rem;
+    font-size: var(--text-base);
   }
 
   .productsSection {
@@ -304,24 +304,24 @@
 
   .ctaCard {
     padding: 3rem 4rem;
-    border-radius: 1.25rem;
+    border-radius: var(--text-xl);
   }
 
   .ctaTitle {
     font-size: 2rem;
-    margin-bottom: 1rem;
+    margin-bottom: var(--text-base);
   }
 
   .ctaDescription {
-    font-size: 1.125rem;
+    font-size: var(--text-lg);
     margin-bottom: 2rem;
     max-width: 42rem;
   }
 
   .ctaButton {
-    padding: 1rem 2rem;
-    font-size: 1rem;
-    border-radius: 0.75rem;
+    padding: var(--text-base) 2rem;
+    font-size: var(--text-base);
+    border-radius: var(--text-xs);
   }
 }
 
