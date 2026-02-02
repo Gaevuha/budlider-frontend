@@ -56,7 +56,7 @@ export default function ProductDetailPage() {
       setIsLoading(true);
       try {
         const listRes = await fetchProductsClient({ slug });
-        let found = normalizeProducts(listRes)[0] || null;
+        let found: Product | null = normalizeProducts(listRes)[0] || null;
         if (!found) {
           try {
             const res = await fetchProductClient(slug);
@@ -112,6 +112,12 @@ export default function ProductDetailPage() {
     };
   }, [product?.category?.slug, product?._id]);
 
+  const images = useMemo(
+    () =>
+      product ? [product.mainImage, product.mainImage, product.mainImage] : [],
+    [product?.mainImage]
+  );
+
   if (!product && !isLoading) {
     return (
       <div className={styles.container}>
@@ -134,11 +140,6 @@ export default function ProductDetailPage() {
 
   const isInCart = cartItems.some((item) => item.productId === product._id);
   const isFavorite = favorites.includes(product._id);
-
-  const images = useMemo(
-    () => [product.mainImage, product.mainImage, product.mainImage],
-    [product.mainImage]
-  );
 
   const handleAddToCart = () => {
     if (isInCart) {

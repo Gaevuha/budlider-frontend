@@ -37,9 +37,57 @@ export function CatalogFilters({
 
     const normalizeList = (data: any) => {
       if (Array.isArray(data)) return data;
-      if (data?.data) return data.data;
+      if (Array.isArray(data?.data)) return data.data;
+      if (Array.isArray(data?.data?.data)) return data.data.data;
+      if (Array.isArray(data?.data?.categories)) return data.data.categories;
+      if (Array.isArray(data?.categories)) return data.categories;
+      if (Array.isArray(data?.data?.brands)) return data.data.brands;
+      if (Array.isArray(data?.brands)) return data.brands;
+      if (Array.isArray(data?.data?.items)) return data.data.items;
+      if (Array.isArray(data?.items)) return data.items;
+      if (Array.isArray(data?.data?.results)) return data.data.results;
+      if (Array.isArray(data?.results)) return data.results;
+      if (Array.isArray(data?.data?.list)) return data.data.list;
+      if (Array.isArray(data?.list)) return data.list;
       return [];
     };
+
+    const normalizeCategories = (list: any[]) =>
+      list
+        .map((category) => {
+          const name =
+            category?.name ||
+            category?.title ||
+            category?.label ||
+            category?.categoryName ||
+            "";
+          const slug = category?.slug || category?.id || category?._id || name;
+          return {
+            ...category,
+            name,
+            slug,
+          };
+        })
+        .filter(
+          (category) => Boolean(category?.name) && Boolean(category?.slug)
+        );
+
+    const normalizeBrands = (list: any[]) =>
+      list
+        .map((brand) => {
+          if (typeof brand === "string") return brand;
+          return (
+            brand?.name ||
+            brand?.title ||
+            brand?.label ||
+            brand?.brand ||
+            brand?.slug ||
+            brand?.id ||
+            brand?._id ||
+            ""
+          );
+        })
+        .filter((brand) => Boolean(brand));
 
     const load = async () => {
       try {
@@ -48,12 +96,23 @@ export function CatalogFilters({
           fetchBrandsClient(),
         ]);
         if (!isMounted) return;
-        setCategories(normalizeList(categoriesRes));
-        setBrands(normalizeList(brandsRes));
-      } catch {
+        const categoriesList = normalizeCategories(
+          normalizeList(categoriesRes)
+        );
+        const brandsList = normalizeBrands(normalizeList(brandsRes));
+        setCategories(categoriesList);
+        setBrands(brandsList);
+        if (categoriesList.length === 0 || brandsList.length === 0) {
+          console.warn("[CatalogFilters] empty lists", {
+            categoriesRes,
+            brandsRes,
+          });
+        }
+      } catch (error) {
         if (!isMounted) return;
         setCategories([]);
         setBrands([]);
+        console.error("[CatalogFilters] load failed", error);
       }
     };
 

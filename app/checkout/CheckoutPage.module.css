@@ -84,6 +84,7 @@
 
 .textarea {
   resize: none;
+  overflow-y: auto;
 }
 
 .error {
@@ -111,18 +112,26 @@
   border-radius: var(--text-xs);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(249, 250, 251, 0.9) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(249, 250, 251, 0.9) 100%
+  );
   overflow: hidden;
 }
 
 .deliveryOption::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.03) 0%, rgba(34, 197, 94, 0.08) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.03) 0%,
+    rgba(34, 197, 94, 0.08) 100%
+  );
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: 0;
@@ -140,8 +149,13 @@
 
 .deliveryOptionSelected {
   border-color: var(--primary);
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(34, 197, 94, 0.12) 100%);
-  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.08) 0%,
+    rgba(34, 197, 94, 0.12) 100%
+  );
+  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
   transform: translateY(-1px);
 }
 
@@ -164,18 +178,30 @@
   width: 3.5rem;
   height: 3.5rem;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.15) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.1) 0%,
+    rgba(34, 197, 94, 0.15) 100%
+  );
   transition: all 0.3s ease;
   z-index: 1;
 }
 
 .deliveryOption:hover .deliveryIconWrapper {
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.25) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.15) 0%,
+    rgba(34, 197, 94, 0.25) 100%
+  );
   transform: scale(1.1) rotate(5deg);
 }
 
 .deliveryOptionSelected .deliveryIconWrapper {
-  background: linear-gradient(135deg, var(--primary) 0%, rgba(34, 197, 94, 0.85) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    rgba(34, 197, 94, 0.85) 100%
+  );
   box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
   transform: scale(1.05);
 }
@@ -262,18 +288,26 @@
   border-radius: var(--text-xs);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(249, 250, 251, 0.9) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(249, 250, 251, 0.9) 100%
+  );
   overflow: hidden;
 }
 
 .paymentOption::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.03) 0%, rgba(34, 197, 94, 0.08) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.03) 0%,
+    rgba(34, 197, 94, 0.08) 100%
+  );
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: 0;
@@ -291,8 +325,13 @@
 
 .paymentOptionSelected {
   border-color: var(--primary);
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(34, 197, 94, 0.12) 100%);
-  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.08) 0%,
+    rgba(34, 197, 94, 0.12) 100%
+  );
+  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
   transform: translateY(-1px);
 }
 
@@ -315,18 +354,30 @@
   width: 3.5rem;
   height: 3.5rem;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.15) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.1) 0%,
+    rgba(34, 197, 94, 0.15) 100%
+  );
   transition: all 0.3s ease;
   z-index: 1;
 }
 
 .paymentOption:hover .paymentIconWrapper {
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.25) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.15) 0%,
+    rgba(34, 197, 94, 0.25) 100%
+  );
   transform: scale(1.1) rotate(5deg);
 }
 
 .paymentOptionSelected .paymentIconWrapper {
-  background: linear-gradient(135deg, var(--primary) 0%, rgba(34, 197, 94, 0.85) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    rgba(34, 197, 94, 0.85) 100%
+  );
   box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
   transform: scale(1.05);
 }

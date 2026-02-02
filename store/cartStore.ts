@@ -8,6 +8,7 @@ import { CartItem } from "@/types";
 
 interface CartState {
   items: CartItem[];
+  setItems: (items: CartItem[]) => void;
   addItem: (productId: string, quantity: number) => void;
   removeItem: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
@@ -18,9 +19,7 @@ interface CartState {
 
 const getStorage = () => {
   if (typeof window === "undefined") return undefined;
-  const hasAuth = Boolean(
-    localStorage.getItem("user") || localStorage.getItem("token")
-  );
+  const hasAuth = Boolean(localStorage.getItem("user"));
   return hasAuth ? localStorage : sessionStorage;
 };
 
@@ -38,6 +37,8 @@ export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
+
+      setItems: (items) => set({ items }),
 
       addItem: (productId, quantity) =>
         set((state) => {

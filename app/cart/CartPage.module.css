@@ -6,6 +6,13 @@
   padding: var(--text-base);
 }
 
+.loaderContainer {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .title {
   font-size: var(--text-3xl);
   font-weight: bold;
@@ -80,6 +87,11 @@
 
 .itemImageLink {
   display: block;
+  color: inherit;
+}
+.itemLink {
+  text-decoration: none;
+  color: inherit;
 }
 
 .image {

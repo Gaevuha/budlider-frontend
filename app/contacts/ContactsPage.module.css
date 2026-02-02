@@ -145,6 +145,7 @@
 
 .textarea {
   resize: none;
+  overflow-y: auto;
 }
 
 .submitButton {

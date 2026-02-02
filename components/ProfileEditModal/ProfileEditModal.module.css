@@ -51,7 +51,8 @@
 
 .textarea {
   min-height: 100px;
-  resize: vertical;
+  resize: none;
+  overflow-y: auto;
 }
 
 .footer {

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   fetchAllOrdersClient,
+  deleteOrderAdminClient,
   updateOrderStatusClient,
 } from "@/lib/api/apiClient";
 import { Order } from "@/types";
@@ -39,32 +40,148 @@ export default function AdminOrdersPage() {
 
   const isAdmin = useMemo(() => user?.role === "admin", [user?.role]);
 
+  const getOrderId = (order: any) => order?.id || order?._id || order?.orderId;
+
+  const getOrderCreatedAt = (order: any) =>
+    order?.createdAt || order?.created_at || order?.date;
+
+  const getCustomerName = (order: any) =>
+    order?.customerName ||
+    order?.shippingAddress?.name ||
+    order?.name ||
+    order?.user?.name;
+
+  const getCustomerPhone = (order: any) =>
+    order?.customerPhone ||
+    order?.shippingAddress?.phone ||
+    order?.phone ||
+    order?.user?.phone;
+
+  const getCustomerEmail = (order: any) =>
+    order?.customerEmail || order?.email || order?.user?.email;
+
+  const getOrderType = (order: any) =>
+    order?.type || order?.orderType || (order?.isQuick ? "quick" : "product");
+
+  const getOrderStatus = (order: any) => {
+    if (order?.status === "new") return "pending";
+    if (order?.status === "completed") return "received";
+    return order?.status || "pending";
+  };
+  const getDisplayStatus = (order: any) =>
+    getOrderStatus(order) === "pending" ? "new" : getOrderStatus(order);
+
+  const buildAddressFromShipping = (shipping: any) => {
+    if (!shipping) return undefined;
+    if (typeof shipping === "string") return shipping;
+
+    if (shipping.address) return shipping.address;
+
+    const parts = [
+      shipping.city,
+      shipping.street,
+      shipping.building,
+      shipping.apartment || shipping.flat,
+      shipping.department,
+    ].filter(Boolean);
+
+    return parts.length > 0 ? parts.join(", ") : undefined;
+  };
+
+  const getDeliveryAddress = (order: any) =>
+    order?.deliveryAddress || buildAddressFromShipping(order?.shippingAddress);
+
+  const normalizeItems = (items: any[]) =>
+    Array.isArray(items)
+      ? items.map((item) => {
+          const quantity = Number(item?.quantity ?? item?.qty ?? 1);
+          const price = Number(
+            item?.price ?? item?.product?.price ?? item?.productPrice ?? 0
+          );
+          return {
+            ...item,
+            name: item?.name || item?.product?.name,
+            price,
+            quantity,
+            total: Number(item?.total ?? price * quantity),
+          };
+        })
+      : [];
+
+  const getOrderTotal = (order: any) => {
+    if (typeof order?.total === "number") return order.total;
+    if (typeof order?.totalAmount === "number") return order.totalAmount;
+    if (typeof order?.amount === "number") return order.amount;
+    if (typeof order?.sum === "number") return order.sum;
+
+    const items = normalizeItems(order?.items || []);
+    return items.reduce((sum, item) => sum + Number(item?.total || 0), 0);
+  };
+
+  const getItemsSubtotal = (order: any) => {
+    const items = normalizeItems(order?.items || []);
+    return items.reduce((sum, item) => sum + Number(item?.total || 0), 0);
+  };
+
   useEffect(() => {
+    if (!user) return;
     if (!isAdmin) {
       router.push("/");
       return;
     }
 
     loadOrders();
-  }, [isAdmin, router]);
+  }, [user, isAdmin, router]);
 
   const loadOrders = async () => {
     try {
       const res = await fetchAllOrdersClient();
       const data = res?.data?.orders || res?.orders || res || [];
-      setOrders(Array.isArray(data) ? data : []);
+      const normalized = Array.isArray(data)
+        ? data.map((order: any) => ({
+            ...order,
+            id: getOrderId(order),
+            createdAt: getOrderCreatedAt(order),
+            customerName: getCustomerName(order),
+            customerPhone: getCustomerPhone(order),
+            customerEmail: getCustomerEmail(order),
+            deliveryAddress: getDeliveryAddress(order),
+            total: getOrderTotal(order),
+            status: getOrderStatus(order),
+            type: getOrderType(order),
+            items: normalizeItems(order?.items || []),
+          }))
+        : [];
+      setOrders(normalized as Order[]);
     } catch {
       setOrders([]);
     }
   };
 
-  const handleStatusChange = async (
-    orderId: string,
-    newStatus: Order["status"]
-  ) => {
-    await updateOrderStatusClient(orderId, { status: newStatus });
-    loadOrders();
-    toast.success("Статус замовлення оновлено");
+  const normalizeStatusForApi = (value: string): Order["status"] => {
+    if (value === "new") return "pending";
+    if (
+      value === "pending" ||
+      value === "processing" ||
+      value === "paid" ||
+      value === "shipped" ||
+      value === "cancelled" ||
+      value === "received"
+    ) {
+      return value;
+    }
+    return "pending";
+  };
+
+  const handleStatusChange = async (orderId: string, newStatus: string) => {
+    try {
+      const normalized = normalizeStatusForApi(newStatus);
+      await updateOrderStatusClient(orderId, { status: normalized });
+      loadOrders();
+      toast.success("Статус замовлення оновлено");
+    } catch (error) {
+      toast.error("Не вдалося оновити статус замовлення");
+    }
   };
 
   const handleCancelOrder = (orderId: string) => {
@@ -73,9 +190,14 @@ export default function AdminOrdersPage() {
     }
   };
 
-  const handleDeleteOrder = (orderId: string) => {
-    if (window.confirm("Видалити це замовлення?")) {
-      handleStatusChange(orderId, "cancelled");
+  const handleDeleteOrder = async (orderId: string) => {
+    if (!window.confirm("Видалити це замовлення?")) return;
+    try {
+      await deleteOrderAdminClient(orderId);
+      loadOrders();
+      toast.success("Замовлення видалено");
+    } catch (error) {
+      toast.error("Не вдалося видалити замовлення");
     }
   };
 
@@ -94,15 +216,15 @@ export default function AdminOrdersPage() {
     ];
 
     const rows = filteredOrders.map((order) => [
-      order.id,
-      new Date(order.createdAt).toLocaleDateString("uk-UA"),
-      order.customerName,
-      order.customerPhone,
-      order.customerEmail || "-",
-      order.deliveryAddress,
-      order.total,
-      order.status,
-      order.type || "product",
+      getOrderId(order),
+      new Date(getOrderCreatedAt(order)).toLocaleDateString("uk-UA"),
+      getCustomerName(order) || "-",
+      getCustomerPhone(order) || "-",
+      getCustomerEmail(order) || "-",
+      getDeliveryAddress(order) || "-",
+      getOrderTotal(order),
+      getOrderStatus(order),
+      getOrderType(order) || "product",
       order.comment || "-",
     ]);
 
@@ -141,29 +263,39 @@ export default function AdminOrdersPage() {
 
   const filteredOrders = orders.filter((order) => {
     const matchesSearch =
-      (order.customerName || "")
+      (getCustomerName(order) || "")
         .toLowerCase()
         .includes(searchQuery.toLowerCase()) ||
-      (order.customerPhone || "").includes(searchQuery) ||
-      (order.id || "").includes(searchQuery);
+      (getCustomerPhone(order) || "").includes(searchQuery) ||
+      String(getOrderId(order) || "").includes(searchQuery);
 
     const matchesStatus =
-      statusFilter === "all" || order.status === statusFilter;
+      statusFilter === "all" || getOrderStatus(order) === statusFilter;
 
     const matchesDateRange =
       !dateRange[0] ||
       !dateRange[1] ||
-      (new Date(order.createdAt) >= dateRange[0] &&
-        new Date(order.createdAt) <= dateRange[1]);
+      (new Date(getOrderCreatedAt(order)) >= dateRange[0] &&
+        new Date(getOrderCreatedAt(order)) <= dateRange[1]);
 
     return matchesSearch && matchesStatus && matchesDateRange;
   });
+
+  if (!user) {
+    return null;
+  }
 
   if (!isAdmin) {
     return null;
   }
 
   const getStatusClassName = (status: Order["status"]) => {
+    const effectiveStatus =
+      status === "pending"
+        ? "new"
+        : status === "received"
+        ? "completed"
+        : status;
     const statusMap = {
       new: styles.statusNew,
       pending: styles.statusPending,
@@ -173,7 +305,7 @@ export default function AdminOrdersPage() {
       completed: styles.statusCompleted,
       cancelled: styles.statusCancelled,
     };
-    return `${styles.statusSelect} ${statusMap[status] || ""}`;
+    return `${styles.statusSelect} ${statusMap[effectiveStatus] || ""}`;
   };
 
   const getTypeBadgeClassName = (type: string) => {
@@ -223,10 +355,11 @@ export default function AdminOrdersPage() {
               className={styles.filterSelect}
             >
               <option value="all">Всі статуси</option>
-              <option value="new">Нові</option>
+              <option value="pending">Нові</option>
               <option value="processing">В обробці</option>
-              <option value="shipped">Відправлені</option>
-              <option value="completed">Виконані</option>
+              <option value="paid">Оплачено</option>
+              <option value="shipped">Відправлено</option>
+              <option value="received">Отримано</option>
               <option value="cancelled">Скасовані</option>
             </select>
           </div>
@@ -280,19 +413,25 @@ export default function AdminOrdersPage() {
         <div className={styles.statCard}>
           <p className={styles.statLabel}>Нові</p>
           <p className={`${styles.statValue} ${styles.statValueBlue}`}>
-            {orders.filter((o) => o.status === "new").length}
+            {orders.filter((o) => getDisplayStatus(o) === "new").length}
           </p>
         </div>
         <div className={styles.statCard}>
           <p className={styles.statLabel}>В обробці</p>
           <p className={`${styles.statValue} ${styles.statValueYellow}`}>
-            {orders.filter((o) => o.status === "processing").length}
+            {orders.filter((o) => getDisplayStatus(o) === "processing").length}
           </p>
         </div>
         <div className={styles.statCard}>
-          <p className={styles.statLabel}>Виконані</p>
+          <p className={styles.statLabel}>Відправлено</p>
+          <p className={`${styles.statValue} ${styles.statValueDarkGreen}`}>
+            {orders.filter((o) => getOrderStatus(o) === "shipped").length}
+          </p>
+        </div>
+        <div className={styles.statCard}>
+          <p className={styles.statLabel}>Отримано</p>
           <p className={`${styles.statValue} ${styles.statValueGreen}`}>
-            {orders.filter((o) => o.status === "completed").length}
+            {orders.filter((o) => getOrderStatus(o) === "received").length}
           </p>
         </div>
       </div>
@@ -320,72 +459,74 @@ export default function AdminOrdersPage() {
                 </tr>
               ) : (
                 filteredOrders.flatMap((order) => [
-                  <tr key={order.id} className={styles.tableRow}>
+                  <tr key={getOrderId(order)} className={styles.tableRow}>
                     <td className={styles.tableCell}>
                       <button
                         onClick={() =>
                           setExpandedOrderId(
-                            expandedOrderId === order.id ? null : order.id
+                            expandedOrderId === getOrderId(order)
+                              ? null
+                              : getOrderId(order)
                           )
                         }
                         className={styles.expandButton}
                       >
-                        {expandedOrderId === order.id ? (
+                        {expandedOrderId === getOrderId(order) ? (
                           <ChevronUp className={styles.smallIcon} />
                         ) : (
                           <ChevronDown className={styles.smallIcon} />
                         )}
-                        #{order.id}
+                        #{getOrderId(order)}
                       </button>
                     </td>
                     <td className={styles.tableCell}>
-                      {new Date(order.createdAt).toLocaleDateString("uk-UA")}
+                      {new Date(getOrderCreatedAt(order)).toLocaleDateString(
+                        "uk-UA"
+                      )}
                     </td>
                     <td className={styles.tableCell}>
                       <div className={styles.customerName}>
-                        {order.customerName || "-"}
+                        {getCustomerName(order) || "-"}
                       </div>
-                      {order.type && (
-                        <span className={getTypeBadgeClassName(order.type)}>
-                          {order.type === "quick"
+                      {getOrderType(order) && (
+                        <span
+                          className={getTypeBadgeClassName(getOrderType(order))}
+                        >
+                          {getOrderType(order) === "quick"
                             ? "Швидке"
-                            : order.type === "service"
+                            : getOrderType(order) === "service"
                             ? "Послуга"
                             : "Товар"}
                         </span>
                       )}
                     </td>
                     <td className={styles.tableCell}>
-                      {order.customerPhone || "-"}
+                      {getCustomerPhone(order) || "-"}
                     </td>
                     <td className={`${styles.tableCell} ${styles.totalCell}`}>
-                      {order.total} грн
+                      {getOrderTotal(order)} грн
                     </td>
                     <td className={styles.tableCell}>
                       <select
-                        value={order.status}
+                        value={getOrderStatus(order)}
                         onChange={(e) =>
-                          handleStatusChange(
-                            order.id,
-                            e.target.value as Order["status"]
-                          )
+                          handleStatusChange(getOrderId(order), e.target.value)
                         }
-                        className={getStatusClassName(order.status)}
+                        className={getStatusClassName(getOrderStatus(order))}
                       >
-                        <option value="new">Нове</option>
-                        <option value="pending">Очікує</option>
+                        <option value="pending">Нове</option>
                         <option value="processing">В обробці</option>
                         <option value="paid">Оплачено</option>
                         <option value="shipped">Відправлено</option>
-                        <option value="completed">Виконано</option>
+                        <option value="received">Отримано</option>
                         <option value="cancelled">Скасовано</option>
                       </select>
                     </td>
                     <td className={styles.tableCell}>
                       <div className={styles.actionsCell}>
                         <button
-                          onClick={() => handleCancelOrder(order.id)}
-                          disabled={order.status === "cancelled"}
+                          onClick={() => handleCancelOrder(getOrderId(order))}
+                          disabled={getOrderStatus(order) === "cancelled"}
                           className={styles.cancelButton}
                         >
                           <X className={styles.smallIcon} />
@@ -393,7 +534,7 @@ export default function AdminOrdersPage() {
                         </button>
                         <span className={styles.divider}>|</span>
                         <button
-                          onClick={() => handleDeleteOrder(order.id)}
+                          onClick={() => handleDeleteOrder(getOrderId(order))}
                           className={styles.deleteButton}
                         >
                           Видалити
@@ -402,10 +543,10 @@ export default function AdminOrdersPage() {
                     </td>
                   </tr>,
 
-                  ...(expandedOrderId === order.id
+                  ...(expandedOrderId === getOrderId(order)
                     ? [
                         <tr
-                          key={`${order.id}-details`}
+                          key={`${getOrderId(order)}-details`}
                           className={styles.detailsRow}
                         >
                           <td colSpan={7} className={styles.detailsCell}>
@@ -421,7 +562,7 @@ export default function AdminOrdersPage() {
                                       Ім'я:
                                     </span>
                                     <span className={styles.detailsValue}>
-                                      {order.customerName || "Не вказано"}
+                                      {getCustomerName(order) || "Не вказано"}
                                     </span>
                                   </div>
                                   <div className={styles.detailsItem}>
@@ -429,26 +570,26 @@ export default function AdminOrdersPage() {
                                       Телефон:
                                     </span>
                                     <span className={styles.detailsValue}>
-                                      {order.customerPhone || "Не вказано"}
+                                      {getCustomerPhone(order) || "Не вказано"}
                                     </span>
                                   </div>
-                                  {order.customerEmail && (
+                                  {getCustomerEmail(order) && (
                                     <div className={styles.detailsItem}>
                                       <span className={styles.detailsLabel}>
                                         Email:
                                       </span>
                                       <span className={styles.detailsValue}>
-                                        {order.customerEmail}
+                                        {getCustomerEmail(order)}
                                       </span>
                                     </div>
                                   )}
-                                  {order.deliveryAddress && (
+                                  {getDeliveryAddress(order) && (
                                     <div className={styles.detailsItem}>
                                       <span className={styles.detailsLabel}>
                                         Адреса:
                                       </span>
                                       <span className={styles.detailsValue}>
-                                        {order.deliveryAddress}
+                                        {getDeliveryAddress(order)}
                                       </span>
                                     </div>
                                   )}
@@ -498,7 +639,9 @@ export default function AdminOrdersPage() {
                                   <div className={styles.orderItems}>
                                     {order.items.map((item, index) => (
                                       <div
-                                        key={`${order.id}-item-${index}`}
+                                        key={`${getOrderId(
+                                          order
+                                        )}-item-${index}`}
                                         className={styles.orderItem}
                                       >
                                         <div className={styles.orderItemInfo}>
@@ -517,10 +660,25 @@ export default function AdminOrdersPage() {
                                         </div>
                                       </div>
                                     ))}
+                                    {getOrderTotal(order) >
+                                      getItemsSubtotal(order) && (
+                                      <div className={styles.orderItem}>
+                                        <div className={styles.orderItemInfo}>
+                                          <div className={styles.orderItemName}>
+                                            Доставка
+                                          </div>
+                                        </div>
+                                        <div className={styles.orderItemTotal}>
+                                          {getOrderTotal(order) -
+                                            getItemsSubtotal(order)}{" "}
+                                          грн
+                                        </div>
+                                      </div>
+                                    )}
                                     <div className={styles.orderTotal}>
                                       <span>Всього:</span>
                                       <span className={styles.orderTotalValue}>
-                                        {order.total} грн
+                                        {getOrderTotal(order)} грн
                                       </span>
                                     </div>
                                   </div>

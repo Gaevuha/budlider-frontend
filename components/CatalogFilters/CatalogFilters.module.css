@@ -1,15 +1,17 @@
 .aside {
   width: 100%;
-  background: linear-gradient(135deg, var(--background)fff 0%, #f9fafb 100%);
+  background: linear-gradient(135deg, var(--background) fff 0%, #f9fafb 100%);
   border: 2px solid #22c55e;
   border-radius: var(--text-base);
   padding: var(--text-2xl);
-  box-shadow: 0 4px 6px -1px rgba(34, 197, 94, 0.1), 0 2px 4px -1px rgba(34, 197, 94, 0.06);
+  box-shadow: 0 4px 6px -1px rgba(34, 197, 94, 0.1),
+    0 2px 4px -1px rgba(34, 197, 94, 0.06);
   transition: all 0.3s ease;
 }
 
 .aside:hover {
-  box-shadow: 0 10px 15px -3px rgba(34, 197, 94, 0.15), 0 4px 6px -2px rgba(34, 197, 94, 0.08);
+  box-shadow: 0 10px 15px -3px rgba(34, 197, 94, 0.15),
+    0 4px 6px -2px rgba(34, 197, 94, 0.08);
 }
 
 /* Планшет */
@@ -92,7 +94,7 @@
 }
 
 .sectionTitle::before {
-  content: '';
+  content: "";
   width: 4px;
   height: var(--text-base);
   background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
@@ -103,6 +105,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--text-xs);
+  height: 300px;
+  overflow-y: auto;
 }
 
 .checkboxLabel {
@@ -143,7 +147,7 @@
 }
 
 .checkbox:checked::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 50%;
   top: 50%;

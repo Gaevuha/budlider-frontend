@@ -8,8 +8,9 @@ import { DeliverySelection } from "@/components/DeliverySelection/DeliverySelect
 import { toast } from "@/lib/utils/toast";
 import { useCart, useClearCart } from "@/lib/hooks/useCart";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAuthModalStore } from "@/store/authModalStore";
 import { CardPaymentForm } from "@/components/CardPaymentForm/CardPaymentForm";
-import { fetchProductClient } from "@/lib/api/apiClient";
+import { fetchProductsClient } from "@/lib/api/apiClient";
 import { createOrderClient } from "@/lib/api/apiClient";
 import type { Product } from "@/types";
 import {
@@ -21,6 +22,7 @@ import {
   Store,
 } from "lucide-react";
 import { Package, Mail } from "lucide-react";
+import { Loader } from "@/components/ui/loader/Loader";
 import styles from "./CheckoutPage.module.css";
 
 // Валідація дати (MM/YY)
@@ -68,6 +70,30 @@ const isValidCardNumber = (value: string | undefined) => {
   }
 
   return sum % 10 === 0;
+};
+
+const buildShippingAddress = (params: {
+  name: string;
+  phone: string;
+  address: string;
+}) => {
+  const raw = params.address || "";
+  const parts = raw
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  const city = parts[0] || raw || "Невідомо";
+  const street = parts[1] || parts[0] || raw || "Невідомо";
+  const building = parts[2] || "Невідомо";
+
+  return {
+    name: params.name || "",
+    phone: params.phone || "",
+    city,
+    street,
+    building,
+  };
 };
 
 // Базова схема валідації
@@ -154,16 +180,18 @@ interface CheckoutFormData {
 export default function CheckoutPage() {
   const router = useRouter();
   const { user } = useAuth();
+  const { openModal } = useAuthModalStore();
   const { items } = useCart();
   const clearCart = useClearCart();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [productsById, setProductsById] = useState<Record<string, Product>>({});
 
-  const normalizeProduct = (data: any): Product | null => {
-    if (!data) return null;
-    if (data?.data) return data.data;
-    return data;
+  const normalizeProducts = (data: any): Product[] => {
+    if (Array.isArray(data)) return data;
+    if (data?.data?.products) return data.data.products;
+    if (data?.products) return data.products;
+    return [];
   };
 
   useEffect(() => {
@@ -175,21 +203,14 @@ export default function CheckoutPage() {
 
     let isMounted = true;
     const load = async () => {
-      const results = await Promise.all(
-        ids.map(async (id) => {
-          try {
-            const res = await fetchProductClient(id);
-            return normalizeProduct(res);
-          } catch {
-            return null;
-          }
-        })
-      );
-
+      const res = await fetchProductsClient({ limit: 500 });
+      const list = normalizeProducts(res);
       if (!isMounted) return;
       const map: Record<string, Product> = {};
-      results.forEach((product) => {
-        if (product?._id) map[product._id] = product;
+      list.forEach((product) => {
+        if (product?._id && ids.includes(product._id)) {
+          map[product._id] = product;
+        }
       });
       setProductsById(map);
     };
@@ -228,35 +249,74 @@ export default function CheckoutPage() {
       setIsSubmitting(true);
 
       try {
+        if (!user) {
+          openModal();
+          return;
+        }
+
+        if (cartItems.length === 0) {
+          toast.error("Кошик порожній. Додайте товари перед оформленням.");
+          return;
+        }
+
         // Імітація обробки оплати
         if (values.paymentMethod === "card_online") {
           // Тут повинна бути інтеграція з платіжною системою (Stripe, LiqPay, WayForPay тощо)
           await new Promise((resolve) => setTimeout(resolve, 1500)); // Імітація затримки обробки
         }
 
-        // Формуємо items з повною інформацією про товари
-        const orderItems = cartItems.map((item) => ({
-          product: item.productId,
-          name: item.product?.name || "Товар",
-          price: item.product?.price || 0,
-          quantity: item.quantity,
-          total: (item.product?.price || 0) * item.quantity,
-        }));
+        const resolvedDeliveryMethod =
+          values.deliveryMethod === "courier"
+            ? "courier"
+            : values.deliveryMethod === "pickup"
+            ? "pickup"
+            : "post";
 
-        const orderPayload: any = {
-          items: orderItems,
-          total: total,
+        const resolvedPaymentMethod =
+          values.paymentMethod === "card_delivery"
+            ? "card"
+            : values.paymentMethod === "card_online"
+            ? "online"
+            : "cash";
+
+        const orderPayload: {
+          items: Array<{ productId: string; quantity: number }>;
+          shippingAddress: {
+            name: string;
+            phone: string;
+            city: string;
+            street: string;
+            building: string;
+          };
+          deliveryMethod: "courier" | "pickup" | "post";
+          paymentMethod: "cash" | "card" | "online";
+          status: "new";
+          comment?: string;
+          customerName?: string;
+          customerPhone?: string;
+          customerEmail?: string;
+          deliveryAddress?: string;
+        } = {
+          items: cartItems.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+          })),
+          shippingAddress: buildShippingAddress({
+            name: values.name,
+            phone: values.phone,
+            address: values.address,
+          }),
+          deliveryMethod: resolvedDeliveryMethod,
+          paymentMethod: resolvedPaymentMethod,
+          status: "new",
           customerName: values.name,
           customerPhone: values.phone,
-          customerEmail: values.email || "",
+          customerEmail: values.email,
           deliveryAddress: values.address,
-          deliveryMethod: values.deliveryMethod,
-          comment: values.comment || "",
-          paymentMethod: values.paymentMethod,
-          type: "product",
+          ...(values.comment?.trim() ? { comment: values.comment.trim() } : {}),
         };
 
-        await createOrderClient(orderPayload);
+        const res = await createOrderClient(orderPayload);
         clearCart.mutate();
 
         if (values.paymentMethod === "card_online") {
@@ -267,9 +327,20 @@ export default function CheckoutPage() {
           );
         }
 
-        router.push("/");
-      } catch (error) {
-        toast.error("Помилка оформлення замовлення. Спробуйте ще раз.");
+        const orderId = res?.data?.order?.id || res?.order?.id || res?.id;
+        if (orderId) {
+          router.push(`/orders/${orderId}`);
+        } else {
+          router.push("/");
+        }
+      } catch (error: any) {
+        const details =
+          error?.response?.data?.error?.errors?.[0] ||
+          error?.response?.data?.error?.message ||
+          error?.response?.data?.message;
+        toast.error(
+          details || "Помилка оформлення замовлення. Спробуйте ще раз."
+        );
         console.error("Checkout error:", error);
       } finally {
         setIsSubmitting(false);
@@ -283,6 +354,31 @@ export default function CheckoutPage() {
     },
     [formik]
   );
+
+  if (!user) {
+    return (
+      <div className="container">
+        <div className={styles.emptyContainer}>
+          <div className={styles.emptyIcon}>
+            <ShoppingBag className="w-12 h-12 text-muted-foreground" />
+          </div>
+          <h1 className={styles.emptyTitle}>Потрібен вхід</h1>
+          <p className={styles.emptyText}>Увійдіть, щоб оформити замовлення</p>
+          <button onClick={openModal} className={styles.emptyLink}>
+            Увійти
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (items.length > 0 && cartItems.length === 0) {
+    return (
+      <div className="container">
+        <Loader />
+      </div>
+    );
+  }
 
   if (cartItems.length === 0) {
     return (

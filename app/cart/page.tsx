@@ -11,9 +11,11 @@ import {
   useUpdateCartQuantity,
   useRemoveFromCart,
 } from "@/lib/hooks/useCart";
-import { fetchProductClient } from "@/lib/api/apiClient";
+import { fetchProductsClient } from "@/lib/api/apiClient";
+import { Loader } from "@/components/ui/loader/Loader";
 import type { Product } from "@/types";
 import styles from "./CartPage.module.css";
+import Image from "next/image";
 
 export default function CartPage() {
   // ✅ Нові хуки замість Zustand store
@@ -26,10 +28,11 @@ export default function CartPage() {
 
   const [productsById, setProductsById] = useState<Record<string, Product>>({});
 
-  const normalizeProduct = (data: any): Product | null => {
-    if (!data) return null;
-    if (data?.data) return data.data;
-    return data;
+  const normalizeProducts = (data: any): Product[] => {
+    if (Array.isArray(data)) return data;
+    if (data?.data?.products) return data.data.products;
+    if (data?.products) return data.products;
+    return [];
   };
 
   useEffect(() => {
@@ -42,20 +45,14 @@ export default function CartPage() {
     let isMounted = true;
     const load = async () => {
       try {
-        const results = await Promise.all(
-          ids.map(async (id) => {
-            try {
-              const res = await fetchProductClient(id);
-              return normalizeProduct(res);
-            } catch {
-              return null;
-            }
-          })
-        );
+        const res = await fetchProductsClient({ limit: 500 });
+        const list = normalizeProducts(res);
         if (!isMounted) return;
         const map: Record<string, Product> = {};
-        results.forEach((product) => {
-          if (product?._id) map[product._id] = product;
+        list.forEach((product) => {
+          if (product?._id && ids.includes(product._id)) {
+            map[product._id] = product;
+          }
         });
         setProductsById(map);
       } finally {
@@ -80,6 +77,14 @@ export default function CartPage() {
   const total = cartItems.reduce((sum, item) => {
     return sum + (item.product?.price || 0) * item.quantity;
   }, 0);
+
+  if (items.length > 0 && cartItems.length === 0) {
+    return (
+      <div className={`${styles.container} ${styles.loaderContainer}`}>
+        <Loader />
+      </div>
+    );
+  }
 
   if (cartItems.length === 0) {
     return (
@@ -114,17 +119,22 @@ export default function CartPage() {
                     href={`/product/${product.slug}`}
                     className={styles.itemImageLink}
                   >
-                    <img
+                    <Image
                       src={product.mainImage}
                       alt={product.name}
                       className={styles.image}
+                      width={80}
+                      height={80}
                     />
                   </Link>
                 </div>
 
                 {/* Info */}
                 <div className={styles.itemInfo}>
-                  <Link href={`/product/${product.slug}`}>
+                  <Link
+                    href={`/product/${product.slug}`}
+                    className={styles.itemLink}
+                  >
                     <h3 className={styles.itemName}>{product.name}</h3>
                   </Link>
                   <p className={styles.itemBrand}>{product.brand}</p>

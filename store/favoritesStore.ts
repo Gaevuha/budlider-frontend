@@ -7,6 +7,7 @@ import {
 
 interface FavoritesState {
   favorites: string[];
+  setFavorites: (favorites: string[]) => void;
   addFavorite: (productId: string) => void;
   removeFavorite: (productId: string) => void;
   toggleFavorite: (productId: string) => void;
@@ -16,9 +17,7 @@ interface FavoritesState {
 
 const getStorage = () => {
   if (typeof window === "undefined") return undefined;
-  const hasAuth = Boolean(
-    localStorage.getItem("user") || localStorage.getItem("token")
-  );
+  const hasAuth = Boolean(localStorage.getItem("user"));
   return hasAuth ? localStorage : sessionStorage;
 };
 
@@ -36,6 +35,8 @@ export const useFavoritesStore = create<FavoritesState>()(
   persist(
     (set, get) => ({
       favorites: [],
+
+      setFavorites: (favorites) => set({ favorites }),
 
       addFavorite: (productId) =>
         set((state) => {

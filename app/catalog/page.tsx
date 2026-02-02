@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 
 import { ProductCard } from "@/components/ProductCard/ProductCard";
 import { CatalogFilters } from "@/components/CatalogFilters/CatalogFilters";
@@ -64,12 +65,17 @@ export default function CatalogPage() {
       isNew: isNew === "true" ? true : undefined,
     };
 
-    sessionStorage.setItem("catalogFilters", JSON.stringify(parsed));
     return parsed;
   }, [searchParams]);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    sessionStorage.setItem("catalogFilters", JSON.stringify(filters));
+  }, [filters]);
+
+  useEffect(() => {
     if (searchParams.toString()) return;
+    if (typeof window === "undefined") return;
 
     const saved = sessionStorage.getItem("catalogFilters");
     if (!saved) return;
@@ -101,7 +107,6 @@ export default function CatalogPage() {
   const [searchQuery, setSearchQuery] = useState(
     () => searchParams.get("search") || ""
   );
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [pagination, setPagination] = useState({
     currentPage: 1,
@@ -118,6 +123,21 @@ export default function CatalogPage() {
 
   const { favorites } = useWishlist();
   const toggleWishlist = useToggleWishlist();
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const handleResize = () => {
+      if (window.innerWidth >= 1440 && isFiltersModalOpen) {
+        setIsFiltersModalOpen(false);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [isFiltersModalOpen]);
 
   const itemsPerPage = useMemo(() => {
     if (breakpoint === "mobile") return 8;
@@ -166,91 +186,182 @@ export default function CatalogPage() {
     filters.onSale !== undefined ||
     filters.isNew !== undefined;
 
-  useEffect(() => {
-    let isMounted = true;
-    const loadProducts = async () => {
-      const isAppend = breakpoint !== "desktop" && currentPage > 0;
-      if (isAppend) setIsLoadingMore(true);
+  const queryParams = useMemo(() => {
+    const categoriesCsv = filters.categories.length
+      ? filters.categories.join(",")
+      : undefined;
+    const brandsCsv = filters.brands.length
+      ? filters.brands.join(",")
+      : undefined;
+    return {
+      search: searchQuery || undefined,
+      categories: filters.categories.length ? filters.categories : undefined,
+      category: categoriesCsv,
+      categorySlug: categoriesCsv,
+      categoryId: categoriesCsv,
+      brands: filters.brands.length ? filters.brands : undefined,
+      brand: brandsCsv,
+      brandSlug: brandsCsv,
+      priceMin: filters.priceMin,
+      priceMax: filters.priceMax,
+      minPrice: filters.priceMin,
+      maxPrice: filters.priceMax,
+      price_min: filters.priceMin,
+      price_max: filters.priceMax,
+      rating: filters.rating,
+      inStock: filters.inStock,
+      onSale: filters.onSale,
+      isOnSale: filters.onSale,
+      is_on_sale: filters.onSale,
+      isNew: filters.isNew,
+      isNewProduct: filters.isNew,
+      is_new: filters.isNew,
+      sort: sortParam,
+      page: currentPage + 1,
+      limit: itemsPerPage,
+    };
+  }, [
+    currentPage,
+    filters.brands,
+    filters.categories,
+    filters.inStock,
+    filters.isNew,
+    filters.onSale,
+    filters.priceMax,
+    filters.priceMin,
+    filters.rating,
+    itemsPerPage,
+    searchQuery,
+    sortParam,
+  ]);
 
-      try {
-        const params = {
-          search: searchQuery || undefined,
-          categories: filters.categories.length
-            ? filters.categories
-            : undefined,
-          brands: filters.brands.length ? filters.brands : undefined,
-          priceMin: filters.priceMin,
-          priceMax: filters.priceMax,
-          rating: filters.rating,
-          inStock: filters.inStock,
-          onSale: filters.onSale,
-          isOnSale: filters.onSale,
-          is_on_sale: filters.onSale,
-          isNew: filters.isNew,
-          isNewProduct: filters.isNew,
-          is_new: filters.isNew,
-          sort: sortParam,
-          page: currentPage + 1,
-          limit: itemsPerPage,
+  const productsQuery = useQuery<{ products: Product[]; pagination: any }>({
+    queryKey: ["catalog-products", queryParams],
+    queryFn: async () => {
+      console.debug("[CatalogPage] fetchProducts params", queryParams);
+      const res = await fetchProductsClient(queryParams);
+      let nextProducts = normalizeProducts(res);
+      let nextPagination = normalizePagination(res);
+
+      if (searchQuery && nextProducts.length === 0) {
+        const fallbackParams = {
+          ...queryParams,
+          search: undefined,
+          page: 1,
+          limit: 500,
         };
-
-        const res = await fetchProductsClient(params);
-        if (!isMounted) return;
-
-        const nextProducts = normalizeProducts(res);
-        const nextPagination = normalizePagination(res);
-        const filteredProducts = nextProducts.filter((product) => {
-          const hasNewFlag =
-            "isNewProduct" in product ||
-            "isNew" in product ||
-            "is_new" in product ||
-            "new" in product;
-          const isNewValue =
-            (product as any).isNewProduct ??
-            (product as any).isNew ??
-            (product as any).is_new ??
-            (product as any).new;
-          if (filters.isNew && hasNewFlag && isNewValue !== true) return false;
-
-          const hasSaleFlag =
-            "oldPrice" in product ||
-            "isOnSale" in product ||
-            "onSale" in product ||
-            "is_on_sale" in product;
-          const isSaleValue =
-            Boolean(product.oldPrice) ||
-            (product as any).isOnSale === true ||
-            (product as any).onSale === true ||
-            (product as any).is_on_sale === true;
-          if (filters.onSale && hasSaleFlag && !isSaleValue) return false;
-
-          if (filters.inStock && product.availability !== "in_stock")
-            return false;
-          return true;
+        console.warn("[CatalogPage] search fallback", fallbackParams);
+        const fallbackRes = await fetchProductsClient(fallbackParams);
+        const fallbackProducts = normalizeProducts(fallbackRes);
+        const query = searchQuery.trim().toLowerCase();
+        nextProducts = fallbackProducts.filter((product) => {
+          const name = product.name?.toLowerCase() || "";
+          const slug = (product as any).slug?.toLowerCase() || "";
+          const description = product.description?.toLowerCase() || "";
+          const brand =
+            typeof (product as any).brand === "string"
+              ? (product as any).brand.toLowerCase()
+              : (product as any).brand?.name?.toLowerCase() || "";
+          return (
+            name.includes(query) ||
+            slug.includes(query) ||
+            description.includes(query) ||
+            brand.includes(query)
+          );
         });
-        setPagination(nextPagination);
-
-        setProducts((prev) =>
-          isAppend ? [...prev, ...filteredProducts] : filteredProducts
-        );
-      } catch (error) {
-        if (!isMounted) return;
-        setProducts([]);
-        setPagination({ currentPage: 1, totalPages: 1, totalItems: 0 });
-      } finally {
-        if (!isMounted) return;
-        setIsLoadingMore(false);
+        nextPagination = {
+          currentPage: 1,
+          totalPages: 1,
+          totalItems: nextProducts.length,
+        };
+        console.debug("[CatalogPage] fallback results", {
+          count: nextProducts.length,
+        });
       }
-    };
 
-    loadProducts();
-    return () => {
-      isMounted = false;
-    };
-  }, [breakpoint, currentPage, filters, itemsPerPage, searchQuery, sortParam]);
+      const filteredProducts = nextProducts.filter((product) => {
+        if (filters.categories.length) {
+          const categoryValue: string | undefined =
+            typeof (product as any).category === "string"
+              ? (product as any).category
+              : (product as any).category?.slug ||
+                (product as any).category?._id ||
+                (product as any).category?.id ||
+                (product as any).category?.name;
+          if (categoryValue && !filters.categories.includes(categoryValue))
+            return false;
+        }
+
+        if (filters.brands.length) {
+          const brandValue: string | undefined =
+            typeof (product as any).brand === "string"
+              ? (product as any).brand
+              : (product as any).brand?.name ||
+                (product as any).brand?.title ||
+                (product as any).brand?.label;
+          if (brandValue && !filters.brands.includes(brandValue)) return false;
+        }
+
+        const hasNewFlag =
+          "isNewProduct" in product ||
+          "isNew" in product ||
+          "is_new" in product ||
+          "new" in product;
+        const isNewValue =
+          (product as any).isNewProduct ??
+          (product as any).isNew ??
+          (product as any).is_new ??
+          (product as any).new;
+        if (filters.isNew && hasNewFlag && isNewValue !== true) return false;
+
+        const hasSaleFlag =
+          "oldPrice" in product ||
+          "isOnSale" in product ||
+          "onSale" in product ||
+          "is_on_sale" in product;
+        const isSaleValue =
+          Boolean(product.oldPrice) ||
+          (product as any).isOnSale === true ||
+          (product as any).onSale === true ||
+          (product as any).is_on_sale === true;
+        if (filters.onSale && hasSaleFlag && !isSaleValue) return false;
+
+        if (filters.inStock && product.availability !== "in_stock")
+          return false;
+        if (
+          filters.priceMin !== undefined &&
+          typeof product.price === "number" &&
+          product.price < filters.priceMin
+        )
+          return false;
+        if (
+          filters.priceMax !== undefined &&
+          typeof product.price === "number" &&
+          product.price > filters.priceMax
+        )
+          return false;
+        return true;
+      });
+
+      return { products: filteredProducts, pagination: nextPagination };
+    },
+    placeholderData: (previousData) => previousData,
+  });
+
+  useEffect(() => {
+    if (!productsQuery.data) return;
+    const isAppend = breakpoint !== "desktop" && currentPage > 0;
+    setPagination(productsQuery.data.pagination);
+    setProducts((prev) =>
+      isAppend
+        ? [...prev, ...productsQuery.data.products]
+        : productsQuery.data.products
+    );
+  }, [breakpoint, currentPage, productsQuery.data]);
 
   const pageCount = pagination.totalPages || 1;
   const hasMoreItems = pagination.currentPage < pagination.totalPages;
+  const isLoadingMore = productsQuery.isFetching && currentPage > 0;
 
   const handleFiltersChange = (newFilters: Filters) => {
     const params = new URLSearchParams();
@@ -425,8 +536,53 @@ export default function CatalogPage() {
         </div>
       </section>
 
-      {/* QuickOrderModal та FiltersModal залишаються без змін */}
-      {/* ... */}
+      {isFiltersModalOpen && (
+        <div className={styles.filtersModal}>
+          <button
+            type="button"
+            className={styles.filtersModalOverlay}
+            onClick={() => setIsFiltersModalOpen(false)}
+            aria-label="Закрити фільтри"
+          />
+          <div
+            className={styles.filtersModalContent}
+            role="dialog"
+            aria-modal="true"
+          >
+            <div className={styles.filtersModalHeader}>
+              <h2 className={styles.filtersModalTitle}>Фільтри</h2>
+              <button
+                type="button"
+                onClick={() => setIsFiltersModalOpen(false)}
+                className={styles.filtersModalClose}
+                aria-label="Закрити"
+              >
+                <X className={styles.filtersModalCloseIcon} />
+              </button>
+            </div>
+            <div className={styles.filtersModalBody}>
+              <CatalogFilters
+                filters={filters}
+                onFiltersChange={handleFiltersChange}
+              />
+            </div>
+            <div className={styles.filtersModalFooter}>
+              <button
+                type="button"
+                className={styles.filtersModalApply}
+                onClick={() => setIsFiltersModalOpen(false)}
+              >
+                Застосувати
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      <QuickOrderModal
+        isOpen={Boolean(quickOrderProduct)}
+        onClose={() => setQuickOrderProduct(null)}
+        product={quickOrderProduct}
+      />
     </>
   );
 }

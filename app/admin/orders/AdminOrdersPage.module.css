@@ -237,7 +237,7 @@
 .statValue {
   font-size: var(--text-2xl);
   font-weight: 700;
-  color: var(--primary);
+  color: var(secondary-foreground);
   margin: 0;
 }
 
@@ -248,7 +248,9 @@
 .statValueYellow {
   color: #ca8a04;
 }
-
+.statValueDarkGreen {
+  color: #0d9488;
+}
 .statValueGreen {
   color: var(--accent);
 }

@@ -1,5 +1,17 @@
 /* WishlistPage.module.css - Mobile First */
 
+.container {
+  padding-top: var(--text-base);
+  padding-bottom: var(--text-base);
+}
+
+.loaderContainer {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Header styles */
 .header {
   margin-bottom: var(--text-2xl);
@@ -118,6 +130,11 @@
 
 /* Tablet (768px+) - 3 columns */
 @media only screen and (min-width: 768px) {
+  .container {
+    padding-top: var(--text-2xl);
+    padding-bottom: var(--text-2xl);
+  }
+
   .header {
     margin-bottom: 2.5rem;
   }

@@ -22,10 +22,19 @@ export const getUserOrders = fetchOrdersClient;
 export const getOrderById = fetchOrderClient;
 // ==================== QUICK ORDER API ====================
 export async function createQuickOrder(data: {
-  productId: string;
-  quantity: number;
-  customerName: string;
-  customerPhone: string;
+  items: Array<{ productId: string; quantity: number }>;
+  shippingAddress: {
+    name: string;
+    phone: string;
+    city: string;
+    street: string;
+    building: string;
+  };
+  deliveryMethod: "courier" | "pickup" | "post";
+  paymentMethod: "cash" | "card_delivery" | "card_online";
+  status?: "new";
+  name?: string;
+  phone?: string;
   comment?: string;
 }): Promise<any> {
   const res = await apiClient.post("/orders/quick", data);
@@ -34,14 +43,33 @@ export async function createQuickOrder(data: {
 import { apiClient } from "./api";
 import type { Product } from "@/types/index";
 
-export type ProductsQueryParams = Partial<Product> & {
+let cachedCategories: any[] | null = null;
+let cachedCategoriesAt = 0;
+let categoriesPromise: Promise<any> | null = null;
+
+let cachedBrands: any[] | null = null;
+let cachedBrandsAt = 0;
+let brandsPromise: Promise<any> | null = null;
+
+const CATALOG_CACHE_TTL = 60_000;
+
+export type ProductsQueryParams = Omit<Partial<Product>, "category"> & {
   page?: number;
   limit?: number;
   search?: string;
   categories?: string[];
+  category?: string | string[];
+  categorySlug?: string | string[];
+  categoryId?: string | string[];
   brands?: string[];
+  brand?: string | string[];
+  brandSlug?: string | string[];
   priceMin?: number;
   priceMax?: number;
+  minPrice?: number;
+  maxPrice?: number;
+  price_min?: number;
+  price_max?: number;
   rating?: number;
   inStock?: boolean;
   onSale?: boolean;
@@ -91,15 +119,94 @@ export async function searchProductsClient(params: any): Promise<any> {
 }
 
 export async function fetchBrandsClient(): Promise<any> {
-  const res = await apiClient.get("/products/brands");
-  return res.data;
+  const now = Date.now();
+  if (cachedBrands && now - cachedBrandsAt < CATALOG_CACHE_TTL) {
+    return cachedBrands;
+  }
+  if (brandsPromise) return brandsPromise;
+
+  brandsPromise = (async () => {
+    let lastError: any;
+    try {
+      console.debug("[fetchBrandsClient] fallback to /products");
+      const res = await apiClient.get("/products", { params: { limit: 500 } });
+      const products =
+        res.data?.data?.products || res.data?.products || res.data?.data || [];
+      if (Array.isArray(products)) {
+        const derived = Array.from(
+          new Set(
+            products
+              .map((product) => product?.brand)
+              .filter((brand) => typeof brand === "string" && brand.length > 0)
+          )
+        );
+        cachedBrands = derived;
+        cachedBrandsAt = Date.now();
+        return derived;
+      }
+    } catch (error) {
+      lastError = error;
+      const status = (error as any)?.response?.status;
+      if (status === 429) {
+        cachedBrands = [];
+        cachedBrandsAt = Date.now();
+        return [];
+      }
+    }
+    if (lastError) {
+      console.error("[fetchBrandsClient] all endpoints failed", lastError);
+    }
+    return [];
+  })();
+
+  try {
+    return await brandsPromise;
+  } finally {
+    brandsPromise = null;
+  }
 }
 
 /* ==================== CATEGORIES API ==================== */
 
 export async function fetchCategoriesClient(): Promise<any> {
-  const res = await apiClient.get("/categories");
-  return res.data;
+  const now = Date.now();
+  if (cachedCategories && now - cachedCategoriesAt < CATALOG_CACHE_TTL) {
+    return cachedCategories;
+  }
+  if (categoriesPromise) return categoriesPromise;
+
+  categoriesPromise = (async () => {
+    const endpoints = ["/categories"];
+    let lastError: any;
+    for (const endpoint of endpoints) {
+      try {
+        console.debug("[fetchCategoriesClient] request", endpoint);
+        const res = await apiClient.get(endpoint);
+        cachedCategories = res.data;
+        cachedCategoriesAt = Date.now();
+        return res.data;
+      } catch (error) {
+        console.warn("[fetchCategoriesClient] failed", endpoint, error);
+        const status = (error as any)?.response?.status;
+        if (status === 429) {
+          cachedCategories = [];
+          cachedCategoriesAt = Date.now();
+          return [];
+        }
+        lastError = error;
+      }
+    }
+    if (lastError) {
+      console.error("[fetchCategoriesClient] all endpoints failed", lastError);
+    }
+    return [];
+  })();
+
+  try {
+    return await categoriesPromise;
+  } finally {
+    categoriesPromise = null;
+  }
 }
 
 export async function fetchCategoryClient(slug: string): Promise<any> {
@@ -201,8 +308,29 @@ export async function fetchOrderClient(id: string): Promise<any> {
 }
 
 export async function createOrderClient(data: any): Promise<any> {
-  const res = await apiClient.post("/orders", data);
-  return res.data;
+  const maxAttempts = 3;
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      const res = await apiClient.post("/orders", data);
+      return res.data;
+    } catch (error: any) {
+      const status = error?.response?.status;
+      const message = error?.response?.data?.error?.message;
+      const isDuplicateOrderNumber =
+        status === 409 &&
+        (message?.includes("orderNumber") ||
+          message?.includes("order number") ||
+          message?.includes("duplicate"));
+
+      if (!isDuplicateOrderNumber || attempt === maxAttempts) {
+        throw error;
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 250 * attempt));
+    }
+  }
+
+  throw new Error("Не вдалося створити замовлення");
 }
 
 export async function cancelOrderClient(id: string): Promise<any> {
@@ -222,6 +350,11 @@ export async function updateOrderStatusClient(
   data: any
 ): Promise<any> {
   const res = await apiClient.put(`/orders/admin/${id}/status`, data);
+  return res.data;
+}
+
+export async function deleteOrderAdminClient(id: string): Promise<any> {
+  const res = await apiClient.delete(`/orders/${id}`);
   return res.data;
 }
 

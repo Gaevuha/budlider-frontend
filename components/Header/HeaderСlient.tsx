@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { BurgerMenu } from "@/components/BurgerMenu/BurgerMenu";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAuthModalStore } from "@/store/authModalStore";
@@ -34,6 +34,8 @@ export function HeaderClient({
   const [hasHydrated, setHasHydrated] = useState(false);
   const profileMenuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const pathname = usePathname();
+  const prevPathnameRef = useRef(pathname);
 
   const { user, logout } = useAuth();
   const { openModal, isOpen, closeModal } = useAuthModalStore();
@@ -54,6 +56,12 @@ export function HeaderClient({
     };
   }, []);
 
+  useEffect(() => {
+    if (isLargeDesktop) {
+      setIsMenuOpen(false);
+    }
+  }, [isLargeDesktop]);
+
   // Позначаємо гідратацію, щоб використовувати актуальні значення зі store
   useEffect(() => {
     setHasHydrated(true);
@@ -66,25 +74,12 @@ export function HeaderClient({
   const cartItemsCount = hasHydrated ? derivedCartCount : initialCartItemsCount;
   const favoritesCount = hasHydrated ? favorites.length : initialFavoritesCount;
 
-  // Закриття dropdown меню при кліку поза ним
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        profileMenuRef.current &&
-        !profileMenuRef.current.contains(event.target as Node)
-      ) {
-        setIsProfileMenuOpen(false);
-      }
-    };
-
-    if (isProfileMenuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
+    if (prevPathnameRef.current !== pathname) {
+      prevPathnameRef.current = pathname;
+      setIsProfileMenuOpen(false);
     }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isProfileMenuOpen]);
+  }, [pathname]);
 
   // Автоматичний пошук при введенні
   useEffect(() => {

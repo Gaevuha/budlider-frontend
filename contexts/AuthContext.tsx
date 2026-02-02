@@ -15,6 +15,8 @@ import {
   logoutClient,
   getMeClient,
   updateProfileClient,
+  fetchCartClient,
+  fetchWishlistClient,
 } from "@/lib/api/apiClient";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -32,6 +34,87 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const isGuestToken = (value: string | null | undefined) =>
+    typeof value === "string" &&
+    (value.startsWith("demo_") ||
+      value.startsWith("mock-") ||
+      value === "guest");
+
+  const hasAuthCookie = () =>
+    typeof document !== "undefined" &&
+    document.cookie.split(";").some((cookie) => {
+      const trimmed = cookie.trim();
+      return (
+        trimmed.startsWith("auth-token=") ||
+        trimmed.startsWith("accessToken=") ||
+        trimmed.startsWith("access_token=")
+      );
+    });
+
+  const normalizeCartItems = (payload: any) => {
+    const raw =
+      payload?.data?.items ||
+      payload?.items ||
+      payload?.data?.cart?.items ||
+      payload?.data?.cart ||
+      payload?.cart?.items ||
+      payload?.cart ||
+      payload?.cart?.items ||
+      payload?.data ||
+      [];
+
+    if (!Array.isArray(raw)) return [];
+
+    return raw
+      .map((item) => ({
+        productId:
+          item?.productId ||
+          item?.product?._id ||
+          item?.product ||
+          item?._id ||
+          item?.id,
+        quantity: Number(item?.quantity ?? item?.qty ?? 1),
+      }))
+      .filter((item) => Boolean(item.productId));
+  };
+
+  const normalizeWishlist = (payload: any) => {
+    const raw =
+      payload?.data?.items ||
+      payload?.items ||
+      payload?.data?.wishlist ||
+      payload?.wishlist ||
+      payload?.data ||
+      [];
+
+    if (!Array.isArray(raw)) return [];
+
+    return raw
+      .map((item) =>
+        typeof item === "string"
+          ? item
+          : item?.productId || item?.product?._id || item?._id || item?.id
+      )
+      .filter(Boolean);
+  };
+
+  const syncUserData = async () => {
+    try {
+      const [cartRes, wishlistRes] = await Promise.all([
+        fetchCartClient(),
+        fetchWishlistClient(),
+      ]);
+
+      const cartItems = normalizeCartItems(cartRes);
+      const favorites = normalizeWishlist(wishlistRes);
+
+      useCartStore.getState().setItems(cartItems);
+      useFavoritesStore.getState().setFavorites(favorites);
+    } catch (error) {
+      // ignore sync errors
+    }
+  };
+
   // Завантаження користувача з localStorage при монтуванні
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
@@ -43,13 +126,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setToken(savedToken);
       setAuthCookie(savedToken);
     }
-    if (!savedUser) {
+    if (savedUser && (savedToken || hasAuthCookie())) {
+      syncUserData();
+    }
+    if (
+      !savedUser &&
+      !isGuestToken(savedToken) &&
+      (savedToken || hasAuthCookie())
+    ) {
       getMeClient()
         .then((res) => {
           const currentUser = res?.data?.user || res?.user || res;
           if (currentUser) {
             setUser(currentUser);
             localStorage.setItem("user", JSON.stringify(currentUser));
+            syncUserData();
           }
         })
         .catch(() => undefined);
@@ -64,6 +155,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (authUser) {
       setUser(authUser);
       localStorage.setItem("user", JSON.stringify(authUser));
+      syncUserData();
     }
     if (authToken) {
       setToken(authToken);
@@ -77,6 +169,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (currentUser) {
         setUser(currentUser);
         localStorage.setItem("user", JSON.stringify(currentUser));
+        syncUserData();
       }
     }
 
@@ -91,6 +184,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (authUser) {
       setUser(authUser);
       localStorage.setItem("user", JSON.stringify(authUser));
+      syncUserData();
     }
     if (authToken) {
       setToken(authToken);

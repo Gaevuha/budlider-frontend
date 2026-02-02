@@ -1,11 +1,54 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useCartStore } from '@/store/cartStore';
-import { CartItem } from '@/types';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useCartStore } from "@/store/cartStore";
+import { useAuth } from "@/contexts/AuthContext";
+import {
+  addToCartClient,
+  clearCartClient,
+  fetchCartClient,
+  removeFromCartClient,
+  updateCartItemClient,
+} from "@/lib/api/apiClient";
 
 // Hook для отримання кошика
 export function useCart() {
   const items = useCartStore((state) => state.items);
-  
+  const setItems = useCartStore((state) => state.setItems);
+  const { user } = useAuth();
+
+  useQuery({
+    queryKey: ["cart", user?._id],
+    enabled: Boolean(user),
+    queryFn: async () => {
+      const res = await fetchCartClient();
+      const raw =
+        res?.data?.items ||
+        res?.items ||
+        res?.data?.cart?.items ||
+        res?.data?.cart ||
+        res?.cart?.items ||
+        res?.cart ||
+        res?.data ||
+        [];
+
+      if (!Array.isArray(raw)) return [];
+
+      const normalized = raw
+        .map((item: any) => ({
+          productId:
+            item?.productId ||
+            item?.product?._id ||
+            item?.product ||
+            item?._id ||
+            item?.id,
+          quantity: Number(item?.quantity ?? item?.qty ?? 1),
+        }))
+        .filter((item: any) => Boolean(item.productId));
+
+      setItems(normalized);
+      return normalized;
+    },
+  });
+
   return {
     items,
     isLoading: false,
@@ -16,14 +59,23 @@ export function useCart() {
 export function useAddToCart() {
   const addItem = useCartStore((state) => state.addItem);
   const queryClient = useQueryClient();
-  
+  const { user } = useAuth();
+
   return useMutation({
-    mutationFn: ({ productId, quantity = 1 }: { productId: string; quantity?: number }) => {
+    mutationFn: async ({
+      productId,
+      quantity = 1,
+    }: {
+      productId: string;
+      quantity?: number;
+    }) => {
       addItem(productId, quantity);
-      return Promise.resolve();
+      if (user) {
+        await addToCartClient({ productId, quantity });
+      }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
   });
 }
@@ -32,14 +84,17 @@ export function useAddToCart() {
 export function useRemoveFromCart() {
   const removeItem = useCartStore((state) => state.removeItem);
   const queryClient = useQueryClient();
-  
+  const { user } = useAuth();
+
   return useMutation({
-    mutationFn: (productId: string) => {
+    mutationFn: async (productId: string) => {
       removeItem(productId);
-      return Promise.resolve();
+      if (user) {
+        await removeFromCartClient(productId);
+      }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
   });
 }
@@ -48,14 +103,23 @@ export function useRemoveFromCart() {
 export function useUpdateCartQuantity() {
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const queryClient = useQueryClient();
-  
+  const { user } = useAuth();
+
   return useMutation({
-    mutationFn: ({ productId, quantity }: { productId: string; quantity: number }) => {
+    mutationFn: async ({
+      productId,
+      quantity,
+    }: {
+      productId: string;
+      quantity: number;
+    }) => {
       updateQuantity(productId, quantity);
-      return Promise.resolve();
+      if (user) {
+        await updateCartItemClient(productId, { quantity });
+      }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
   });
 }
@@ -64,14 +128,17 @@ export function useUpdateCartQuantity() {
 export function useClearCart() {
   const clearCart = useCartStore((state) => state.clearCart);
   const queryClient = useQueryClient();
-  
+  const { user } = useAuth();
+
   return useMutation({
-    mutationFn: () => {
+    mutationFn: async () => {
       clearCart();
-      return Promise.resolve();
+      if (user) {
+        await clearCartClient();
+      }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
   });
 }

@@ -91,7 +91,8 @@ export interface Order {
     | "cancelled"
     | "paid"
     | "pending"
-    | "shipped";
+    | "shipped"
+    | "received";
   createdAt: Date | string;
   type?: "product" | "service" | "quick";
   serviceName?: string;

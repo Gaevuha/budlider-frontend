@@ -112,7 +112,8 @@
   border-radius: 0.5rem;
   font-size: var(--text-base);
   font-family: inherit;
-  resize: vertical;
+  resize: none;
+  overflow-y: auto;
   transition: border-color 0.2s;
 }
 

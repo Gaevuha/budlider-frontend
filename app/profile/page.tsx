@@ -67,6 +67,26 @@ export default function ProfilePage() {
     });
   }, [orders]);
 
+  const getStatusLabel = (status: Order["status"]) => {
+    const map: Record<Order["status"], string> = {
+      new: "Нове",
+      pending: "Нове",
+      processing: "В обробці",
+      paid: "Оплачено",
+      shipped: "Відправлено",
+      completed: "Виконано",
+      received: "Отримано",
+      cancelled: "Скасовано",
+    };
+    return map[status] || status;
+  };
+
+  const getTypeLabel = (type?: Order["type"]) => {
+    if (type === "service") return "Послуга";
+    if (type === "quick") return "Швидке замовлення";
+    return "Товари";
+  };
+
   const handleLogout = () => {
     logout();
     router.push("/");
@@ -249,11 +269,13 @@ export default function ProfilePage() {
                       {new Date(order.createdAt).toLocaleDateString("uk-UA")}
                     </span>
                   </div>
-                  <span className={styles.orderStatus}>{order.status}</span>
+                  <span className={styles.orderStatus}>
+                    {getStatusLabel(order.status)}
+                  </span>
                 </div>
                 <div className={styles.orderRow}>
                   <span className={styles.orderType}>
-                    {order.type === "service" ? "Послуга" : "Товари"}
+                    {getTypeLabel(order.type)}
                   </span>
                   <span className={styles.orderTotal}>{order.total} грн</span>
                 </div>

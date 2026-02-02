@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { type RefObject } from "react";
 import { User, LogOut, Settings, Users } from "lucide-react";
 import { RiAdminFill } from "react-icons/ri";
 import styles from "./ProfileMenu.module.css";
@@ -10,7 +11,7 @@ interface ProfileMenuProps {
   isProfileMenuOpen: boolean;
   setIsProfileMenuOpen: (open: boolean) => void;
   handleLogout: () => void;
-  profileMenuRef: React.RefObject<HTMLDivElement>;
+  profileMenuRef: RefObject<HTMLDivElement>;
 }
 
 export function ProfileMenu({
@@ -38,30 +39,18 @@ export function ProfileMenu({
             <p className={styles.profileDropdownEmail}>{user.email}</p>
           </div>
 
-          <Link
-            href="/profile"
-            onClick={() => setIsProfileMenuOpen(false)}
-            className={styles.profileDropdownItem}
-          >
+          <Link href="/profile" className={styles.profileDropdownItem}>
             <User className={styles.profileMenuIcon} />
             Профіль
           </Link>
 
           {user.role === "admin" && (
             <>
-              <Link
-                href="/admin/users"
-                onClick={() => setIsProfileMenuOpen(false)}
-                className={styles.profileDropdownItem}
-              >
+              <Link href="/admin/users" className={styles.profileDropdownItem}>
                 <Users className={styles.profileMenuIcon} />
                 Управління користувачами
               </Link>
-              <Link
-                href="/admin/orders"
-                onClick={() => setIsProfileMenuOpen(false)}
-                className={styles.profileDropdownItem}
-              >
+              <Link href="/admin/orders" className={styles.profileDropdownItem}>
                 <Settings className={styles.profileMenuIcon} />
                 Адмін-панель
               </Link>

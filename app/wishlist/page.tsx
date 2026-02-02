@@ -6,7 +6,8 @@ import { QuickOrderModal } from "@/components/QuickOrderModal/QuickOrderModal";
 import { Product } from "@/types";
 import { useCart, useAddToCart, useRemoveFromCart } from "@/lib/hooks/useCart";
 import { useWishlist, useToggleWishlist } from "@/lib/hooks/useWishlist";
-import { fetchProductClient } from "@/lib/api/apiClient";
+import { fetchProductsClient } from "@/lib/api/apiClient";
+import { Loader } from "@/components/ui/loader/Loader";
 import { Heart } from "lucide-react";
 import styles from "./WishlistPage.module.css";
 
@@ -24,10 +25,11 @@ export default function WishlistPage() {
 
   const [productsById, setProductsById] = useState<Record<string, Product>>({});
 
-  const normalizeProduct = (data: any): Product | null => {
-    if (!data) return null;
-    if (data?.data) return data.data;
-    return data;
+  const normalizeProducts = (data: any): Product[] => {
+    if (Array.isArray(data)) return data;
+    if (data?.data?.products) return data.data.products;
+    if (data?.products) return data.products;
+    return [];
   };
 
   useEffect(() => {
@@ -38,21 +40,14 @@ export default function WishlistPage() {
 
     let isMounted = true;
     const load = async () => {
-      const results = await Promise.all(
-        favorites.map(async (id) => {
-          try {
-            const res = await fetchProductClient(id);
-            return normalizeProduct(res);
-          } catch {
-            return null;
-          }
-        })
-      );
-
+      const res = await fetchProductsClient({ limit: 500 });
+      const list = normalizeProducts(res);
       if (!isMounted) return;
       const map: Record<string, Product> = {};
-      results.forEach((product) => {
-        if (product?._id) map[product._id] = product;
+      list.forEach((product) => {
+        if (product?._id && favorites.includes(product._id)) {
+          map[product._id] = product;
+        }
       });
       setProductsById(map);
     };
@@ -91,8 +86,18 @@ export default function WishlistPage() {
     toggleWishlist.mutate(productId);
   };
 
+  if (favorites.length > 0 && favoriteProducts.length === 0) {
+    return (
+      <div
+        className={`container ${styles.container} ${styles.loaderContainer}`}
+      >
+        <Loader />
+      </div>
+    );
+  }
+
   return (
-    <div className="container">
+    <div className={`container ${styles.container}`}>
       <div className={styles.header}>
         <h1 className={styles.title}>Обране</h1>
         <p className={styles.description}>

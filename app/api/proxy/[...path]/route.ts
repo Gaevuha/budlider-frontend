@@ -1,6 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
 import { apiServer } from "@/lib/api/api";
 
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const MAX_RETRIES = 3;
+
+async function requestWithRetry(config: any) {
+  let attempt = 0;
+  while (true) {
+    try {
+      return await apiServer.request(config);
+    } catch (error: any) {
+      const status = error?.response?.status;
+      if (status === 429 && attempt < MAX_RETRIES) {
+        const retryAfterHeader = error.response?.headers?.["retry-after"];
+        const retryAfterSeconds = parseInt(retryAfterHeader || "1", 10);
+        const retryAfterMs = Number.isNaN(retryAfterSeconds)
+          ? 1000
+          : Math.max(1, retryAfterSeconds) * 1000;
+
+        attempt += 1;
+        console.warn(
+          `429 Too Many Requests. Retry #${attempt} after ${retryAfterMs}ms`
+        );
+        await delay(retryAfterMs);
+        continue;
+      }
+
+      throw error;
+    }
+  }
+}
+
 // Универсальный прокси для всех запросов
 export async function GET(request: NextRequest) {
   return proxyRequest(request, "GET");
@@ -38,6 +68,14 @@ async function proxyRequest(request: NextRequest, method: string) {
     const authHeader = request.headers.get("Authorization");
     if (authHeader) {
       headers["Authorization"] = authHeader;
+    } else {
+      const tokenCookie =
+        request.cookies.get("accessToken")?.value ||
+        request.cookies.get("access_token")?.value ||
+        request.cookies.get("auth-token")?.value;
+      if (tokenCookie) {
+        headers["Authorization"] = `Bearer ${tokenCookie}`;
+      }
     }
 
     // Передаємо cookies від клієнта до бекенду
@@ -54,7 +92,7 @@ async function proxyRequest(request: NextRequest, method: string) {
       if (contentType?.includes("multipart/form-data")) {
         const formData = await request.formData();
 
-        const response = await apiServer.request({
+        const response = await requestWithRetry({
           url,
           method: method as any,
           headers: {
@@ -95,7 +133,7 @@ async function proxyRequest(request: NextRequest, method: string) {
     }
 
     // Виконання запиту
-    const response = await apiServer.request({
+    const response = await requestWithRetry({
       url,
       method: method as any,
       headers,
@@ -126,6 +164,19 @@ async function proxyRequest(request: NextRequest, method: string) {
     console.error("Error response status:", error.response?.status);
     console.error("Error response data:", error.response?.data);
     console.error("Error response headers:", error.response?.headers);
+
+    if (error.response?.status === 429) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            message: "Занадто багато запитів. Спробуйте пізніше.",
+            statusCode: 429,
+          },
+        },
+        { status: 429 }
+      );
+    }
 
     return NextResponse.json(
       {

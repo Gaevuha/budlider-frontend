@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST="{}"
+self.__REACT_LOADABLE_MANIFEST="{\"lib/utils/toast.ts -> izitoast\":{\"id\":\"lib/utils/toast.ts -> izitoast\",\"files\":[\"static/chunks/_app-pages-browser_node_modules_izitoast_dist_js_iziToast_js.js\"]},\"lib/utils/toast.ts -> izitoast/dist/css/iziToast.min.css\":{\"id\":\"lib/utils/toast.ts -> izitoast/dist/css/iziToast.min.css\",\"files\":[\"static/css/_app-pages-browser_node_modules_izitoast_dist_css_iziToast_min_css.css\",\"static/chunks/_app-pages-browser_node_modules_izitoast_dist_css_iziToast_min_css.js\"]}}"
