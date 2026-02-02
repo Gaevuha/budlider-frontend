@@ -1,13 +1,21 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ordersStorage } from "@/lib/utils/localStorage";
-import { Order } from "@/types/index";
+import { createQuickOrder } from "@/lib/api/apiClient";
 import { toast } from "@/lib/utils/toast";
 
 interface QuickOrderData {
-  productId: string;
-  quantity: number;
-  customerName: string;
-  customerPhone: string;
+  items: Array<{ productId: string; quantity: number }>;
+  shippingAddress: {
+    name: string;
+    phone: string;
+    city: string;
+    street: string;
+    building: string;
+  };
+  deliveryMethod: "courier" | "pickup" | "post";
+  paymentMethod: "cash" | "card_delivery" | "card_online";
+  status?: "new";
+  name?: string;
+  phone?: string;
   comment?: string;
 }
 
@@ -17,35 +25,7 @@ export function useCreateQuickOrder() {
 
   return useMutation({
     mutationFn: async (data: QuickOrderData) => {
-      // Симуляція API запиту
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      const order: Order = {
-        id: `order-${Date.now()}`,
-        userId: undefined,
-        items: [
-          {
-            product: data.productId,
-            name: "", // Буде заповнено з продукту
-            price: 0, // Буде заповнено з продукту
-            quantity: data.quantity,
-            total: 0, // Буде обчислено
-          },
-        ],
-        total: 0,
-        customerName: data.customerName,
-        customerPhone: data.customerPhone,
-        customerEmail: "",
-        deliveryMethod: "self-pickup",
-        deliveryAddress: "",
-        paymentMethod: "cash",
-        status: "pending",
-        createdAt: new Date().toISOString(),
-        comment: data.comment,
-      };
-
-      ordersStorage.addOrder(order);
-      return order;
+      return await createQuickOrder(data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });

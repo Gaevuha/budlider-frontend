@@ -1,0 +1,66 @@
+.mobileSearch {
+  display: block;
+  padding-bottom: var(--text-base);
+}
+
+/* Планшет 768px+ - пошук переміщається в topBar */
+@media only screen and (min-width: 768px) {
+  .mobileSearch {
+    display: none;
+  }
+
+  .searchWrapper {
+    display: flex;
+    flex: 1;
+    max-width: 42rem;
+    margin: 0 2rem;
+  }
+}
+
+.searchContainer {
+  position: relative;
+  width: 100%;
+  display: flex;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.5rem 2.5rem 0.5rem 2.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.searchInput:focus {
+  border-color: #16a34a;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+}
+
+.searchButton {
+  position: absolute;
+  right: 0.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: default;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  pointer-events: none;
+}
+
+.searchIcon {
+  width: var(--text-xl);
+  height: var(--text-xl);
+  color: #16a34a;
+}
+
+@media only screen and (min-width: 1440px) {
+  .searchContainer {
+    width: 600px;
+  }
+}

@@ -1,149 +1,21 @@
-/* Mobile First - базові стилі для мобілки */
+/* app/components/Header/Header.module.css */
+/* Mobile First - базові стилі для мобілки (до 375px) */
 .header {
   background-color: white;
   border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 20px;
   position: sticky;
   top: 0;
   z-index: 50;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .topBar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 0;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  text-decoration: none;
-  font-size: 1.25rem;
-  font-weight: 800;
-  transition: transform 0.2s ease;
-  letter-spacing: -0.02em;
-}
-
-.logo:hover {
-  transform: translateY(-2px);
-}
-
-/* Планшет */
-@media only screen and (min-width: 375px) {
-  .logo {
-    font-size: 1.5rem;
-  }
-}
-
-/* Декстоп */
-@media only screen and (min-width: 768px) {
-  .logo {
-    font-size: 1.875rem;
-  }
-}
-
-/* Великий декстоп */
-@media only screen and (min-width: 1350px) {
-  .logo {
-    font-size: 2.5rem;
-  }
-}
-
-.logoBud {
-  color: #16a34a;
-  text-shadow: 
-    0 2px 4px rgba(22, 163, 74, 0.2),
-    0 4px 8px rgba(22, 163, 74, 0.15);
-  position: relative;
-}
-
-.logoLeader {
-  color: #111827;
-  font-style: italic;
-  font-weight: 600;
-  text-shadow: 
-    0 1px 2px rgba(17, 24, 39, 0.1),
-    0 2px 4px rgba(17, 24, 39, 0.08);
-  opacity: 0.95;
-}
-
-.logoIcon {
-  width: 2.5rem;
-  height: 2.5rem;
-  background-color: #16a34a;
-  border-radius: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.logoText {
-  color: white;
-  font-size: 1.25rem;
-  font-weight: 700;
-}
-
-.logoTitle {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #111827;
-}
-
-.searchWrapper {
-  display: none;
-  flex: 1;
-  max-width: 42rem;
-  margin: 0 2rem;
-}
-
-/* Пошук з'являється на декстопі від 1350px */
-@media only screen and (min-width: 1350px) {
-  .searchWrapper {
-    display: flex;
-  }
-}
-
-.searchContainer {
-  position: relative;
-  width: 100%;
-  display: flex;
-}
-
-.searchInput {
-  width: 100%;
-  padding: 0.5rem 2.5rem 0.5rem 2.5rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  outline: none;
-  transition: all 0.2s;
-}
-
-.searchInput:focus {
-  border-color: #16a34a;
-  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
-}
-
-.searchButton {
-  position: absolute;
-  right: 0.25rem;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: default;
-  padding: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.375rem;
-  pointer-events: none;
-}
-
-.searchIcon {
-  width: 1.25rem;
-  height: 1.25rem;
-  color: #16a34a;
+  padding: var(--text-base) 0;
+  gap: 0.5rem;
 }
 
 .actions {
@@ -152,251 +24,58 @@
   gap: 0.5rem;
 }
 
-/* Планшет */
-@media only screen and (min-width: 375px) {
+/* Планшет 768px+ */
+@media only screen and (min-width: 768px) {
   .actions {
-    gap: 1rem;
+    gap: var(--text-base);
   }
-}
-
-.actionButton {
-  position: relative;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  transition: background-color 0.2s;
-  border: none;
-  background: none;
-  cursor: pointer;
-  text-decoration: none;
-  color: #111827;
-}
-
-.actionButton:hover {
-  background-color: #f3f4f6;
-}
-
-.actionIcon {
-  width: 1.25rem;
-  height: 1.25rem;
-}
-
-/* Планшет */
-@media only screen and (min-width: 375px) {
-  .actionIcon {
-    width: 1.5rem;
-    height: 1.5rem;
-  }
-}
-
-.badge {
-  position: absolute;
-  top: -0.25rem;
-  right: -0.25rem;
-  width: 1.25rem;
-  height: 1.25rem;
-  background-color: #16a34a;
-  color: white;
-  font-size: 0.75rem;
-  border-radius: 9999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .burgerButton {
-  position: relative;
   padding: 0.5rem;
   border-radius: 0.5rem;
-  transition: background-color 0.2s;
   border: none;
   background: none;
   cursor: pointer;
   color: #111827;
   display: flex;
+  transition: background-color 0.2s;
 }
 
 .burgerButton:hover {
   background-color: #f3f4f6;
 }
 
-/* Бургер-меню ховається тільки на декстопі від 1350px */
-@media only screen and (min-width: 1350px) {
+.burgerIcon {
+  font-size: var(--text-2xl);
+  line-height: 1;
+}
+
+/* Бургер-меню ховається на декстопі від 1440px */
+@media only screen and (min-width: 1440px) {
+  .header {
+    padding-bottom: 0;
+  }
   .burgerButton {
     display: none;
   }
-}
+  .authButton {
+    padding: 0.5rem var(--text-base);
+    border-radius: 0.5rem;
+    background-color: #16a34a;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-weight: 600;
+    font-size: var(--text-sm);
+  }
 
-.authButton {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  background-color: #16a34a;
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  font-weight: 500;
-}
+  .authButton:hover {
+    background-color: #15803d;
+  }
 
-.authButton:hover {
-  background-color: #15803d;
-}
-
-.authButtonText {
-  display: none;
-}
-
-/* Декстоп */
-@media only screen and (min-width: 1350px) {
   .authButtonText {
     display: block;
-  }
-}
-
-.profileWrapper {
-  position: relative;
-}
-
-.profileButton {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.25rem;
-  border-radius: 0.5rem;
-  background: none;
-  border: 1px solid #e5e7eb;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.profileButton:hover {
-  background-color: #f3f4f6;
-}
-
-.avatar {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.userName {
-  display: none;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #111827;
-  padding-right: 0.5rem;
-}
-
-/* Декстоп */
-@media only screen and (min-width: 1350px) {
-  .userName {
-    display: block;
-  }
-}
-
-.profileDropdown {
-  position: absolute;
-  top: calc(100% + 0.5rem);
-  right: 0;
-  width: 250px;
-  background-color: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  z-index: 50;
-  overflow: hidden;
-}
-
-.profileDropdownHeader {
-  padding: 1rem;
-  border-bottom: 1px solid #e5e7eb;
-  background-color: #f9fafb;
-}
-
-.profileDropdownName {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #111827;
-  margin-bottom: 0.25rem;
-}
-
-.profileDropdownEmail {
-  font-size: 0.75rem;
-  color: #6b7280;
-}
-
-.profileDropdownItem {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  width: 100%;
-  padding: 0.75rem 1rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-  color: #111827;
-  font-size: 0.875rem;
-  transition: background-color 0.2s;
-  text-align: left;
-}
-
-.profileDropdownItem:hover {
-  background-color: #f3f4f6;
-}
-
-.profileMenuIcon {
-  width: 1.125rem;
-  height: 1.125rem;
-  color: #6b7280;
-}
-
-.nav {
-  display: none;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 0.75rem 0;
-  border-top: 1px solid #e5e7eb;
-}
-
-/* Навігація з'являється тільки на декстопі від 1350px */
-@media only screen and (min-width: 1350px) {
-  .nav {
-    display: flex;
-  }
-}
-
-.navList {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.navLink {
-  color: #111827;
-  text-decoration: none;
-  transition: color 0.2s;
-  font-size: 1rem;
-}
-
-.navLink:hover {
-  color: #16a34a;
-}
-
-.mobileSearch {
-  display: block;
-  padding-bottom: 1rem;
-}
-
-/* Мобільний пошук ховається на декстопі від 1350px */
-@media only screen and (min-width: 1350px) {
-  .mobileSearch {
-    display: none;
   }
 }

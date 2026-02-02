@@ -1,19 +1,21 @@
-'use client';
+"use client";
 
-import { toast } from '@/utils/toast';
-import { Portal } from '@/components/ui/portal/Portal';
-import styles from './ProfileEditModal.module.css';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
-import { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { X, Camera } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useState, useRef, useEffect } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { X, Camera } from "lucide-react";
+import ModalWrapper from "@/components/ui/modalwrapper/ModalWrapper";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "@/lib/utils/toast";
+import styles from "./ProfileEditModal.module.css";
 
 interface ProfileEditModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+type Maybe<T> = T | undefined | null;
 
 interface ProfileFormData {
   name: string;
@@ -23,236 +25,148 @@ interface ProfileFormData {
   address: string;
 }
 
-const profileValidationSchema = yup.object().shape({
-  name: yup.string().required("Ім'я обов'язкове").min(2, "Ім'я має містити мінімум 2 символи"),
-  email: yup.string().required("Email обов'язковий").email('Невірний формат email'),
-  phone: yup.string().matches(/^\+?3?8?(0\d{9})$/, 'Невірний формат телефону'),
-  avatar: yup.string(),
-  address: yup.string(),
+const schema = yup.object({
+  name: yup.string().required("Обов'язкове поле"),
+  email: yup.string().required("Обов'язкове поле").email("Невірний email"),
+  phone: yup.string().default(""),
+  avatar: yup.string().default(""),
+  address: yup.string().default(""),
 });
-
 export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
   const { user, updateProfile } = useAuth();
-  const [avatarPreview, setAvatarPreview] = useState<string>(user?.avatar || '');
+  const [avatarPreview, setAvatarPreview] = useState(user?.avatar || "");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const formik = useFormik<ProfileFormData>({
-    initialValues: {
-      name: user?.name || '',
-      email: user?.email || '',
-      phone: user?.phone || '',
-      avatar: user?.avatar || '',
-      address: user?.address || '',
-    },
-    validationSchema: profileValidationSchema,
-    onSubmit: async (values) => {
-      try {
-        updateProfile(values);
-        setAvatarPreview(values.avatar);
-        onClose();
-      } catch (error) {
-        console.error('Failed to update profile:', error);
-        toast.error('Не вдалося оновити профіль');
-      }
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm<ProfileFormData>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      name: user?.name ?? "",
+      email: user?.email ?? "",
+      phone: user?.phone ?? "",
+      avatar: user?.avatar ?? "",
+      address: user?.address ?? "",
     },
   });
+
+  useEffect(() => {
+    if (!isOpen || !user) return;
+    reset({
+      name: user.name ?? "",
+      email: user.email ?? "",
+      phone: user.phone ?? "",
+      avatar: user.avatar ?? "",
+      address: user.address ?? "",
+    });
+    setAvatarPreview(user.avatar || "");
+  }, [isOpen, reset, user]);
+
+  const onSubmit: SubmitHandler<ProfileFormData> = (data) => {
+    updateProfile({
+      ...data,
+      phone: data.phone || undefined,
+      avatar: data.avatar || undefined,
+      address: data.address || undefined,
+    });
+    reset(data);
+    setAvatarPreview(data.avatar || "");
+    onClose();
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
-    // Перевірка розміру (макс 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('Файл занадто великий. Максимальний розмір 5MB');
-      return;
-    }
-
-    // Перевірка типу
-    if (!file.type.startsWith('image/')) {
-      toast.error('Будь ласка, оберіть файл зображення');
-      return;
-    }
-
-    // Конвертація в base64
+    if (!file.type.startsWith("image/")) return toast.error("Невірний формат");
     const reader = new FileReader();
     reader.onloadend = () => {
-      const base64String = reader.result as string;
-      setAvatarPreview(base64String);
-      formik.setFieldValue('avatar', base64String);
+      const base64 = reader.result as string;
+      setAvatarPreview(base64);
+      setValue("avatar", base64);
     };
     reader.readAsDataURL(file);
-  };
-
-  const handleClose = () => {
-    formik.resetForm();
-    setAvatarPreview(user?.avatar || '');
-    onClose();
   };
 
   if (!user) return null;
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <Portal>
-          <div className={styles.overlay} onClick={handleClose}>
-            <motion.div
-              className={styles.modal}
-              onClick={(e) => e.stopPropagation()}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-            >
-              <div className={styles.header}>
-                <h2 className={styles.title}>Редагувати профіль</h2>
-                <button
-                  type="button"
-                  onClick={handleClose}
-                  className={styles.closeButton}
-                  aria-label="Закрити"
-                >
-                  <X size={24} />
-                </button>
-              </div>
+    <ModalWrapper isOpen={isOpen} onClose={onClose}>
+      <div className={styles.profileHeader}>
+        <h2 className={styles.profileTitle}>Редагувати профіль</h2>
+        <button className={styles.profileCloseButton} onClick={onClose}>
+          <X />
+        </button>
+      </div>
 
-              <form onSubmit={formik.handleSubmit} style={{ display: 'flex', flexDirection: 'column', height: '100%', flex: 1, minHeight: 0 }}>
-                <div className={styles.content}>
-                  {/* Avatar Section */}
-                  <div className={styles.avatarSection}>
-                    <div className={styles.avatarWrapper}>
-                      {avatarPreview ? (
-                        <img
-                          src={avatarPreview}
-                          alt={user.name}
-                          className={styles.avatar}
-                          onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                          }}
-                        />
-                      ) : (
-                        <div className={styles.avatarPlaceholder}>
-                          <span className={styles.avatarLetter}>
-                            {user.name.charAt(0)}
-                          </span>
-                        </div>
-                      )}
-                      <button
-                        type="button"
-                        onClick={() => fileInputRef.current?.click()}
-                        className={styles.changeAvatarButton}
-                        aria-label="Змінити аватар"
-                      >
-                        <Camera size={20} />
-                      </button>
-                    </div>
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+        <div className={styles.avatarSection}>
+          {avatarPreview && (
+            <img
+              src={avatarPreview}
+              alt={user.name}
+              className={styles.avatar}
+            />
+          )}
+          <button
+            type="button"
+            className={styles.changeAvatarButton}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <Camera />
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            hidden
+          />
+        </div>
 
-                    {/* Hidden file input */}
-                    <input
-                      type="file"
-                      ref={fileInputRef}
-                      className={styles.fileInput}
-                      onChange={handleFileChange}
-                      accept="image/*"
-                    />
-                  </div>
+        <input
+          {...register("name")}
+          placeholder="Ім'я"
+          className={styles.input}
+        />
+        {errors.name && <p className={styles.error}>{errors.name.message}</p>}
 
-                  {/* Form Fields */}
-                  <div className={styles.form}>
-                    <div className={styles.formGroup}>
-                      <label htmlFor="name" className={styles.label}>
-                        Ім'я <span className={styles.required}>*</span>
-                      </label>
-                      <input
-                        id="name"
-                        type="text"
-                        name="name"
-                        value={formik.values.name}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        className={styles.input}
-                      />
-                      {formik.touched.name && formik.errors.name && (
-                        <span className={styles.error}>{formik.errors.name}</span>
-                      )}
-                    </div>
+        <input
+          {...register("email")}
+          placeholder="Email"
+          className={styles.input}
+        />
+        {errors.email && <p className={styles.error}>{errors.email.message}</p>}
 
-                    <div className={styles.formGroup}>
-                      <label htmlFor="email" className={styles.label}>
-                        Email <span className={styles.required}>*</span>
-                      </label>
-                      <input
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={formik.values.email}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        className={styles.input}
-                      />
-                      {formik.touched.email && formik.errors.email && (
-                        <span className={styles.error}>{formik.errors.email}</span>
-                      )}
-                    </div>
+        <input
+          {...register("phone")}
+          placeholder="Телефон"
+          className={styles.input}
+        />
+        {errors.phone && <p className={styles.error}>{errors.phone.message}</p>}
 
-                    <div className={styles.formGroup}>
-                      <label htmlFor="phone" className={styles.label}>
-                        Телефон
-                      </label>
-                      <input
-                        id="phone"
-                        type="tel"
-                        name="phone"
-                        placeholder="+380501234567"
-                        value={formik.values.phone}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        className={styles.input}
-                      />
-                      {formik.touched.phone && formik.errors.phone && (
-                        <span className={styles.error}>{formik.errors.phone}</span>
-                      )}
-                    </div>
+        <textarea
+          {...register("address")}
+          placeholder="Адреса"
+          className={styles.textarea}
+        />
 
-                    <div className={styles.formGroup}>
-                      <label htmlFor="address" className={styles.label}>
-                        Адреса
-                      </label>
-                      <textarea
-                        id="address"
-                        name="address"
-                        placeholder="Місто, вулиця, будинок, квартира"
-                        value={formik.values.address}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        className={styles.textarea}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* FOOTER WITH BUTTONS */}
-                <div className={styles.footer}>
-                  <button
-                    type="button"
-                    onClick={handleClose}
-                    className={`${styles.button} ${styles.cancelButton}`}
-                  >
-                    Скасувати
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={formik.isSubmitting}
-                    className={`${styles.button} ${styles.saveButton}`}
-                  >
-                    {formik.isSubmitting ? 'Збереження...' : 'Зберегти'}
-                  </button>
-                </div>
-              </form>
-            </motion.div>
-          </div>
-        </Portal>
-      )}
-    </AnimatePresence>
+        <div className={styles.footer}>
+          <button
+            type="button"
+            className={styles.cancelButton}
+            onClick={onClose}
+          >
+            Скасувати
+          </button>
+          <button type="submit" className={styles.saveButton}>
+            Зберегти
+          </button>
+        </div>
+      </form>
+    </ModalWrapper>
   );
 }

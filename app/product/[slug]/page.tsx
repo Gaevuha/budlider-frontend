@@ -1,8 +1,7 @@
 "use client";
 
 import { useRouter, useParams } from "next/navigation";
-import { useState } from "react";
-import { mockProducts } from "@/data/mockData";
+import { useEffect, useMemo, useState } from "react";
 import {
   Heart,
   ShoppingCart,
@@ -14,6 +13,7 @@ import {
 import { Product } from "@/types";
 import { useCart, useAddToCart, useRemoveFromCart } from "@/lib/hooks/useCart";
 import { useWishlist, useToggleWishlist } from "@/lib/hooks/useWishlist";
+import { fetchProductsClient, fetchProductClient } from "@/lib/api/apiClient";
 import { AvailabilityBadge } from "@/components/AvailabilityBadge/AvailabilityBadge";
 import { ReviewForm } from "@/components/ReviewForm/ReviewForm";
 import { ReviewsList } from "@/components/ReviewsList/ReviewsList";
@@ -33,10 +33,92 @@ export default function ProductDetailPage() {
 
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const product = mockProducts.find((p) => p.slug === slug);
+  const normalizeProducts = (data: any): Product[] => {
+    if (Array.isArray(data)) return data;
+    if (data?.data?.products) return data.data.products;
+    if (data?.products) return data.products;
+    return [];
+  };
 
-  if (!product) {
+  const normalizeProduct = (data: any): Product | null => {
+    if (!data) return null;
+    if (data?.data) return data.data;
+    return data;
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+    const load = async () => {
+      setIsLoading(true);
+      try {
+        const listRes = await fetchProductsClient({ slug });
+        let found: Product | null = normalizeProducts(listRes)[0] || null;
+        if (!found) {
+          try {
+            const res = await fetchProductClient(slug);
+            found = normalizeProduct(res);
+          } catch {
+            found = null;
+          }
+        }
+
+        if (!isMounted) return;
+        setProduct(found);
+      } catch {
+        if (!isMounted) return;
+        setProduct(null);
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    };
+
+    load();
+    return () => {
+      isMounted = false;
+    };
+  }, [slug]);
+
+  useEffect(() => {
+    if (!product?.category?.slug) {
+      setRelatedProducts([]);
+      return;
+    }
+
+    let isMounted = true;
+    const loadRelated = async () => {
+      try {
+        const res = await fetchProductsClient({
+          categories: [product.category.slug],
+          limit: 4,
+        });
+        const related = normalizeProducts(res).filter(
+          (p) => p._id !== product._id
+        );
+        if (!isMounted) return;
+        setRelatedProducts(related.slice(0, 4));
+      } catch {
+        if (!isMounted) return;
+        setRelatedProducts([]);
+      }
+    };
+
+    loadRelated();
+    return () => {
+      isMounted = false;
+    };
+  }, [product?.category?.slug, product?._id]);
+
+  const images = useMemo(
+    () =>
+      product ? [product.mainImage, product.mainImage, product.mainImage] : [],
+    [product?.mainImage]
+  );
+
+  if (!product && !isLoading) {
     return (
       <div className={styles.container}>
         <div className={styles.notFound}>
@@ -52,10 +134,12 @@ export default function ProductDetailPage() {
     );
   }
 
+  if (!product) {
+    return null;
+  }
+
   const isInCart = cartItems.some((item) => item.productId === product._id);
   const isFavorite = favorites.includes(product._id);
-
-  const images = [product.mainImage, product.mainImage, product.mainImage];
 
   const handleAddToCart = () => {
     if (isInCart) {
@@ -69,11 +153,7 @@ export default function ProductDetailPage() {
     toggleWishlist.mutate(product._id);
   };
 
-  const relatedProducts = mockProducts
-    .filter(
-      (p) => p.category.slug === product.category.slug && p._id !== product._id
-    )
-    .slice(0, 4);
+  const relatedProductsList = relatedProducts;
 
   return (
     <div className={styles.container}>
@@ -112,8 +192,8 @@ export default function ProductDetailPage() {
               alt={product.name}
               className={styles.mainImageImg}
               width={400}
-                height={400}
-                priority
+              height={400}
+              priority
             />
           </div>
           <div className={styles.thumbnails}>
@@ -285,11 +365,11 @@ export default function ProductDetailPage() {
       </div>
 
       {/* Related Products */}
-      {relatedProducts.length > 0 && (
+      {relatedProductsList.length > 0 && (
         <div className={styles.relatedSection}>
           <h2 className={styles.relatedTitle}>Схожі товари</h2>
           <div className={styles.relatedGrid}>
-            {relatedProducts.map((relatedProduct) => (
+            {relatedProductsList.map((relatedProduct) => (
               <Link
                 key={relatedProduct._id}
                 href={`/product/${relatedProduct.slug}`}

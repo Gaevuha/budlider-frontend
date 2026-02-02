@@ -28,7 +28,7 @@ export interface Product {
   mainImage: string;
   characteristics: Record<string, any>;
   stock: number;
-  availability: 'in_stock' | 'out_of_stock' | 'pre_order';
+  availability: "in_stock" | "out_of_stock" | "pre_order";
   rating: number;
   reviewCount: number;
   tags: string[];
@@ -80,13 +80,21 @@ export interface Order {
   customerName: string;
   customerPhone: string;
   customerEmail?: string;
-  deliveryMethod: 'novaposhta' | 'ukrposhta' | 'courier' | 'self-pickup';
+  deliveryMethod: "novaposhta" | "ukrposhta" | "courier" | "self-pickup";
   deliveryAddress: string;
   comment?: string;
-  paymentMethod: 'cash' | 'card_delivery' | 'card_online';
-  status: 'new' | 'processing' | 'completed' | 'cancelled' | 'paid' | 'pending' | 'shipped';
+  paymentMethod: "cash" | "card_delivery" | "card_online";
+  status:
+    | "new"
+    | "processing"
+    | "completed"
+    | "cancelled"
+    | "paid"
+    | "pending"
+    | "shipped"
+    | "received";
   createdAt: Date | string;
-  type?: 'product' | 'service' | 'quick';
+  type?: "product" | "service" | "quick";
   serviceName?: string;
 }
 
@@ -98,8 +106,8 @@ export interface User {
   avatar?: string;
   address?: string;
   addresses?: string[];
-  role: 'user' | 'admin';
-  authProvider?: 'local' | 'google' | 'facebook';
+  role: "user" | "admin";
+  authProvider?: "local" | "google" | "facebook";
   wishlist?: string[];
   cart?: Array<{
     product: string;
@@ -130,6 +138,6 @@ export interface AuthContextType {
   token: string | null;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
-  logout: () => void;
-  updateProfile: (data: Partial<User>) => void;
+  logout: () => Promise<void> | void;
+  updateProfile: (data: Partial<User>) => Promise<void> | void;
 }

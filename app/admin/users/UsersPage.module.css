@@ -2,13 +2,13 @@
 /* ІКОНИ */
 /* ==================== */
 .icon {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: var(--text-xl);
+  height: var(--text-xl);
 }
 
 .smallIcon {
-  width: 1rem;
-  height: 1rem;
+  width: var(--text-base);
+  height: var(--text-base);
 }
 
 /* ==================== */
@@ -16,7 +16,7 @@
 /* ==================== */
 
 .container {
-  padding: 1rem;
+  padding: var(--text-base);
   background-color: var(--background);
   min-height: 100vh;
 }
@@ -24,7 +24,7 @@
 .wrapper {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1.5rem 0;
+  padding: var(--text-2xl) 0;
   min-height: calc(100vh - 200px);
 }
 
@@ -38,8 +38,8 @@
 .titleRow {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: var(--text-base);
+  margin-bottom: var(--text-base);
 }
 
 .title {
@@ -53,12 +53,12 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.625rem 1.25rem;
+  padding: 0.625rem var(--text-xl);
   background-color: var(--card);
   border: 2px solid var(--border);
   border-radius: var(--radius);
   color: var(--foreground);
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
@@ -78,12 +78,12 @@
 .stats {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  gap: var(--text-base);
+  margin-bottom: var(--text-2xl);
 }
 
 .statCard {
-  padding: 1.25rem;
+  padding: var(--text-xl);
   background: linear-gradient(135deg, var(--card) 0%, var(--background) 100%);
   border: 2px solid var(--border);
   border-radius: var(--radius);
@@ -123,7 +123,7 @@
 }
 
 .statLabel {
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   font-weight: 500;
   color: var(--muted-foreground);
   text-transform: uppercase;
@@ -134,10 +134,10 @@
 /* ЕЛЕМЕНТИ КЕРУВАННЯ */
 /* ==================== */
 .controls {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--text-2xl);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--text-base);
 }
 
 .searchBox {
@@ -147,21 +147,21 @@
 
 .searchIcon {
   position: absolute;
-  left: 0.875rem;
+  left: var(--text-sm);
   top: 50%;
   transform: translateY(-50%);
-  width: 1.25rem;
-  height: 1.25rem;
+  width: var(--text-xl);
+  height: var(--text-xl);
   color: var(--primary);
   pointer-events: none;
 }
 
 .searchInput {
   width: 100%;
-  padding: 0.875rem 0.875rem 0.875rem 2.75rem;
+  padding: var(--text-sm) var(--text-sm) var(--text-sm) 2.75rem;
   border: 2px solid var(--border);
   border-radius: var(--radius);
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   background: var(--input-background);
   transition: all 0.2s ease;
 }
@@ -183,12 +183,12 @@
 }
 
 .filterButton {
-  padding: 0.75rem 1.5rem;
+  padding: var(--text-xs) var(--text-2xl);
   background: var(--card);
   color: var(--foreground);
   border: 2px solid var(--border);
   border-radius: var(--radius);
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -227,7 +227,7 @@
 .loading,
 .error,
 .empty {
-  padding: 3rem 1.5rem;
+  padding: 3rem var(--text-2xl);
   text-align: center;
 }
 
@@ -248,23 +248,23 @@
 }
 
 .loadingText {
-  margin-top: 1rem;
+  margin-top: var(--text-base);
   color: var(--muted-foreground);
 }
 
 .errorMessage {
   color: var(--destructive);
-  font-size: 1rem;
-  margin-bottom: 1rem;
+  font-size: var(--text-base);
+  margin-bottom: var(--text-base);
 }
 
 .retryButton {
-  padding: 0.75rem 1.5rem;
+  padding: var(--text-xs) var(--text-2xl);
   background: var(--primary);
   color: var(--primary-foreground);
   border: none;
   border-radius: var(--radius);
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   cursor: pointer;
   transition: opacity 0.2s;
 }
@@ -275,7 +275,7 @@
 
 .emptyText {
   color: var(--muted-foreground);
-  font-size: 1rem;
+  font-size: var(--text-base);
 }
 
 /* ==================== */
@@ -284,12 +284,12 @@
 .usersList {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  gap: var(--text-base);
+  margin-bottom: var(--text-2xl);
 }
 
 .userCard {
-  padding: 1rem;
+  padding: var(--text-base);
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -302,8 +302,8 @@
 
 .userCardHeader {
   display: flex;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+  gap: var(--text-xs);
+  margin-bottom: var(--text-base);
 }
 
 .userAvatar {
@@ -339,7 +339,7 @@
 }
 
 .userEmail {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: var(--muted-foreground);
   word-wrap: break-word;
 }
@@ -348,14 +348,14 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin-bottom: 1rem;
-  font-size: 0.875rem;
+  margin-bottom: var(--text-base);
+  font-size: var(--text-sm);
 }
 
 .userDetailRow {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--text-base);
 }
 
 .userDetailLabel {
@@ -373,9 +373,9 @@
 /* ==================== */
 .roleBadge {
   display: inline-block;
-  padding: 0.375rem 0.75rem;
+  padding: 0.375rem var(--text-xs);
   border-radius: var(--radius);
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.025em;
@@ -407,12 +407,12 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.75rem;
+  padding: var(--text-xs);
   border: 2px solid var(--border);
   border-radius: var(--radius);
   background: var(--card);
   color: var(--foreground);
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -535,10 +535,10 @@
   }
 
   .tableHeader {
-    padding: 1rem;
+    padding: var(--text-base);
     text-align: left;
     font-weight: 600;
-    font-size: 0.75rem;
+    font-size: var(--text-xs);
     color: var(--muted-foreground);
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -546,15 +546,15 @@
   }
 
   .tableCell {
-    padding: 1rem;
+    padding: var(--text-base);
     color: var(--foreground);
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
   }
 
   .userCellContent {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: var(--text-xs);
   }
 
   .tableAvatar {
@@ -587,7 +587,7 @@
   }
 
   .tableUserEmail {
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
     color: var(--muted-foreground);
   }
 

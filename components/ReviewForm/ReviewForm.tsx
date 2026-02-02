@@ -5,7 +5,7 @@ import { Star } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAuthModalStore } from "@/store/authModalStore";
 import { useReviewsStore } from "@/store/reviewsStore";
-import { reviewsApi } from "@/lib/api/reviewsApi";
+import { createReviewClient } from "@/lib/api/apiClient";
 import { toast } from "@/lib/utils/toast";
 import styles from "./ReviewForm.module.css";
 
@@ -48,7 +48,7 @@ export function ReviewForm({ productId, onSubmitSuccess }: ReviewFormProps) {
     try {
       // Спроба відправити на бекенд
       try {
-        const response = await reviewsApi.createReview(productId, {
+        const response = await createReviewClient(productId, {
           rating,
           text: text.trim(),
           guestName: !user ? guestName.trim() : undefined,

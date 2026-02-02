@@ -55,12 +55,16 @@
     "izitoast": "^1.4.0",
     "lucide-react": "0.487.0",
     "motion": "12.23.24",
+    "next": "^14.2.0",
     "next-themes": "0.4.6",
+    "react": "18.3.1",
     "react-calendar": "^6.0.0",
     "react-day-picker": "8.10.1",
     "react-dnd": "16.0.1",
     "react-dnd-html5-backend": "16.0.1",
+    "react-dom": "18.3.1",
     "react-hook-form": "7.55.0",
+    "react-icons": "^5.5.0",
     "react-paginate": "^8.3.0",
     "react-popper": "2.3.0",
     "react-resizable-panels": "2.1.7",
@@ -72,16 +76,13 @@
     "tw-animate-css": "1.3.8",
     "vaul": "1.1.2",
     "yup": "^1.7.1",
-    "zustand": "^5.0.10",
-    "next": "^14.2.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "zustand": "^5.0.10"
   },
   "devDependencies": {
-    "tailwindcss": "4.1.12",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "tailwindcss": "4.1.12",
     "typescript": "^5"
   },
   "peerDependencies": {

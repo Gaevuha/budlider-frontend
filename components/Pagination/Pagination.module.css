@@ -73,6 +73,6 @@
 /* Tablet (768px+) */
 @media (min-width: 768px) {
   .container {
-    gap: 0.75rem;
+    gap: var(--text-xs);
   }
 }

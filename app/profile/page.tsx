@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -16,12 +16,15 @@ import {
 import { ProfileEditModal } from "@/components/ProfileEditModal/ProfileEditModal";
 import { useCart } from "@/lib/hooks/useCart";
 import { useWishlist } from "@/lib/hooks/useWishlist";
+import { fetchOrdersClient } from "@/lib/api/apiClient";
+import type { Order } from "@/types";
 import styles from "./ProfilePage.module.css";
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();
   const router = useRouter();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [orders, setOrders] = useState<Order[]>([]);
 
   const { items: cartItems } = useCart();
   const { favorites } = useWishlist();
@@ -31,6 +34,58 @@ export default function ProfilePage() {
     0
   );
   const favoritesCount = favorites.length;
+
+  useEffect(() => {
+    if (!user) return;
+    let isMounted = true;
+    const load = async () => {
+      try {
+        const res = await fetchOrdersClient();
+        const data = res?.data?.orders || res?.orders || res || [];
+        const userOrders = Array.isArray(data)
+          ? data.filter((order: Order) => order.userId === user._id)
+          : [];
+        if (!isMounted) return;
+        setOrders(userOrders);
+      } catch {
+        if (!isMounted) return;
+        setOrders([]);
+      }
+    };
+
+    load();
+    return () => {
+      isMounted = false;
+    };
+  }, [user]);
+
+  const sortedOrders = useMemo(() => {
+    return [...orders].sort((a, b) => {
+      const aTime = new Date(a.createdAt).getTime();
+      const bTime = new Date(b.createdAt).getTime();
+      return bTime - aTime;
+    });
+  }, [orders]);
+
+  const getStatusLabel = (status: Order["status"]) => {
+    const map: Record<Order["status"], string> = {
+      new: "Нове",
+      pending: "Нове",
+      processing: "В обробці",
+      paid: "Оплачено",
+      shipped: "Відправлено",
+      completed: "Виконано",
+      received: "Отримано",
+      cancelled: "Скасовано",
+    };
+    return map[status] || status;
+  };
+
+  const getTypeLabel = (type?: Order["type"]) => {
+    if (type === "service") return "Послуга";
+    if (type === "quick") return "Швидке замовлення";
+    return "Товари";
+  };
 
   const handleLogout = () => {
     logout();
@@ -198,10 +253,36 @@ export default function ProfilePage() {
       {/* Orders History - optional section */}
       <div className={styles.ordersCard}>
         <h2 className={styles.ordersTitle}>Історія замовлень</h2>
-        <div className={styles.emptyOrders}>
-          <Package className={styles.emptyOrdersIcon} />
-          <p className={styles.emptyOrdersText}>У вас ще немає замовлень</p>
-        </div>
+        {sortedOrders.length === 0 ? (
+          <div className={styles.emptyOrders}>
+            <Package className={styles.emptyOrdersIcon} />
+            <p className={styles.emptyOrdersText}>У вас ще немає замовлень</p>
+          </div>
+        ) : (
+          <div className={styles.ordersList}>
+            {sortedOrders.map((order) => (
+              <div key={order.id} className={styles.orderItem}>
+                <div className={styles.orderRow}>
+                  <div className={styles.orderMeta}>
+                    <span className={styles.orderId}>#{order.id}</span>
+                    <span className={styles.orderDate}>
+                      {new Date(order.createdAt).toLocaleDateString("uk-UA")}
+                    </span>
+                  </div>
+                  <span className={styles.orderStatus}>
+                    {getStatusLabel(order.status)}
+                  </span>
+                </div>
+                <div className={styles.orderRow}>
+                  <span className={styles.orderType}>
+                    {getTypeLabel(order.type)}
+                  </span>
+                  <span className={styles.orderTotal}>{order.total} грн</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Profile Edit Modal */}

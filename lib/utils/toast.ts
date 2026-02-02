@@ -1,5 +1,15 @@
-import iziToast from "izitoast";
-import "izitoast/dist/css/iziToast.min.css";
+let toastPromise: Promise<any> | null = null;
+
+const loadToast = async () => {
+  if (typeof window === "undefined") return null;
+  if (!toastPromise) {
+    toastPromise = Promise.all([
+      import("izitoast"),
+      import("izitoast/dist/css/iziToast.min.css"),
+    ]).then(([module]) => module?.default || module);
+  }
+  return toastPromise;
+};
 
 // Налаштування за замовчуванням
 const defaultConfig = {
@@ -16,61 +26,76 @@ const defaultConfig = {
 
 export const toast = {
   success: (message: string, title = "Успіх") => {
-    iziToast.success({
-      ...defaultConfig,
-      title,
-      message,
-      backgroundColor: "#16a34a",
-      titleColor: "#ffffff",
-      messageColor: "#ffffff",
-      icon: "ico-success",
-      iconColor: "#ffffff",
+    loadToast().then((iziToast) => {
+      if (!iziToast) return;
+      iziToast.success({
+        ...defaultConfig,
+        title,
+        message,
+        backgroundColor: "#16a34a",
+        titleColor: "#ffffff",
+        messageColor: "#ffffff",
+        icon: "ico-success",
+        iconColor: "#ffffff",
+      });
     });
   },
 
   error: (message: string, title = "Помилка") => {
-    iziToast.error({
-      ...defaultConfig,
-      title,
-      message,
-      backgroundColor: "#dc2626",
-      titleColor: "#ffffff",
-      messageColor: "#ffffff",
-      icon: "ico-error",
-      iconColor: "#ffffff",
+    loadToast().then((iziToast) => {
+      if (!iziToast) return;
+      iziToast.error({
+        ...defaultConfig,
+        title,
+        message,
+        backgroundColor: "#dc2626",
+        titleColor: "#ffffff",
+        messageColor: "#ffffff",
+        icon: "ico-error",
+        iconColor: "#ffffff",
+      });
     });
   },
 
   warning: (message: string, title = "Увага") => {
-    iziToast.warning({
-      ...defaultConfig,
-      title,
-      message,
-      backgroundColor: "#f59e0b",
-      titleColor: "#ffffff",
-      messageColor: "#ffffff",
-      icon: "ico-warning",
-      iconColor: "#ffffff",
+    loadToast().then((iziToast) => {
+      if (!iziToast) return;
+      iziToast.warning({
+        ...defaultConfig,
+        title,
+        message,
+        backgroundColor: "#f59e0b",
+        titleColor: "#ffffff",
+        messageColor: "#ffffff",
+        icon: "ico-warning",
+        iconColor: "#ffffff",
+      });
     });
   },
 
   info: (message: string, title = "Інформація") => {
-    iziToast.info({
-      ...defaultConfig,
-      title,
-      message,
-      backgroundColor: "#3b82f6",
-      titleColor: "#ffffff",
-      messageColor: "#ffffff",
-      icon: "ico-info",
-      iconColor: "#ffffff",
+    loadToast().then((iziToast) => {
+      if (!iziToast) return;
+      iziToast.info({
+        ...defaultConfig,
+        title,
+        message,
+        backgroundColor: "#3b82f6",
+        titleColor: "#ffffff",
+        messageColor: "#ffffff",
+        icon: "ico-info",
+        iconColor: "#ffffff",
+      });
     });
   },
 
   custom: (options: any) => {
-    iziToast.show({
-      ...defaultConfig,
-      ...options,
+    loadToast().then((iziToast) => {
+      if (!iziToast) return;
+      iziToast.show({
+        ...defaultConfig,
+        ...options,
+      });
     });
   },
 };

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 "use client";
 
@@ -14,25 +14,25 @@ import {
   type FieldPath,
   type FieldValues,
 } from "react-hook-form";
-import { Label } from '@/components/ui/label/Label";
+import { Label } from "@/components/ui/label/Label";
 import styles from "./Form.module.css";
 
 const Form = FormProvider;
 
 type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
 > = {
   name: TName;
 };
 
 const FormFieldContext = React.createContext<FormFieldContextValue>(
-  {} as FormFieldContextValue,
+  {} as FormFieldContextValue
 );
 
 const FormField = <
   TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
 >({
   ...props
 }: ControllerProps<TFieldValues, TName>) => {
@@ -71,7 +71,7 @@ type FormItemContextValue = {
 };
 
 const FormItemContext = React.createContext<FormItemContextValue>(
-  {} as FormItemContextValue,
+  {} as FormItemContextValue
 );
 
 function FormItem({ className = "", ...props }: React.ComponentProps<"div">) {
@@ -80,11 +80,7 @@ function FormItem({ className = "", ...props }: React.ComponentProps<"div">) {
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <div
-        data-slot="form-item"
-        className={classes}
-        {...props}
-      />
+      <div data-slot="form-item" className={classes} {...props} />
     </FormItemContext.Provider>
   );
 }
@@ -126,7 +122,10 @@ function FormControl({ ...props }: React.ComponentProps<typeof Slot>) {
   );
 }
 
-function FormDescription({ className = "", ...props }: React.ComponentProps<"p">) {
+function FormDescription({
+  className = "",
+  ...props
+}: React.ComponentProps<"p">) {
   const { formDescriptionId } = useFormField();
   const classes = [styles.formDescription, className].filter(Boolean).join(" ");
 

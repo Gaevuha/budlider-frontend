@@ -1,8 +1,8 @@
 /* CardPaymentForm Styles */
 
 .wrapper {
-  margin-top: 1.5rem;
-  padding: 1.5rem;
+  margin-top: var(--text-2xl);
+  padding: var(--text-2xl);
   background-color: rgb(var(--color-muted) / 0.3);
   border: 1px solid rgb(var(--color-border));
   border-radius: 0.5rem;
@@ -12,17 +12,17 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: var(--text-base);
 }
 
 .titleIcon {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: var(--text-xl);
+  height: var(--text-xl);
   color: rgb(var(--color-primary));
 }
 
 .formGroup {
-  margin-bottom: 1rem;
+  margin-bottom: var(--text-base);
 }
 
 .label {
@@ -40,7 +40,7 @@
 
 .input {
   width: 100%;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem var(--text-base);
   border: 1px solid rgb(var(--color-border));
   border-radius: 0.5rem;
   outline: none;
@@ -62,11 +62,11 @@
 
 .inputIcon {
   position: absolute;
-  left: 0.75rem;
+  left: var(--text-xs);
   top: 50%;
   transform: translateY(-50%);
-  width: 1.25rem;
-  height: 1.25rem;
+  width: var(--text-xl);
+  height: var(--text-xl);
   color: rgb(var(--color-muted-foreground));
   pointer-events: none;
 }
@@ -78,7 +78,7 @@
 .gridRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: var(--text-base);
 }
 
 .errorMessage {
@@ -90,8 +90,8 @@
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
-  padding: 0.75rem;
-  margin-top: 1rem;
+  padding: var(--text-xs);
+  margin-top: var(--text-base);
   background-color: rgb(239 246 255);
   border-radius: 0.5rem;
   color: rgb(var(--color-muted-foreground));
@@ -104,8 +104,8 @@
 }
 
 .securityIcon {
-  width: 1rem;
-  height: 1rem;
+  width: var(--text-base);
+  height: var(--text-base);
   margin-top: 0.125rem;
   flex-shrink: 0;
 }
@@ -117,8 +117,8 @@
 /* Mobile First: до 640px */
 @media (max-width: 640px) {
   .wrapper {
-    padding: 1rem;
-    margin-top: 1rem;
+    padding: var(--text-base);
+    margin-top: var(--text-base);
   }
 
   .gridRow {

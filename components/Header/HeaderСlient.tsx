@@ -1,24 +1,20 @@
 // app/components/Header/HeaderClient.tsx
 "use client";
 
-import {
-  ShoppingCart,
-  Heart,
-  Search,
-  Menu,
-  User,
-  LogOut,
-  Settings,
-  Users,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { BurgerMenu } from "@/components/BurgerMenu/BurgerMenu";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAuthModalStore } from "@/store/authModalStore";
 import { AuthModal } from "@/components/AuthModal/AuthModal";
+import { Logo } from "@/components/Logo/Logo";
+import { SearchBar } from "@/components/SearchBar/SearchBar";
+import { Navigation } from "@/components/Navigation/Navigation";
+import { ActionButtons } from "@/components/ActionButtons/ActionButtons";
+import { ProfileMenu } from "@/components/ProfileMenu/ProfileMenu";
+import { useCart } from "@/lib/hooks/useCart";
+import { useWishlist } from "@/lib/hooks/useWishlist";
 import styles from "./Header.module.css";
-import Link from "next/link";
 
 interface HeaderClientProps {
   initialCartItemsCount: number;
@@ -34,104 +30,72 @@ export function HeaderClient({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
-  const [cartItemsCount, setCartItemsCount] = useState(initialCartItemsCount);
-  const [favoritesCount, setFavoritesCount] = useState(initialFavoritesCount);
+  const [isLargeDesktop, setIsLargeDesktop] = useState(false);
+  const [hasHydrated, setHasHydrated] = useState(false);
   const profileMenuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const pathname = usePathname();
+  const prevPathnameRef = useRef(pathname);
 
   const { user, logout } = useAuth();
   const { openModal, isOpen, closeModal } = useAuthModalStore();
+  const { items: cartItems } = useCart();
+  const { favorites } = useWishlist();
 
-  // Оновлюємо кількість товарів при зміні (реальний час)
+  // Визначаємо, чи це desktop версія
   useEffect(() => {
-    // Функція для оновлення кількості товарів у кошику
-    const updateCartCount = () => {
-      if (typeof window !== "undefined") {
-        const cart = JSON.parse(localStorage.getItem("cart") || "{}");
-        const count =
-          cart.items?.reduce(
-            (sum: number, item: any) => sum + item.quantity,
-            0
-          ) || 0;
-        setCartItemsCount(count);
-      }
+    const checkScreenSize = () => {
+      setIsLargeDesktop(window.innerWidth >= 1440);
     };
 
-    // Функція для оновлення кількості обраних товарів
-    const updateFavoritesCount = () => {
-      if (typeof window !== "undefined") {
-        const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-        setFavoritesCount(favorites.length);
-      }
-    };
-
-    // Слухаємо зміни в localStorage
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === "cart") {
-        updateCartCount();
-      }
-      if (e.key === "favorites") {
-        updateFavoritesCount();
-      }
-    };
-
-    // Оновлюємо початкові значення при завантаженні
-    updateCartCount();
-    updateFavoritesCount();
-
-    // Додаємо слухач подій для міжвкладкового спілкування
-    window.addEventListener("storage", handleStorageChange);
-
-    // Додаємо слухач для власних подій (якщо зміни відбуваються в цій же вкладці)
-    const interval = setInterval(() => {
-      updateCartCount();
-      updateFavoritesCount();
-    }, 1000); // Перевіряємо кожну секунду
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
 
     return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      clearInterval(interval);
+      window.removeEventListener("resize", checkScreenSize);
     };
   }, []);
 
-  // Закриття dropdown меню при кліку поза ним
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        profileMenuRef.current &&
-        !profileMenuRef.current.contains(event.target as Node)
-      ) {
-        setIsProfileMenuOpen(false);
-      }
-    };
-
-    if (isProfileMenuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
+    if (isLargeDesktop) {
+      setIsMenuOpen(false);
     }
+  }, [isLargeDesktop]);
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isProfileMenuOpen]);
+  // Позначаємо гідратацію, щоб використовувати актуальні значення зі store
+  useEffect(() => {
+    setHasHydrated(true);
+  }, []);
+
+  const derivedCartCount = useMemo(
+    () => cartItems.reduce((sum, item) => sum + item.quantity, 0),
+    [cartItems]
+  );
+  const cartItemsCount = hasHydrated ? derivedCartCount : initialCartItemsCount;
+  const favoritesCount = hasHydrated ? favorites.length : initialFavoritesCount;
+
+  useEffect(() => {
+    if (prevPathnameRef.current !== pathname) {
+      prevPathnameRef.current = pathname;
+      setIsProfileMenuOpen(false);
+    }
+  }, [pathname]);
 
   // Автоматичний пошук при введенні
   useEffect(() => {
     if (searchQuery.trim()) {
       const timer = setTimeout(() => {
-        // При пошуку очищаємо всі інші фільтри та скидаємо пагінацію
         router.push(
           `/catalog?search=${encodeURIComponent(searchQuery.trim())}`
         );
 
-        // Очищаємо sessionStorage щоб фільтри не відновлювалися
         if (typeof window !== "undefined") {
           sessionStorage.removeItem("catalogFilters");
         }
-      }, 500); // Затримка 500мс для debounce
+      }, 500);
 
       return () => clearTimeout(timer);
     } else if (searchQuery === "" && typeof window !== "undefined") {
-      // Якщо поле порожнє і ми на сторінці каталогу, очищаємо параметр search
       const urlParams = new URLSearchParams(window.location.search);
       const currentPath = window.location.pathname;
 
@@ -145,14 +109,17 @@ export function HeaderClient({
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      // При пошуку очищаємо всі інші фільтри та скидаємо пагінацію
       router.push(`/catalog?search=${encodeURIComponent(searchQuery.trim())}`);
 
-      // Очищаємо sessionStorage щоб фільтри не відновлювалися
       if (typeof window !== "undefined") {
         sessionStorage.removeItem("catalogFilters");
       }
     }
+  };
+
+  const handleLogout = () => {
+    logout();
+    setIsProfileMenuOpen(false);
   };
 
   return (
@@ -160,141 +127,45 @@ export function HeaderClient({
       <div className="container">
         {/* Top bar */}
         <div className={styles.topBar}>
-          {/* Logo */}
-          <Link href="/" className={styles.logo}>
-            <span className={styles.logoBud}>Буд</span>
-            <span className={styles.logoLeader}>лідер</span>
-          </Link>
+          <Logo />
 
-          {/* Search */}
-          <div className={styles.searchWrapper}>
-            <form onSubmit={handleSearch} className={styles.searchContainer}>
-              <input
-                type="text"
-                placeholder="Пошук товарів..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className={styles.searchInput}
+          {/* Desktop Search (показується тільки на планшеті 768px+ та декстопі) */}
+          {isLargeDesktop && (
+            <div className={styles.desktopSearchWrapper}>
+              <SearchBar
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                handleSearch={handleSearch}
+                variant="desktop"
               />
-              <button
-                type="submit"
-                className={styles.searchButton}
-                aria-label="Пошук"
-              >
-                <Search className={styles.searchIcon} />
-              </button>
-            </form>
-          </div>
+            </div>
+          )}
 
-          {/* Actions */}
           <div className={styles.actions}>
-            {/* Кошик та обране - ЗАВЖДИ доступні (для гостей та авторизованих) */}
-            {(!user || user.role !== "admin") && (
-              <>
-                <Link
-                  href="/wishlist"
-                  className={styles.actionButton}
-                  aria-label="Обране"
-                >
-                  <Heart className={styles.actionIcon} />
-                  {favoritesCount > 0 && (
-                    <span className={styles.badge}>{favoritesCount}</span>
-                  )}
-                </Link>
-                <Link
-                  href="/cart"
-                  className={styles.actionButton}
-                  aria-label="Кошик"
-                >
-                  <ShoppingCart className={styles.actionIcon} />
-                  {cartItemsCount > 0 && (
-                    <span className={styles.badge}>{cartItemsCount}</span>
-                  )}
-                </Link>
-              </>
-            )}
+            <ActionButtons
+              user={user}
+              cartItemsCount={cartItemsCount}
+              favoritesCount={favoritesCount}
+            />
 
-            {/* Auth / Profile */}
             {user ? (
-              <div className={styles.profileWrapper} ref={profileMenuRef}>
+              <ProfileMenu
+                user={user}
+                isProfileMenuOpen={isProfileMenuOpen}
+                setIsProfileMenuOpen={setIsProfileMenuOpen}
+                handleLogout={handleLogout}
+                profileMenuRef={profileMenuRef}
+              />
+            ) : (
+              isLargeDesktop && (
                 <button
-                  onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-                  className={styles.profileButton}
+                  onClick={() => openModal()}
+                  className={styles.authButton}
                   type="button"
                 >
-                  <img
-                    src={
-                      user.avatar ||
-                      "https://api.dicebear.com/7.x/avataaars/svg?seed=default"
-                    }
-                    alt={user.name}
-                    className={styles.avatar}
-                  />
-                  <span className={styles.userName}>{user.name}</span>
+                  <span className={styles.authButtonText}>Вхід/Реєстрація</span>
                 </button>
-
-                {/* Profile Dropdown */}
-                {isProfileMenuOpen && (
-                  <div className={styles.profileDropdown}>
-                    <div className={styles.profileDropdownHeader}>
-                      <p className={styles.profileDropdownName}>{user.name}</p>
-                      <p className={styles.profileDropdownEmail}>
-                        {user.email}
-                      </p>
-                    </div>
-                    <Link
-                      href="/profile"
-                      className={styles.profileDropdownItem}
-                      onClick={() => setIsProfileMenuOpen(false)}
-                    >
-                      <User className={styles.profileMenuIcon} />
-                      Профіль
-                    </Link>
-                    {user.role === "admin" && (
-                      <>
-                        <Link
-                          href="/admin/users"
-                          className={styles.profileDropdownItem}
-                          onClick={() => setIsProfileMenuOpen(false)}
-                        >
-                          <Users className={styles.profileMenuIcon} />
-                          Управління користувачами
-                        </Link>
-                        <Link
-                          href="/admin/orders"
-                          className={styles.profileDropdownItem}
-                          onClick={() => setIsProfileMenuOpen(false)}
-                        >
-                          <Settings className={styles.profileMenuIcon} />
-                          Адмін-панель
-                        </Link>
-                      </>
-                    )}
-                    <button
-                      onClick={() => {
-                        logout();
-                        setIsProfileMenuOpen(false);
-                      }}
-                      className={styles.profileDropdownItem}
-                      type="button"
-                    >
-                      <LogOut className={styles.profileMenuIcon} />
-                      Вийти
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <button
-                onClick={() => openModal()}
-                className={styles.authButton}
-                type="button"
-              >
-                <User className={styles.actionIcon} />
-                <span className={styles.authButtonText}>
-                  Увійти / Зареєструватися
-                </span>
-              </button>
+              )
             )}
 
             <button
@@ -303,64 +174,26 @@ export function HeaderClient({
               aria-label="Відкрити меню"
               type="button"
             >
-              <Menu className={styles.actionIcon} />
+              <span className={styles.burgerIcon}>☰</span>
             </button>
           </div>
         </div>
 
-        {/* Navigation - Desktop only */}
-        <nav className={styles.nav}>
-          <ul className={styles.navList}>
-            <li>
-              <Link href="/catalog" className={styles.navLink}>
-                Каталог
-              </Link>
-            </li>
-            <li>
-              <Link href="/services" className={styles.navLink}>
-                Послуги
-              </Link>
-            </li>
-            <li>
-              <Link href="/about" className={styles.navLink}>
-                Про нас
-              </Link>
-            </li>
-            <li>
-              <Link href="/delivery" className={styles.navLink}>
-                Доставка
-              </Link>
-            </li>
-            <li>
-              <Link href="/contacts" className={styles.navLink}>
-                Контакти
-              </Link>
-            </li>
-          </ul>
-        </nav>
+        <Navigation />
 
-        {/* Mobile search */}
-        <div className={styles.mobileSearch}>
-          <form onSubmit={handleSearch} className={styles.searchContainer}>
-            <input
-              type="text"
-              placeholder="Пошук товарів..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className={styles.searchInput}
+        {/* Mobile Search (показується тільки на мобільних до 768px) */}
+        {!isLargeDesktop && (
+          <div className={styles.mobileSearchWrapper}>
+            <SearchBar
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              handleSearch={handleSearch}
+              variant="mobile"
             />
-            <button
-              type="submit"
-              className={styles.searchButton}
-              aria-label="Пошук"
-            >
-              <Search className={styles.searchIcon} />
-            </button>
-          </form>
-        </div>
+          </div>
+        )}
       </div>
 
-      {/* Burger Menu */}
       <BurgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <AuthModal isOpen={isOpen} onClose={closeModal} />
     </header>

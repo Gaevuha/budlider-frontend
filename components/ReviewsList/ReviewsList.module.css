@@ -5,7 +5,7 @@
 .empty {
   background-color: #f9fafb;
   border: 1px solid var(--color-border);
-  border-radius: 0.75rem;
+  border-radius: var(--text-xs);
   padding: 3rem 2rem;
   text-align: center;
   color: var(--color-text-secondary);
@@ -13,14 +13,14 @@
 
 .emptySubtext {
   margin-top: 0.5rem;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: var(--color-text-secondary);
 }
 
 .statistics {
   background-color: white;
   border: 1px solid var(--color-border);
-  border-radius: 0.75rem;
+  border-radius: var(--text-xs);
   padding: 2rem;
   margin-bottom: 2rem;
   display: grid;
@@ -51,8 +51,8 @@
 }
 
 .star {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: var(--text-xl);
+  height: var(--text-xl);
   color: #d1d5db;
 }
 
@@ -62,25 +62,25 @@
 }
 
 .reviewCount {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: var(--color-text-secondary);
 }
 
 .distribution {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--text-xs);
 }
 
 .distributionRow {
   display: grid;
   grid-template-columns: 70px 1fr 40px;
-  gap: 1rem;
+  gap: var(--text-base);
   align-items: center;
 }
 
 .distributionLabel {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: var(--color-text-secondary);
 }
 
@@ -98,7 +98,7 @@
 }
 
 .distributionCount {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: var(--color-text-secondary);
   text-align: right;
 }
@@ -106,26 +106,26 @@
 .list {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--text-2xl);
 }
 
 .review {
   background-color: white;
   border: 1px solid var(--color-border);
-  border-radius: 0.75rem;
-  padding: 1.5rem;
+  border-radius: var(--text-xs);
+  padding: var(--text-2xl);
 }
 
 .reviewHeader {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 1rem;
+  margin-bottom: var(--text-base);
 }
 
 .userInfo {
   display: flex;
-  gap: 1rem;
+  gap: var(--text-base);
   align-items: center;
 }
 
@@ -146,7 +146,7 @@
   justify-content: center;
   color: white;
   font-weight: 700;
-  font-size: 1.25rem;
+  font-size: var(--text-xl);
 }
 
 .userName {
@@ -155,7 +155,7 @@
 }
 
 .date {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: var(--color-text-secondary);
   margin-top: 0.25rem;
 }
@@ -166,8 +166,8 @@
 }
 
 .reviewStar {
-  width: 1rem;
-  height: 1rem;
+  width: var(--text-base);
+  height: var(--text-base);
   color: #d1d5db;
 }
 
@@ -179,13 +179,13 @@
 .comment {
   color: var(--color-text);
   line-height: 1.6;
-  margin-bottom: 1rem;
+  margin-bottom: var(--text-base);
 }
 
 .reviewFooter {
   display: flex;
-  gap: 1rem;
-  padding-top: 1rem;
+  gap: var(--text-base);
+  padding-top: var(--text-base);
   border-top: 1px solid var(--color-border);
 }
 
@@ -196,8 +196,8 @@
   background: none;
   border: 1px solid var(--color-border);
   border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
+  padding: 0.5rem var(--text-base);
+  font-size: var(--text-sm);
   color: var(--color-text-secondary);
   cursor: pointer;
   transition: all 0.2s;
@@ -216,8 +216,8 @@
   background: none;
   border: 1px solid var(--color-border);
   border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
+  padding: 0.5rem var(--text-base);
+  font-size: var(--text-sm);
   color: var(--color-text-secondary);
   cursor: pointer;
   transition: all 0.2s;
@@ -230,8 +230,8 @@
 }
 
 .thumbIcon {
-  width: 1rem;
-  height: 1rem;
+  width: var(--text-base);
+  height: var(--text-base);
 }
 
 @media (max-width: 1024px) {
@@ -250,7 +250,7 @@
 
 @media (max-width: 768px) {
   .statistics {
-    padding: 1.5rem;
+    padding: var(--text-2xl);
   }
 
   .ratingNumber {
@@ -258,12 +258,12 @@
   }
 
   .review {
-    padding: 1rem;
+    padding: var(--text-base);
   }
 
   .reviewHeader {
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--text-base);
   }
 
   .userInfo {
@@ -276,6 +276,6 @@
 
   .distributionRow {
     grid-template-columns: 60px 1fr 30px;
-    gap: 0.75rem;
+    gap: var(--text-xs);
   }
 }

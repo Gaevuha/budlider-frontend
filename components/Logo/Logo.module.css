@@ -1,0 +1,51 @@
+/* app/components/Header/Logo.module.css */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  text-decoration: none;
+  font-size: var(--text-xl);
+  font-weight: 800;
+  transition: transform 0.2s ease;
+  letter-spacing: -0.02em;
+}
+
+.logo:hover {
+  transform: translateY(-2px);
+}
+
+/* Мобільна версія 375px+ */
+@media only screen and (min-width: 375px) {
+  .logo {
+    font-size: var(--text-2xl);
+  }
+}
+
+/* Планшет 768px+ */
+@media only screen and (min-width: 768px) {
+  .logo {
+    font-size: var(--text-3xl);
+  }
+}
+
+/* Декстоп 1440px+ */
+@media only screen and (min-width: 1440px) {
+  .logo {
+    font-size: 2.5rem;
+  }
+}
+
+.logoBud {
+  color: #16a34a;
+  text-shadow: 0 2px 4px rgba(22, 163, 74, 0.2),
+    0 4px 8px rgba(22, 163, 74, 0.15);
+  position: relative;
+}
+
+.logoLeader {
+  color: #111827;
+  font-style: italic;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(17, 24, 39, 0.1), 0 2px 4px rgba(17, 24, 39, 0.08);
+  opacity: 0.95;
+}

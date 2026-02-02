@@ -1,23 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { mockProducts } from "@/data/mockData";
 import { ProductCard } from "@/components/ProductCard/ProductCard";
 import { QuickOrderModal } from "@/components/QuickOrderModal/QuickOrderModal";
 import { Hero } from "@/components/Hero/Hero";
 import { Product } from "@/types";
 import { useCart, useAddToCart, useRemoveFromCart } from "@/lib/hooks/useCart";
 import { useWishlist, useToggleWishlist } from "@/lib/hooks/useWishlist";
+import { fetchProductsClient } from "@/lib/api/apiClient";
 import { Package, Truck, Shield, Phone, ArrowRight } from "lucide-react";
 import styles from "./HomePage.module.css";
 
 export default function HomePage() {
-  const newProducts = mockProducts.filter((p) => p.isNewProduct).slice(0, 4);
-  const saleProducts = mockProducts.filter((p) => p.oldPrice).slice(0, 4);
   const [quickOrderProduct, setQuickOrderProduct] = useState<Product | null>(
     null
   );
+  const [newProducts, setNewProducts] = useState<Product[]>([]);
+  const [saleProducts, setSaleProducts] = useState<Product[]>([]);
 
   // ✅ Нові хуки замість Zustand stores
   const { items: cartItems } = useCart();
@@ -27,11 +27,53 @@ export default function HomePage() {
   const toggleWishlist = useToggleWishlist();
 
   const handleQuickOrder = (productId: string) => {
-    const product = mockProducts.find((p) => p._id === productId);
+    const product = [...newProducts, ...saleProducts].find(
+      (p) => p._id === productId
+    );
     if (product) {
       setQuickOrderProduct(product);
     }
   };
+
+  const normalizeProducts = (data: any): Product[] => {
+    if (Array.isArray(data)) return data;
+    if (data?.data?.products) return data.data.products;
+    if (data?.products) return data.products;
+    return [];
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+    const load = async () => {
+      try {
+        const [newRes, saleRes] = await Promise.all([
+          fetchProductsClient({ isNew: true, limit: 50 }),
+          fetchProductsClient({ onSale: true, limit: 50 }),
+        ]);
+        if (!isMounted) return;
+        const newCandidates = normalizeProducts(newRes);
+        const saleCandidates = normalizeProducts(saleRes);
+        const filteredNew = newCandidates.filter(
+          (product) => product.isNewProduct === true
+        );
+        const filteredSale = saleCandidates.filter((product) =>
+          Boolean(product.oldPrice)
+        );
+        setNewProducts(filteredNew.slice(0, 4));
+        setSaleProducts(filteredSale.slice(0, 4));
+      } catch (error) {
+        if (!isMounted) return;
+        setNewProducts([]);
+        setSaleProducts([]);
+      } finally {
+        // no-op
+      }
+    };
+    load();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // ✅ Обробник кошика - працює для ВСІХ користувачів
   const handleAddToCart = (productId: string) => {

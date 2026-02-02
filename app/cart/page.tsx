@@ -2,16 +2,20 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAuthModalStore } from "@/store/authModalStore";
-import { mockProducts } from "@/data/mockData";
 import { Minus, Plus, X, ShoppingBag } from "lucide-react";
 import {
   useCart,
   useUpdateCartQuantity,
   useRemoveFromCart,
 } from "@/lib/hooks/useCart";
+import { fetchProductsClient } from "@/lib/api/apiClient";
+import { Loader } from "@/components/ui/loader/Loader";
+import type { Product } from "@/types";
 import styles from "./CartPage.module.css";
+import Image from "next/image";
 
 export default function CartPage() {
   // ✅ Нові хуки замість Zustand store
@@ -22,16 +26,65 @@ export default function CartPage() {
   const { user } = useAuth();
   const { openModal } = useAuthModalStore();
 
-  const cartItems = items
-    .map((item) => {
-      const product = mockProducts.find((p) => p._id === item.productId);
-      return { ...item, product };
-    })
-    .filter((item) => item.product);
+  const [productsById, setProductsById] = useState<Record<string, Product>>({});
+
+  const normalizeProducts = (data: any): Product[] => {
+    if (Array.isArray(data)) return data;
+    if (data?.data?.products) return data.data.products;
+    if (data?.products) return data.products;
+    return [];
+  };
+
+  useEffect(() => {
+    const ids = Array.from(new Set(items.map((item) => item.productId)));
+    if (ids.length === 0) {
+      setProductsById({});
+      return;
+    }
+
+    let isMounted = true;
+    const load = async () => {
+      try {
+        const res = await fetchProductsClient({ limit: 500 });
+        const list = normalizeProducts(res);
+        if (!isMounted) return;
+        const map: Record<string, Product> = {};
+        list.forEach((product) => {
+          if (product?._id && ids.includes(product._id)) {
+            map[product._id] = product;
+          }
+        });
+        setProductsById(map);
+      } finally {
+        // no-op
+      }
+    };
+
+    load();
+    return () => {
+      isMounted = false;
+    };
+  }, [items]);
+
+  const cartItems = useMemo(
+    () =>
+      items
+        .map((item) => ({ ...item, product: productsById[item.productId] }))
+        .filter((item) => item.product),
+    [items, productsById]
+  );
 
   const total = cartItems.reduce((sum, item) => {
     return sum + (item.product?.price || 0) * item.quantity;
   }, 0);
+
+  if (items.length > 0 && cartItems.length === 0) {
+    return (
+      <div className={`${styles.container} ${styles.loaderContainer}`}>
+        <Loader />
+      </div>
+    );
+  }
 
   if (cartItems.length === 0) {
     return (
@@ -66,17 +119,22 @@ export default function CartPage() {
                     href={`/product/${product.slug}`}
                     className={styles.itemImageLink}
                   >
-                    <img
+                    <Image
                       src={product.mainImage}
                       alt={product.name}
                       className={styles.image}
+                      width={80}
+                      height={80}
                     />
                   </Link>
                 </div>
 
                 {/* Info */}
                 <div className={styles.itemInfo}>
-                  <Link href={`/product/${product.slug}`}>
+                  <Link
+                    href={`/product/${product.slug}`}
+                    className={styles.itemLink}
+                  >
                     <h3 className={styles.itemName}>{product.name}</h3>
                   </Link>
                   <p className={styles.itemBrand}>{product.brand}</p>

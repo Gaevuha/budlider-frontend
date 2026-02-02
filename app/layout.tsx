@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Header } from "@/components/Header/Header";
 import { Footer } from "@/components/Footer/Footer";
 import { Providers } from "@/providers/Providers";
-import "@/styles/globals.css";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Будлідер - Інтернет-магазин будівельних матеріалів",
@@ -23,6 +23,7 @@ export default function RootLayout({
           <main>{children}</main>
           <Footer />
         </Providers>
+        <div id="modal-root"></div>
       </body>
     </html>
   );

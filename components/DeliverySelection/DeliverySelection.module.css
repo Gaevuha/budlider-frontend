@@ -1,5 +1,5 @@
 .container {
-  padding: 1rem;
+  padding: var(--text-base);
   background-color: var(--color-muted);
   border-radius: 0.5rem;
   border: 1px solid var(--color-border);
@@ -9,23 +9,23 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: var(--color-text-secondary);
-  margin-bottom: 1rem;
+  margin-bottom: var(--text-base);
 }
 
 .headerIcon {
-  width: 1rem;
-  height: 1rem;
+  width: var(--text-base);
+  height: var(--text-base);
 }
 
 .formGroup {
-  margin-bottom: 1rem;
+  margin-bottom: var(--text-base);
 }
 
 .label {
   display: block;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 500;
   margin-bottom: 0.5rem;
   color: var(--color-text);
@@ -41,11 +41,11 @@
 
 .inputIcon {
   position: absolute;
-  left: 0.75rem;
+  left: var(--text-xs);
   top: 50%;
   transform: translateY(-50%);
-  width: 1.25rem;
-  height: 1.25rem;
+  width: var(--text-xl);
+  height: var(--text-xl);
   color: var(--color-text-secondary);
   pointer-events: none;
 }
@@ -55,7 +55,7 @@
   padding: 0.5rem 2.5rem;
   border: 1px solid var(--color-border);
   border-radius: 0.5rem;
-  font-size: 1rem;
+  font-size: var(--text-base);
   background-color: white;
   transition: all 0.2s;
 }
@@ -72,11 +72,11 @@
 
 .chevronIcon {
   position: absolute;
-  right: 0.75rem;
+  right: var(--text-xs);
   top: 50%;
   transform: translateY(-50%);
-  width: 1.25rem;
-  height: 1.25rem;
+  width: var(--text-xl);
+  height: var(--text-xl);
   color: var(--color-text-secondary);
   transition: transform 0.2s;
   pointer-events: none;
@@ -102,13 +102,13 @@
 .dropdownItem {
   width: 100%;
   text-align: left;
-  padding: 0.75rem 1rem;
+  padding: var(--text-xs) var(--text-base);
   border-bottom: 1px solid var(--color-border);
   background-color: white;
   transition: background-color 0.15s;
   cursor: pointer;
   border: none;
-  font-size: 1rem;
+  font-size: var(--text-base);
 }
 
 .dropdownItem:last-child {
@@ -129,24 +129,24 @@
 }
 
 .cityArea {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: var(--color-text-secondary);
   margin-top: 0.125rem;
 }
 
 .select {
   width: 100%;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem var(--text-base);
   border: 1px solid var(--color-border);
   border-radius: 0.5rem;
-  font-size: 1rem;
+  font-size: var(--text-base);
   background-color: white;
   transition: all 0.2s;
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.5rem center;
-  background-size: 1.25rem;
+  background-size: var(--text-xl);
   padding-right: 2.5rem;
   cursor: pointer;
 }
@@ -158,9 +158,9 @@
 }
 
 .noWarehouses {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: var(--color-text-secondary);
-  padding: 0.75rem;
+  padding: var(--text-xs);
   background-color: #fef3c7;
   border: 1px solid #fcd34d;
   border-radius: 0.5rem;
@@ -169,11 +169,11 @@
 /* Tablet and Desktop */
 @media (min-width: 768px) {
   .container {
-    padding: 1.25rem;
+    padding: var(--text-xl);
   }
 
   .formGroup {
-    margin-bottom: 1.25rem;
+    margin-bottom: var(--text-xl);
   }
 
   .dropdown {
